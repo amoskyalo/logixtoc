@@ -1,0 +1,32 @@
+export const statusColors = {
+  statusID0: "#E34952",
+  statusID1: "#66CC66",
+  statusID2: "#F2A65F",
+  statusID3: "#64A9C2",
+  statusID4: "#F2E95B",
+  statusID5: "#A285E3",
+  statusID6: "#E34D45",
+  statusID7: "#748B9E",
+  statusID8: "#76AC57",
+  statusID9: "#A9B43F",
+  statusID10: "#9CC981",
+  statusID11: "#4E8CBF",
+  statusID12: "#B6B27E",
+  statusID13: "#4E9898",
+  statusID14: "#6D8CC9",
+};
+
+export const ChartColors = [
+  "#c1e547",
+  "#669999",
+  "#b1e247",
+  "#f1e7c7",
+  "#9e9999",
+  "#b1b1b1",
+  "#e1a547",
+  "#a9e1e1",
+  "#c7e1f7",
+  "#d1c147",
+  "#f7e1c7",
+  "#c7c1e5",
+];

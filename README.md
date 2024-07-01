@@ -20,4 +20,7 @@ After clong, run the following commands
 - `yarn` | `npm install` to install dependancies.
 - `yarn dev` | `npm run dev` to run the project.
 
+### Contribution
+Here is a list of all [issues](https://github.com/amoskyalo/logixtoc/issues)
+
 [Production Link](https://logixtoc.africa/).

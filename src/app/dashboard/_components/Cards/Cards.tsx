@@ -1,5 +1,4 @@
-import React from "react";
-import { CardsInterface } from "./types";
+import { CardsInterface } from "../types";
 import { Box, Typography } from "@mui/material";
 import FiberSmartRecordIcon from "@mui/icons-material/FiberSmartRecord";
 
@@ -12,11 +11,12 @@ const Cards = (props: Readonly<CardsInterface>) => {
     iconBackground,
     Icon,
     percentages,
+    value
   } = props;
 
   return (
     <Box
-      sx={{ backgroundColor: cardBackground ?? "white", p: 2, borderRadius: 2}}
+      sx={{ backgroundColor: cardBackground ?? "white", p: 2, borderRadius: 2 }}
     >
       <Box
         sx={{
@@ -29,7 +29,10 @@ const Cards = (props: Readonly<CardsInterface>) => {
       >
         <Box>
           <Typography variant="subtitle1">{title}</Typography>
-          <Typography variant="body2">{subTitle}</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", columnGap: .5 }}>
+            <Typography variant="body2">{subTitle}: </Typography>
+            <Typography variant="subtitle1">{value}</Typography>
+          </Box>
         </Box>
         <Box
           sx={{
@@ -55,7 +58,7 @@ const Cards = (props: Readonly<CardsInterface>) => {
               color={index == 0 ? "primary" : "success"}
             />
             <Typography variant="caption" sx={{ fontWeight: 700 }}>
-              {text}: {value}%
+              {text}: {isNaN(value) ? "--" : `${value}%`}
             </Typography>
           </Box>
         ))}

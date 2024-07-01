@@ -1,5 +1,5 @@
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { useResponsiveness } from "@/hooks";
+import { useResponsiveness, useGetUser } from "@/hooks";
 import { useState } from "react";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -92,6 +92,7 @@ export default function MainBar({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { isMobile } = useResponsiveness();
+  const { FirstName, LastName } = useGetUser();
   const [open, setOpen] = useState(true);
   const [expand, setExpand] = useState(false);
 
@@ -165,7 +166,9 @@ export default function MainBar({
             </IconButton>
           )}
           <Box>
-            <Typography variant="caption">Hello Amos Kyalo👋</Typography>
+            <Typography variant="caption">
+              Hello {`${FirstName} ${LastName}`}👋
+            </Typography>
             <Typography variant="body2" sx={{ fontWeight: 800 }}>
               ESQUE ENERGY
             </Typography>

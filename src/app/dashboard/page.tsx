@@ -1,116 +1,23 @@
-
 "use client";
 
-import React from "react";
 import {
-  CardsInterface,
-  DashboardCard,
-  ProductPerfomanceLineChart,
-  SectionsBox,
-  SalesChart,
+  DashboardStaticsCards,
+  DashboardProductPerfomanceChart,
+  DashboardSalesPerformanceChart,
+  DashboardDeliveryPlanTable,
+  DashboardStockMovementTable,
 } from "./_components";
-import {
-  Groups2,
-  LocalShipping,
-  DeliveryDining,
-  Build,
-} from "@mui/icons-material";
-import { Box, Grid, Chip } from "@mui/material";
-import { DataGrid } from "@/components/DataGrids";
-import { GridColDef } from "@mui/x-data-grid";
-import { useResponsiveness } from "@/hooks";
+import { Box, Grid } from "@mui/material";
+import { useResponsiveness, useGetUser } from "@/hooks";
+import { useGetVendorMainDashboard } from "@/api";
 
 const DashboardPage = () => {
   const { isMobile } = useResponsiveness();
-  const cards: CardsInterface[] = [
-    {
-      title: "Customers",
-      subTitle: "Total customers",
-      iconBackground: "rgba(136, 135, 182, 0.5)",
-      color: "#8e96d3",
-      cardBackground: "#c1e547",
-      Icon: Groups2,
-      percentages: [
-        { text: "Served", value: 0 },
-        { text: "Unserved", value: 0 },
-      ],
-    },
-    {
-      title: "Assets",
-      subTitle: "Total assets",
-      color: "#c7e6e5",
-      iconBackground: "rgba(199, 230, 229, 0.3)",
-      Icon: LocalShipping,
-      percentages: [
-        { text: "Available", value: 0 },
-        { text: "Unavailable", value: 0 },
-      ],
-    },
-    {
-      title: "Delivery plan",
-      subTitle: "Total delivery plan",
-      color: "#9e9dc3",
-      iconBackground: "rgba(158, 157, 195, 0.3)",
-      Icon: DeliveryDining,
-      percentages: [
-        { text: "Active", value: 0 },
-        { text: "Inactive", value: 0 },
-      ],
-    },
-    {
-      title: "Maintenance",
-      subTitle: "Total request",
-      color: "#b2d0f9",
-      iconBackground: "rgba(178, 208, 249, 0.3)",
-      Icon: Build,
-      percentages: [
-        { text: "Today", value: 0 },
-        { text: "Planned", value: 0 },
-      ],
-    },
-  ];
+  const { VendorID, UserID } = useGetUser();
 
-  const columns: GridColDef[] = [
-    {
-      field: "location",
-      headerName: "Location",
-      flex: 1,
-    },
-    {
-      field: "type",
-      headerName: "Type",
-      flex: 1,
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-    },
-  ];
+  const { data, isLoading } = useGetVendorMainDashboard({ VendorID, UserID });
 
-  const rows = [
-    {
-      location: "Nairobi",
-      type: "Stationary",
-      status: 0,
-    },
-    {
-      location: "Mombasa",
-      type: "Stationary",
-      status: 1,
-    },
-  ];
-
-  const renderActionButton = () => {
-    return (
-      <Chip
-        label="View all"
-        sx={{ width: 75 }}
-        color="secondary"
-        onClick={() => null}
-      />
-    );
-  };
+  const dashboardData = data?.Data.DashBoardData;
 
   return (
     <Box
@@ -123,72 +30,48 @@ const DashboardPage = () => {
       }}
     >
       <Box sx={{ overflow: isMobile ? "scroll" : "none" }}>
-        <Grid container spacing={2} width={1200}>
-          {cards.map(
-            ({
-              title,
-              subTitle,
-              color,
-              iconBackground,
-              cardBackground,
-              Icon,
-              percentages,
-            }) => (
-              <Grid item xs={3} key={title}>
-                <DashboardCard
-                  title={title}
-                  subTitle={subTitle}
-                  color={color}
-                  iconBackground={iconBackground}
-                  Icon={Icon}
-                  cardBackground={cardBackground}
-                  percentages={percentages}
-                />
-              </Grid>
-            )
-          )}
-        </Grid>
+        <DashboardStaticsCards
+          loading={isLoading}
+          TotalCustomers={dashboardData?.TotalCustomers ?? 0}
+          ServedCustomers={dashboardData?.ServedCustomers ?? 0}
+          TotalAssets={dashboardData?.TotalAssets ?? 0}
+          AvailableAssets={dashboardData?.AvailableAssets ?? 0}
+          UnAvailableAssets={dashboardData?.UnAvailableAssets ?? 0}
+          TotalDeliveryPlan={dashboardData?.TotalDeliveryPlan ?? 0}
+          ActiveDeliveryPlan={dashboardData?.ActiveDeliveryPlan ?? 0}
+          TotalMaintenanceRequest={dashboardData?.TotalMaintenanceRequest ?? 0}
+          TodayMaintenanceRequest={dashboardData?.TodayMaintenanceRequest ?? 0}
+          PlannedMaintenanceRequest={
+            dashboardData?.PlannedMaintenanceRequest ?? 0
+          }
+        />
       </Box>
 
       <Grid container spacing={4}>
         <Grid item lg={8} xs={12}>
-          <SectionsBox title="Product Performance">
-            <Box>
-              <ProductPerfomanceLineChart />
-            </Box>
-          </SectionsBox>
+          <DashboardProductPerfomanceChart
+            DailyPerformanceArray={dashboardData?.DailyPerformanceArray ?? []}
+            loading={isLoading}
+          />
         </Grid>
 
         <Grid item lg={4} xs={12}>
-          <SectionsBox title="Sales Per Category">
-            <Box>
-              <SalesChart />
-            </Box>
-          </SectionsBox>
+          <DashboardSalesPerformanceChart
+            PerformanceArray={dashboardData?.PerformanceArray ?? []}
+            loading={isLoading}
+          />
         </Grid>
       </Grid>
 
       <Grid container spacing={4}>
-        <Grid item lg={6} xs={12}>
-          <SectionsBox
-            title="Delivery plan"
-            renderActionButton={renderActionButton}
-          >
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              getRowId={(row) => row.location}
-            />
-          </SectionsBox>
-        </Grid>
-        <Grid item lg={6} xs={12}>
-          <SectionsBox
-            title="Stock movement"
-            renderActionButton={renderActionButton}
-          >
-            <DataGrid rows={[]} columns={columns} />
-          </SectionsBox>
-        </Grid>
+        <DashboardDeliveryPlanTable
+          loading={isLoading}
+          rows={dashboardData?.LatestDeliveryPlanArray ?? []}
+        />
+        <DashboardStockMovementTable
+          loading={isLoading}
+          rows={dashboardData?.LatestStockMovementArray ?? []}
+        />
       </Grid>
     </Box>
   );

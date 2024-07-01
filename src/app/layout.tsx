@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ThemeWrapper } from "@/Context";
+import { queryClient } from "@/api";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: "Logixtoc Africa",
@@ -18,9 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeWrapper>
-        <body className={inter.className}>{children}</body>
-      </ThemeWrapper>
+      <body>
+        <QueryClientProvider client={queryClient}>
+        <ToastContainer position="top-center" />
+          <ThemeWrapper>
+            {children}
+          </ThemeWrapper>
+        </QueryClientProvider>
+      </body>
     </html>
   );
 }

@@ -21,7 +21,19 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
         fontWeight: "700",
         fontSize: 20,
       },
+      h4: {
+        fontWeight: "700",
+      },
     },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+          },
+        }
+      }
+    }
   });
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;

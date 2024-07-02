@@ -8,81 +8,77 @@ import {
   ListItemText,
   ListItemButton,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import { routes } from "@/Constants";
+import { usePathname, useRouter } from "next/navigation";
 import FiberSmartRecordIcon from "@mui/icons-material/FiberSmartRecord";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { routes } from "@/Constants";
 
-const tabs = [
-  {
-    name: "Dashboard",
-  },
-  {
-    name: "Users",
-  },
-  {
-    name: "Customers",
-    subTabs: [
-      {
-        name: "MSQ Customers",
-      },
-      {
-        name: "KYC Customers",
-      },
-    ],
-  },
-];
+const NavList = ({
+  open,
+  setExpanded,
+  isMobile,
+}: Readonly<{
+  isMobile: boolean;
+  open: boolean;
+  setExpanded: (arg: boolean) => void;
+}>) => {
+  const pathname = usePathname();
+  const router = useRouter();
 
-const NavList = ({ open }: Readonly<{ open: boolean }>) => {
   const [openSubTabs, setOpenSubTabs] = useState<string[]>([]);
-  const [active, setActive] = useState<{
-    mainTab: string;
-    subTab: string | null;
-  }>({
-    mainTab: "Dashboard",
-    subTab: null,
-  });
 
-  function isActiveTab(tab: string) {
-    return tab === active.mainTab || tab === active.subTab;
+  function isActiveTab(path: string, isSubTab?: boolean) {
+    if (isSubTab || path === "/dashboard") {
+      return pathname === path;
+    }
+
+    if (path !== "/dashboard" && pathname.includes(path)) {
+      return true;
+    }
   }
 
-  function additionalStyles(tab: string) {
+  function additionalStyles(tab: string, isSubTab?: boolean) {
     return {
       transition: "color 0.5s ease",
-      color: isActiveTab(tab)
+      color: isActiveTab(tab, isSubTab)
         ? "rgba(255, 255, 255,0.8)"
         : "rgba(255, 255, 255, 0.4)",
     };
   }
 
-  function handleNavigate(name: string, subTabs?: Array<{ name: string }>) {
+  function handleNavigate(
+    name: string,
+    path: string,
+    subTabs?: Array<{ name: string }>
+  ) {
     if (!subTabs) {
-      return setActive((prev) => ({ ...prev, mainTab: name }));
+      router.push(path);
     }
-
-    setActive((prev) => ({ ...prev, mainTab: name }));
 
     if (openSubTabs.includes(name)) {
       setOpenSubTabs((prev) => prev.filter((t) => t != name));
     } else {
       setOpenSubTabs((prev) => [...prev, name]);
     }
+
+    if (isMobile && !subTabs) {
+      setExpanded(false);
+    }
   }
 
   return (
     <List>
-      {routes.map(({ name, Icon, subTabs }) => (
+      {routes.map(({ name, Icon, subTabs, path }) => (
         <Box key={name}>
           <ListItem
-            onClick={() => handleNavigate(name, subTabs)}
+            onClick={() => handleNavigate(name, path, subTabs)}
             disablePadding
             sx={{
               display: "flex",
               transition: "background-color 0.9s ease",
               borderRadius: 1,
               pr: open ? 1 : 0,
-              ...(isActiveTab(name)
+              ...(isActiveTab(path)
                 ? { backgroundColor: "rgba(255, 255, 255, 0.2)" }
                 : {}),
             }}
@@ -108,7 +104,7 @@ const NavList = ({ open }: Readonly<{ open: boolean }>) => {
 
             {open && subTabs && (
               <KeyboardArrowDownIcon
-                onClick={() => handleNavigate(name, subTabs)}
+                onClick={() => handleNavigate(name, path, subTabs)}
                 sx={{
                   ...additionalStyles(name),
                   transform:
@@ -127,13 +123,14 @@ const NavList = ({ open }: Readonly<{ open: boolean }>) => {
               unmountOnExit
             >
               <Box key={name} sx={{ ml: 6 }}>
-                {subTabs.map(({ name }) => (
+                {subTabs.map(({ name, path }) => (
                   <ListItemButton
                     key={name}
                     sx={{
                       minHeight: 16,
                       justifyContent: open ? "initial" : "center",
                     }}
+                    onClick={() => handleNavigate(name, path)}
                   >
                     <ListItemIcon
                       sx={{
@@ -143,7 +140,7 @@ const NavList = ({ open }: Readonly<{ open: boolean }>) => {
                       }}
                     >
                       <FiberSmartRecordIcon
-                        sx={{ fontSize: 14, ...additionalStyles(name) }}
+                        sx={{ fontSize: 14, ...additionalStyles(path) }}
                       />
                     </ListItemIcon>
                     {open && (
@@ -152,7 +149,7 @@ const NavList = ({ open }: Readonly<{ open: boolean }>) => {
                         sx={{
                           "& .MuiTypography-root": {
                             fontSize: 14,
-                            ...additionalStyles(name),
+                            ...additionalStyles(path),
                           },
                         }}
                       />

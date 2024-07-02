@@ -1,13 +1,26 @@
-import { useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export const useResponsiveness = () => {
-    const isMobile = useMediaQuery('(max-width:600px)');
-    const isTablet = useMediaQuery('(max-width:900px)');
-    const isDesktop = useMediaQuery('(max-width:1200px)');
+    const [innerWidth, setInnerWidth] = useState<number>(window.innerWidth);
+
+    useEffect(() => {
+        function eventListener() {
+            typeof window !== "undefined" && setInnerWidth(window.innerWidth);
+        }
+        window.addEventListener("resize", eventListener, true);
+
+        return () => window.removeEventListener("resize", eventListener, true);
+    }, []);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setInnerWidth(window.innerWidth);
+        }
+    }, []);
+
+    const isMobile = innerWidth < 900;
 
     return {
-        isMobile,
-        isTablet,
-        isDesktop
+        isMobile
     }
 };

@@ -1,7 +1,17 @@
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { useResponsiveness, useGetUser } from "@/hooks";
+import { useGetUser, useResponsiveness } from "@/hooks";
 import { useState } from "react";
+import {
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Avatar,
+} from "@mui/material";
+import { Popover } from "../Popover";
+import { countries } from "@/Constants";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
@@ -88,90 +98,153 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const flexStyles = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+};
+
 export default function MainBar({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { FirstName, LastName, CountryFlag, ImageURL } = useGetUser();
   const { isMobile } = useResponsiveness();
-  const { FirstName, LastName } = useGetUser();
   const [open, setOpen] = useState(true);
   const [expand, setExpand] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
   const handleDrawerOpen = () => {
-    isMobile ? setExpand(!expand) : setOpen(true);
+    if (isMobile) {
+      setExpand(!expand);
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleDrawerClose = () => {
-    isMobile ? setExpand(!expand) : setOpen(false);
+    if (isMobile) {
+      setExpand(!expand);
+    } else {
+      setOpen(false);
+    }
   };
 
-  const SideBar = () => {
-    return (
-      <Box
-        sx={{
-          backgroundColor: "#10333f",
-          height: "100%",
-          color: "white",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <DrawerHeader>
+  const SideBar = () => (
+    <Box
+      sx={{
+        backgroundColor: "#10333f",
+        height: "100%",
+        color: "white",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <DrawerHeader>
+        <Box
+          sx={{
+            width: "100%",
+            ...flexStyles,
+          }}
+        >
           <Box
             sx={{
-              width: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Image src="/iconlogo.png" alt="logo" height={40} width={40} />
-              <Image src="/mainlogo.png" alt="logo" height={60} width={90} />
-            </Box>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon sx={{ color: "rgba(255, 255, 255, .7)" }} />
-            </IconButton>
+            <Image src="/iconlogo.png" alt="logo" height={40} width={40} />
+            <Image src="/mainlogo.png" alt="logo" height={60} width={90} />
           </Box>
-        </DrawerHeader>
-
-        <Divider />
-
-        <Box sx={{ flex: 1, overflowY: "auto", px: 1 }} id="side_bar">
-          <NavList open={open} />
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon sx={{ color: "rgba(255, 255, 255, .7)" }} />
+          </IconButton>
         </Box>
+      </DrawerHeader>
+      <Divider />
+      <Box sx={{ flex: 1, overflowY: "auto", px: 1 }} id="side_bar">
+        <NavList open={open} setExpanded={setExpand} isMobile={isMobile} />
       </Box>
-    );
-  };
+    </Box>
+  );
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open && !isMobile}>
         <Toolbar>
-          {(!open || isMobile) && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ marginRight: 1 }}
+          <Box sx={{ width: "100%", ...flexStyles }}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              {(!open || isMobile) && (
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{ marginRight: 1 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
+              <Box>
+                <Typography variant="caption">
+                  Hello {`${FirstName} ${LastName}`}👋
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                  ESQUE ENERGY
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{ cursor: "pointer", ...flexStyles }}>
+              <Box
+                sx={flexStyles}
+                onClick={(event) => {
+                  if (anchorEl) {
+                    setAnchorEl(null);
+                  } else {
+                    setAnchorEl(event.currentTarget);
+                  }
+                }}
+              >
+                <Image
+                  src="/kenya.jpg"
+                  height={16}
+                  width={24}
+                  alt={CountryFlag}
+                />
+                <Typography variant="body1">
+                  {CountryFlag?.toLocaleUpperCase()}
+                </Typography>
+                <KeyboardArrowDownIcon />
+              </Box>
+              <Avatar sx={{ width: 32, height: 32, ml: 2 }} src={ImageURL} />
+            </Box>
+
+            <Popover
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              handleClose={() => setAnchorEl(null)}
             >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Box>
-            <Typography variant="caption">
-              Hello {`${FirstName} ${LastName}`}👋
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 800 }}>
-              ESQUE ENERGY
-            </Typography>
+              <MenuList>
+                {countries.map(({ name, flag }) => (
+                  <MenuItem
+                    sx={{ minHeight: 10, height: 16, py: 2 }}
+                    key={name}
+                  >
+                    <ListItemIcon>
+                      <Image
+                        src={flag}
+                        height={16}
+                        width={24}
+                        alt={CountryFlag}
+                      />
+                    </ListItemIcon>
+                    <ListItemText>{name}</ListItemText>
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </Popover>
           </Box>
         </Toolbar>
       </AppBar>

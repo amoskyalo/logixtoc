@@ -73,20 +73,22 @@ export type LineChartInterface = {
 const LineChart = ({ data, loading }: LineChartInterface) => {
   const { isMobile } = useResponsiveness();
 
+  const styles = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  };
+
   return (
     <Box height={isMobile ? 200 : 300}>
       {loading ? (
-        <CircularProgress color="primary" size={48} />
+        <Box sx={styles}>
+          <CircularProgress color="primary" size={48} />
+        </Box>
       ) : !loading && data.labels.length == 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            width: "100%",
-          }}
-        >
+        <Box sx={styles}>
           <Typography variant="body1">No data to display</Typography>
         </Box>
       ) : (

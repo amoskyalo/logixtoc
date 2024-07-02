@@ -15,7 +15,8 @@ const Container = ({
         borderRadius: 2,
         display: "flex",
         flexDirection: "column",
-        rowGap: 3
+        rowGap: 3,
+        height: "100%",
       }}
     >
       <Box

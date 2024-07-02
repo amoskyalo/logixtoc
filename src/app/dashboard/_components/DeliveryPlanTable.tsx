@@ -1,18 +1,33 @@
+"use client";
+
 import React from "react";
 import { DataGrid } from "@/components/DataGrids";
 import { GridColDef } from "@mui/x-data-grid";
 import { SectionsBox, DeliveryPlanTableInterface } from ".";
 import { Chip, Grid } from "@mui/material";
 import { StatusChips } from "@/components/Chips";
+import { useRouter } from "next/navigation";
+import { useResponsiveness } from "@/hooks";
 
 const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
+  const router = useRouter();
+  const { isMobile } = useResponsiveness();
+
   const columns: GridColDef[] = [
-    { field: "VendorLocationName", headerName: "Location", width: 150 },
-    { field: "DeliveryPlanTypeName", headerName: "Type", width: 100 },
+    {
+      field: "VendorLocationName",
+      headerName: "Location",
+      ...(isMobile ? { width: 150 } : { flex: 1 }),
+    },
+    {
+      field: "DeliveryPlanTypeName",
+      headerName: "Type",
+      ...(isMobile ? { width: 150 } : { flex: 1 }),
+    },
     {
       field: "DeliveryPlanStatusName",
       headerName: "Status",
-      width: 150,
+      ...(isMobile ? { width: 150 } : { flex: 1 }),
       renderCell: (param) => (
         <StatusChips
           statusID={param.row.DeliveryPlanStatusID}
@@ -26,9 +41,9 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
     return (
       <Chip
         label="View all"
-        sx={{ width: 75 }}
         color="secondary"
-        onClick={() => null}
+        onClick={() => router.push("/dashboard/inventory/planning")}
+        sx={{ width: 75 }}
       />
     );
   };

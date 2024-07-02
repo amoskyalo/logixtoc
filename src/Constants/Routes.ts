@@ -1,4 +1,3 @@
-
 import {
     Dashboard,
     Inventory,
@@ -35,22 +34,22 @@ export const routes = [
     {
         name: "Inventory",
         Icon: Inventory,
-        path: "/inventory",
+        path: "/dashboard/inventory",
         subTabs: [
             {
                 name: "Planning",
                 Icon: DeliveryDining,
-                path: "/inventory/planning/planning history",
+                path: "/dashboard/inventory/planning",
             },
             {
                 name: "Stock",
                 Icon: ShowChart,
-                path: "/inventory/stock/stock movement"
+                path: "/dashboard/inventory/stock"
             },
             {
                 name: "Products",
                 Icon: OilBarrel,
-                path: "/inventory/products/brand",
+                path: "/dashboard/inventory/products",
             }
         ]
     },
@@ -211,15 +210,14 @@ export const routes = [
             }
         ]
     },
-
     {
         name: "Help Center",
         Icon: Help,
-        path: "/coming soon"
+        path: "/helper-center"
     },
     {
         name: "Settings",
         Icon: Settings,
-        path: "/coming soon"
+        path: "/settings"
     },
 ];

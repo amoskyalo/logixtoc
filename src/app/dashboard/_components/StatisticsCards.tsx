@@ -7,6 +7,7 @@ import {
   DeliveryDining,
   Build,
 } from "@mui/icons-material";
+import { useResponsiveness } from "@/hooks";
 
 const StatisticsCards = ({
   loading,
@@ -21,6 +22,8 @@ const StatisticsCards = ({
   TodayMaintenanceRequest,
   PlannedMaintenanceRequest,
 }: StatisticsCardsInterface) => {
+  const { isMobile } = useResponsiveness();
+
   const cards: CardsInterface[] = [
     {
       title: "Customers",
@@ -91,7 +94,7 @@ const StatisticsCards = ({
   ];
 
   return (
-    <Grid container spacing={2} width={1200}>
+    <Grid container spacing={2} sx={{ ...(isMobile ? { width: 1200 } : {}) }}>
       {cards.map(
         ({
           title,
@@ -101,7 +104,7 @@ const StatisticsCards = ({
           cardBackground,
           Icon,
           percentages,
-          value
+          value,
         }) => (
           <Grid item xs={3} key={title}>
             {loading ? (

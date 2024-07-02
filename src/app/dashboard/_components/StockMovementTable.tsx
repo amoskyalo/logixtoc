@@ -4,15 +4,17 @@ import { StatusChips } from "@/components/Chips";
 import { Chip, Grid } from "@mui/material";
 import { SectionsBox, StockMovementTableInterface } from ".";
 import { GridColDef } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 
 const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
+  const router = useRouter();
   const renderActionButton = () => {
     return (
       <Chip
         label="View all"
-        sx={{ width: 75 }}
         color="secondary"
-        onClick={() => null}
+        onClick={() => router.push("/dashboard/inventory/stock")}
+        sx={{ width: 75 }}
       />
     );
   };

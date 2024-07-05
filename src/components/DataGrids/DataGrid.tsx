@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { DataGrid, DataGridProps } from "@mui/x-data-grid";
+import { DataGrid, DataGridProps, GridToolbar } from "@mui/x-data-grid";
 
 const Grid = (props: DataGridProps) => {
   return (
@@ -10,6 +10,7 @@ const Grid = (props: DataGridProps) => {
       autoHeight={true}
       disableColumnMenu={true}
       hideFooter={true}
+      slots={{ toolbar: GridToolbar }}
       getRowClassName={(params) => {
         return params.indexRelativeToCurrentPage % 2 === 0
           ? "even-row"

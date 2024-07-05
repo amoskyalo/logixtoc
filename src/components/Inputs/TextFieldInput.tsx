@@ -12,16 +12,13 @@ const TextFieldInput = (props: TextFieldProps) => {
           "& .MuiInputBase-input:focus": {
             boxShadow: "none",
           },
-          ".MuiInputLabel-root": {
-            top: 1,
-          },
           ".MuiFormHelperText-root": {
             marginLeft: 0.5,
           },
         }}
         inputProps={{
           style: {
-            height: "28px",
+            height: "24px",
           },
         }}
         {...props}

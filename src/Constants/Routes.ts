@@ -61,12 +61,12 @@ export const routes = [
             {
                 name: "Locations",
                 Icon: LocationOn,
-                path: "/locations",
+                path: "/dashboard/locations",
             },
             {
                 name: "Location types",
                 Icon: DeliveryDining,
-                path: "/locations/location types",
+                path: "/dashboard/locations/location-types",
             }
         ]
     },

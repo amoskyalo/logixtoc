@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useResponsiveness = () => {
-    const [innerWidth, setInnerWidth] = useState<number>(window.innerWidth);
+    const [innerWidth, setInnerWidth] = useState<number>(0);
 
     useEffect(() => {
         function eventListener() {

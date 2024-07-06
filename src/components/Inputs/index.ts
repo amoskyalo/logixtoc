@@ -1,3 +1,5 @@
 import TextFieldInput from "./TextFieldInput";
+import SelectField from "./SelectInput";
+import AutoCompleteField from "./Autocomplete";
 
-export { TextFieldInput }
+export { TextFieldInput, SelectField, AutoCompleteField }

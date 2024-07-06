@@ -1,9 +1,17 @@
-//set new rows
+"use client";
 
 import { FormDialog } from "@/components/Dialogs";
-import { TextFieldInput } from "@/components/Inputs";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+} from "@mui/x-data-grid";
+import { EditToolbar, DataGridActions } from "@/components/DataGrids";
 import { Box } from "@mui/material";
+import { useState } from "react";
+import { useGridRowEditFunctions } from "@/hooks";
 
 const LocationsForm = ({
   onClose,
@@ -12,6 +20,9 @@ const LocationsForm = ({
   onClose: () => void;
   open: boolean;
 }>) => {
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowModels, setRowModels] = useState<GridRowModesModel>({});
+
   const columns: GridColDef[] = [
     {
       field: "location",
@@ -22,19 +33,69 @@ const LocationsForm = ({
     {
       field: "locationName",
       headerName: "Location Name",
+      editable: true,
       flex: 1,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      getActions: ({ id }) => {
+        const isEditMode = rowModels[id]?.mode === GridRowModes.Edit;
+
+        return [
+          <DataGridActions
+            id={id}
+            key="actions"
+            isEditMode={isEditMode}
+            handleCancelClick={handleCancelClick}
+            handleDeleteClick={handleDeleteClick}
+            handleEditClick={handleEditClick}
+            handleSaveClick={handleSaveClick}
+          />,
+        ];
+      },
     },
   ];
 
-  const rows = [{ location: "Nairobi", locationName: "Juja" }];
+  const newRow: { location: string; locationName: ""; id: number } = {
+    location: "",
+    locationName: "",
+    id: rows.length + 1,
+  };
+
+  const {
+    handleAddRecord,
+    handleCancelClick,
+    handleSaveClick,
+    handleEditClick,
+    handleDeleteClick,
+    handleRowModesModelChange,
+    processRowUpdate,
+    handleRowEditStop,
+  } = useGridRowEditFunctions({
+    rowId: rows.length + 1,
+    focusField: "location",
+    setRowModesModels: setRowModels,
+    setRows,
+    newRow,
+    rows,
+  });
+
+  const toolbar = () => <EditToolbar handleClick={handleAddRecord} />;
 
   return (
-    <FormDialog onClose={onClose} open={open}>
+    <FormDialog onClose={onClose} open={open} maxWidth="sm" title="Add New User">
       <Box>
         <DataGrid
           columns={columns}
           rows={rows}
-          getRowId={(row) => row.location}
+          getRowId={(row) => row.id}
+          slots={{ toolbar }}
+          rowModesModel={rowModels}
+          onRowModesModelChange={handleRowModesModelChange}
+          processRowUpdate={processRowUpdate}
+          onRowEditStop={handleRowEditStop}
           density="compact"
           hideFooter
           autoHeight

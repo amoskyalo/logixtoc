@@ -1,28 +1,18 @@
-//updates rows and rowModesModel.
-import { GridToolbarContainer, GridRowsProp, GridRowModesModel } from "@mui/x-data-grid";
+import { GridToolbarContainer } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (newModes: (oldModes: GridRowModesModel) => GridRowModesModel) => void;
-}
-
 const EditToolbar = ({
-  setRows,
-  setRowModesModel,
-}: Readonly<EditToolbarProps>) => {
-  const handleAddRecord = () => {
-    setRows((oldRows: any) => [
-      ...oldRows,
-      { id: "name", name: "Amos", age: 24 },
-    ]);
-    // setRowModesModel()
-  };
-
+  handleClick,
+}: Readonly<{ handleClick: () => void }>) => {
   return (
-    <GridToolbarContainer>
-      <Button startIcon={<AddIcon />} size="small">
+    <GridToolbarContainer sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Button
+        startIcon={<AddIcon />}
+        color="primary"
+        size="small"
+        onClick={handleClick}
+      >
         Add Record
       </Button>
     </GridToolbarContainer>

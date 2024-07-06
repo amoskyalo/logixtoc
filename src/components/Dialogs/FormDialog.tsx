@@ -13,13 +13,17 @@ const FormDialog = ({
   children,
   open,
   onClose,
+  maxWidth = "sm",
+  title,
 }: Readonly<{
   children: React.ReactNode;
   open: boolean;
   onClose: () => void;
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl";
+  title: string;
 }>) => {
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth={maxWidth}>
       <DialogTitle>
         <Box
           sx={{
@@ -29,7 +33,7 @@ const FormDialog = ({
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6">Add new location</Typography>
+          <Typography variant="h6">{title}</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>

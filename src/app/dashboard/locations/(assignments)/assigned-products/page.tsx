@@ -1,0 +1,55 @@
+"use client";
+
+import { useState } from "react";
+import { AssignedProductsTable, AssignedProductsForm } from "./_components";
+import { useGetUser } from "@/hooks";
+import {
+  useGetAssignedProducts,
+  useGetProductTypes,
+  useGetVendorLocation,
+} from "@/api";
+
+const AssignedProducts = () => {
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const { VendorID } = useGetUser();
+  const { data: vendorProducts } = useGetProductTypes({ VendorID });
+  const { data: vendorLocations } = useGetVendorLocation({
+    VendorID,
+    VendorLocationTypeID: 0,
+  });
+  const {
+    data: assignedProducts,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useGetAssignedProducts({
+    VendorID,
+    VendorLocationID: 0,
+    PageNO: page,
+    PageSize: pageSize,
+  });
+
+  return (
+    <>
+      <AssignedProductsTable
+        onAdd={() => setOpen(true)}
+        isLoading={isLoading || isRefetching}
+        rows={assignedProducts?.Data ?? []}
+        refetch={refetch}
+      />
+
+      <AssignedProductsForm
+        open={open}
+        onClose={() => setOpen(false)}
+        products={vendorProducts?.Data ?? []}
+        locations={vendorLocations?.Data ?? []}
+        refetch={refetch}
+      />
+    </>
+  );
+};
+
+export default AssignedProducts;

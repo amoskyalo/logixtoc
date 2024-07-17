@@ -2,6 +2,7 @@ import DataGridContainer from './DataGridContainer';
 import DataGridToolbar from './DataGridToolbar';
 import EditToolbar from './EditToolbar';
 import DataGridActions from './DataGridActions';
+import DataGridEditNDelete from './DataGridEditNDelete';
 
 export { default as DataGrid } from './DataGrid';
-export {  DataGridContainer, DataGridToolbar, EditToolbar, DataGridActions }
+export { DataGridContainer, DataGridToolbar, EditToolbar, DataGridActions, DataGridEditNDelete }

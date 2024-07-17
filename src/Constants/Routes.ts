@@ -44,7 +44,7 @@ export const routes = [
             {
                 name: "Stock",
                 Icon: ShowChart,
-                path: "/dashboard/inventory/stock"
+                path: "/dashboard/inventory/stock/stock-movement"
             },
             {
                 name: "Products",

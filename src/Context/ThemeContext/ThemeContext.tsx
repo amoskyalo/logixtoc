@@ -1,13 +1,15 @@
 "use client";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useResponsiveness } from "@/hooks";
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { isMobile } = useResponsiveness();
+
   const theme = createTheme({
     palette: {
       primary: { main: "#10333f" },
       secondary: { main: "#c1e547" },
-      background: { default: "#F3F4F6" },
       primaryGray: { main: "#F3F4F6" },
     },
     typography: {
@@ -29,11 +31,11 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            textTransform: "none",
+            textTransform: isMobile ? "none" : "uppercase",
           },
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;

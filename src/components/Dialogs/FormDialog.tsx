@@ -13,7 +13,7 @@ const FormDialog = ({
   children,
   open,
   onClose,
-  maxWidth = "sm",
+  maxWidth = "xs",
   title,
 }: Readonly<{
   children: React.ReactNode;

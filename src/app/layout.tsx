@@ -3,8 +3,10 @@ import { ThemeWrapper } from "@/Context";
 import { queryClient } from "@/api";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
+import { CssBaseline } from "@mui/material";
+
 import "./globals.css";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "Logixtoc Africa",
@@ -21,8 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryClientProvider client={queryClient}>
-        <ToastContainer position="top-center" />
           <ThemeWrapper>
+            <CssBaseline />
+            <ToastContainer position="top-center" />
             {children}
           </ThemeWrapper>
         </QueryClientProvider>

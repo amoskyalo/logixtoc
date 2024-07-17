@@ -14,7 +14,13 @@ export const FormFooterButtons = ({
 }) => {
   return (
     <Stack direction="row" spacing={3}>
-      <Button disableElevation fullWidth variant="outlined" onClick={onCancel}>
+      <Button
+        disableElevation
+        fullWidth
+        variant="outlined"
+        onClick={onCancel}
+        sx={{ textTransform: "none" }}
+      >
         {cancelText}
       </Button>
       <SubmitButton loading={loading} text={submitText} />

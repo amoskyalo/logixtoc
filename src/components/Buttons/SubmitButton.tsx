@@ -11,11 +11,12 @@ export const SubmitButton = ({
       fullWidth
       variant="contained"
       type="submit"
-      sx={{ height: "40px" }}
-      startIcon={loading ? <CircularProgress color="inherit" size={18}/> : null}
+      sx={{ height: "40px", textTransform: "capitalize" }}
+      startIcon={
+        loading ? <CircularProgress color="inherit" size={18} /> : null
+      }
     >
       {text}
     </Button>
   );
 };
-

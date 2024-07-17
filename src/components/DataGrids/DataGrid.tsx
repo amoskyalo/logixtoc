@@ -40,6 +40,7 @@ const Grid = (props: DataGridProps) => {
         },
         borderColor: "transparent",
         backgroundColor: "white",
+        borderRadius: "1px"
       }}
     />
   );

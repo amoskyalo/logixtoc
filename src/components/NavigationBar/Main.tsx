@@ -269,7 +269,16 @@ export default function MainBar({
         </Drawer>
       )}
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, overflowX: "hidden" }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          overflowX: "hidden",
+          height: "100%",
+          minHeight: "100vh"
+        }}
+      >
         <DrawerHeader />
         {children}
       </Box>

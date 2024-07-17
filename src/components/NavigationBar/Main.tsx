@@ -24,7 +24,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavList from "./NavList";
 import Image from "next/image";
 
-const drawerWidth = 300;
+const drawerWidth = 310;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,

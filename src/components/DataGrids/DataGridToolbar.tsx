@@ -7,7 +7,7 @@ import {
 import { Button, Stack, TextField, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterListOffIcon from '@mui/icons-material/FilterListOff';
+import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import Datepicker from "react-tailwindcss-datepicker";
 
 export type DatesInterface = {
@@ -19,7 +19,7 @@ type PropsInterface = {
   setDates: any;
   onAdd: () => void;
   onSearch: any;
-  dates: DatesInterface;
+  dates?: DatesInterface;
 };
 
 const DataGridToolbar = ({
@@ -41,14 +41,16 @@ const DataGridToolbar = ({
       }}
     >
       <Stack direction="row" spacing={1}>
-        <Datepicker
-          showShortcuts={true}
-          value={dates}
-          onChange={(newValue) => setDates(newValue)}
-          primaryColor="blue"
-          inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none"
-          containerClassName="relative border border-gray-300 p-0 h-8 w-[240px] rounded-[5px] hover:border-gray-600"
-        />
+        {dates && (
+          <Datepicker
+            showShortcuts={true}
+            value={dates}
+            onChange={(newValue) => setDates(newValue)}
+            primaryColor="blue"
+            inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none"
+            containerClassName="relative border border-gray-300 p-0 h-8 w-[240px] rounded-[5px] hover:border-gray-600"
+          />
+        )}
 
         <TextField
           placeholder="Search..."

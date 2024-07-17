@@ -1,9 +1,18 @@
-'use client';
+"use client";
 
 import { DataGridToolbar, DataGrid } from "@/components/DataGrids";
 import { GridColDef } from "@mui/x-data-grid";
+import { DataGridProps } from "@/app/dashboard/types";
+import { ActualStock } from "@/api";
+import { getIndexedRows } from "@/utils";
+import { StatusChips } from "@/components/Chips";
 
-const ActualStockGrid = () => {
+const ActualStockGrid = ({
+  rows,
+  dates,
+  setDates,
+  isLoading,
+}: DataGridProps<ActualStock>) => {
   const columns: GridColDef[] = [
     {
       field: "id",
@@ -24,7 +33,7 @@ const ActualStockGrid = () => {
     {
       field: "DateAdded",
       headerName: "Date Added",
-      width: 150,
+      width: 180,
     },
     {
       field: "SourceVendorLocationName",
@@ -34,7 +43,7 @@ const ActualStockGrid = () => {
     {
       field: "DestinationVendorLocationName",
       headerName: "Destination Location",
-      width: 150,
+      width: 170,
     },
     {
       field: "StockMovementTypeName",
@@ -45,6 +54,14 @@ const ActualStockGrid = () => {
       field: "Status",
       headerName: "Status",
       width: 150,
+      renderCell: ({
+        row: { StockMovementStatusID, StockMovementStatusName },
+      }) => (
+        <StatusChips
+          statusID={StockMovementStatusID}
+          name={StockMovementStatusName}
+        />
+      ),
     },
     {
       field: "Actions",
@@ -53,14 +70,16 @@ const ActualStockGrid = () => {
     },
   ];
 
-  const toolbar = () => <DataGridToolbar />;
+  const toolbar = () => <DataGridToolbar dates={dates} setDates={setDates} />;
 
   return (
     <DataGrid
       columns={columns}
-      rows={[]}
+      rows={getIndexedRows(rows)}
       slots={{ toolbar }}
       checkboxSelection
+      getRowId={(row) => row.id}
+      loading={isLoading}
     />
   );
 };

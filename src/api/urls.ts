@@ -40,6 +40,15 @@ export const urls = {
     //planning
     getDeliveryPlanHistory: "Planning/GetVendorDeliveryPlanHistory",
 
+    //stock-movement
+    getStockMovementHistory: "/Stock/GetVendorStockMovementHistory",
+
+    //stock-level
+    getStockLevel: "Stock/GetVendorStockLevel",
+
+    //actual-stock
+    getActualStock: "Stock/GetVendorActualStock",
+
     //HR
     getVendorUsers: "HR/GetVendorUsers",
 

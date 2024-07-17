@@ -4,6 +4,8 @@ import { useState } from "react";
 import { LocationTypesGrid, LocationTypesForm } from "./_components";
 import { useGetVendorLocationTypes, useGetSystemLocationTypes } from "@/api";
 import { useGetUser } from "@/hooks";
+import { PageHeader } from "@/components/Headers";
+import { Stack } from "@mui/material";
 
 const LocationTypes = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +22,12 @@ const LocationTypes = () => {
   const { data: systemLocationTypes } = useGetSystemLocationTypes({ VendorID });
 
   return (
-    <>
+    <Stack spacing={3}>
+       <PageHeader
+        headerName="Location Types"
+        subTitle="Manage vendor locations, and location assignments."
+      />
+
       <LocationTypesGrid
         isLoading={isLoading || isFetching}
         rows={locationTypes?.Data || []}
@@ -34,7 +41,7 @@ const LocationTypes = () => {
         systemLocationTypes={systemLocationTypes?.Data || []}
         refetch={refetch}
       />
-    </>
+    </Stack>
   );
 };
 

@@ -7,20 +7,21 @@ import { useResponsiveness } from "@/hooks";
 
 type PropsInterface = {
   parentRoute: string;
+  initialRoute: string;
   tabsList: string[];
 };
 
-const PageTabs = ({ tabsList, parentRoute }: PropsInterface) => {
+const PageTabs = ({ tabsList, parentRoute, initialRoute }: PropsInterface) => {
   const path = usePathname();
   const router = useRouter();
   const { isMobile } = useResponsiveness();
 
   const isActive = (tab: string) => {
-    if (tab !== parentRoute) {
+    if (tab !== initialRoute) {
       return path.includes(tab);
     }
 
-    return path === `/dashboard/${parentRoute}`;
+    return path === `/dashboard/${initialRoute}`;
   };
 
   const handleNavigate = (tab: string) => {

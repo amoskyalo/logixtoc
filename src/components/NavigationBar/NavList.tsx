@@ -7,11 +7,11 @@ import {
   ListItemIcon,
   ListItemText,
   ListItemButton,
+  Stack,
 } from "@mui/material";
 import { routes } from "@/Constants";
 import { usePathname, useRouter } from "next/navigation";
-import FiberSmartRecordIcon from "@mui/icons-material/FiberSmartRecord";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const NavList = ({
   open,
@@ -75,11 +75,13 @@ const NavList = ({
             disablePadding
             sx={{
               display: "flex",
-              transition: "background-color 0.9s ease",
-              borderRadius: 1,
-              pr: open ? 1 : 0,
+              transition: "background-color 0.3s ease",
+              borderRadius: 2,
+              ":hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
               ...(isActiveTab(path)
-                ? { backgroundColor: "rgba(255, 255, 255, 0.2)" }
+                ? { backgroundColor: "rgba(255, 255, 255, 0.1)" }
                 : {}),
             }}
           >
@@ -100,20 +102,20 @@ const NavList = ({
                 <Icon sx={additionalStyles(name)} />
               </ListItemIcon>
               {open && <ListItemText primary={name} />}
-            </ListItemButton>
 
-            {open && subTabs && (
-              <KeyboardArrowDownIcon
-                onClick={() => handleNavigate(name, path, subTabs)}
-                sx={{
-                  ...additionalStyles(name),
-                  transform:
-                    isActiveTab(name) && openSubTabs.includes(name)
-                      ? "rotate(180deg)"
-                      : "none",
-                }}
-              />
-            )}
+              {open && subTabs && (
+                <KeyboardArrowRightIcon
+                  onClick={() => handleNavigate(name, path, subTabs)}
+                  sx={{
+                    ...additionalStyles(name),
+                    transform:
+                      isActiveTab(name) && openSubTabs.includes(name)
+                        ? "rotate(180deg)"
+                        : "none",
+                  }}
+                />
+              )}
+            </ListItemButton>
           </ListItem>
 
           {open && subTabs && (
@@ -122,41 +124,46 @@ const NavList = ({
               timeout="auto"
               unmountOnExit
             >
-              <Box key={name} sx={{ ml: 6 }}>
-                {subTabs.map(({ name, path }) => (
-                  <ListItemButton
-                    key={name}
-                    sx={{
-                      minHeight: 16,
-                      justifyContent: open ? "initial" : "center",
-                    }}
-                    onClick={() => handleNavigate(name, path)}
-                  >
-                    <ListItemIcon
+              <Stack
+                key={name}
+                direction="row"
+                sx={{
+                  borderLeft: "2px solid rgba(255, 255, 255, 0.2)",
+                  ml: 4,
+                  mt: 0.5,
+                }}
+              >
+                <Stack sx={{ width: "100%" }}>
+                  {subTabs.map(({ name, path }) => (
+                    <ListItemButton
+                      key={name}
                       sx={{
-                        minWidth: 0,
-                        columnGap: 2,
-                        mr: 1,
+                        minHeight: 16,
+                        height: 42,
+                        justifyContent: open ? "initial" : "center",
+                        width: "100%",
+                        borderRadius: 2,
+                        ":hover": {
+                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        },
                       }}
+                      onClick={() => handleNavigate(name, path)}
                     >
-                      <FiberSmartRecordIcon
-                        sx={{ fontSize: 14, ...additionalStyles(path) }}
-                      />
-                    </ListItemIcon>
-                    {open && (
-                      <ListItemText
-                        primary={name}
-                        sx={{
-                          "& .MuiTypography-root": {
-                            fontSize: 14,
-                            ...additionalStyles(path),
-                          },
-                        }}
-                      />
-                    )}
-                  </ListItemButton>
-                ))}
-              </Box>
+                      {open && (
+                        <ListItemText
+                          primary={name}
+                          sx={{
+                            "& .MuiTypography-root": {
+                              fontSize: 16,
+                              ...additionalStyles(path),
+                            },
+                          }}
+                        />
+                      )}
+                    </ListItemButton>
+                  ))}
+                </Stack>
+              </Stack>
             </Collapse>
           )}
         </Box>

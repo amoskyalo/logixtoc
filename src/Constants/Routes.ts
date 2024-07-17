@@ -49,7 +49,7 @@ export const routes = [
             {
                 name: "Products",
                 Icon: OilBarrel,
-                path: "/dashboard/inventory/products",
+                path: "/dashboard/inventory/products/brand",
             }
         ]
     },

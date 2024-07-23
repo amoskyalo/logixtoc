@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const UOM = () => {
-  return (
-    <div>UOM</div>
-  )
-}
+   return <div>UOM</div>;
+};
 
-export default UOM
+export default UOM;

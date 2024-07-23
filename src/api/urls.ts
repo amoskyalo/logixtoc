@@ -52,7 +52,13 @@ export const urls = {
     //HR
     getVendorUsers: "HR/GetVendorUsers",
 
-    //product types
+    //products
+    getProductClass: "Product/GetProductClass",
+
+    getProductBrands: "Product/GetVendorProductBrand",
+    postProductsBrand: "Product/AddVendorProductBrand",
+    deleteProductsBrand: "Product/RemoveVendorProductBrand",
+
     getVendorProductTypes: "Product/GetVendorProductType",
 
     //regions

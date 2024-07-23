@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const ProductCategory = () => {
-  return (
-    <div>ProductCategory</div>
-  )
-}
+   return <div>ProductCategory</div>;
+};
 
-export default ProductCategory
+export default ProductCategory;

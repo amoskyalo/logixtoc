@@ -1,87 +1,82 @@
-"use client";
+'use client';
 
-import { DataGridToolbar, DataGrid } from "@/components/DataGrids";
-import { GridColDef } from "@mui/x-data-grid";
-import { DataGridProps } from "@/app/dashboard/types";
-import { ActualStock } from "@/api";
-import { getIndexedRows } from "@/utils";
-import { StatusChips } from "@/components/Chips";
+import { DataGridToolbar, DataGrid } from '@/components/DataGrids';
+import { GridColDef } from '@mui/x-data-grid';
+import { ActualStock } from '@/api';
+import { getIndexedRows } from '@/utils';
+import { StatusChips } from '@/components/Chips';
+import { TablesPropsInterface } from '@/Types';
 
 const ActualStockGrid = ({
-  rows,
-  dates,
-  setDates,
-  isLoading,
-}: DataGridProps<ActualStock>) => {
-  const columns: GridColDef[] = [
-    {
-      field: "id",
-      headerName: "No.",
-      sortable: false,
-      width: 50,
-    },
-    {
-      field: "StockNO",
-      headerName: "Stock No.",
-      width: 150,
-    },
-    {
-      field: "AddedByName",
-      headerName: "Added By",
-      width: 150,
-    },
-    {
-      field: "DateAdded",
-      headerName: "Date Added",
-      width: 180,
-    },
-    {
-      field: "SourceVendorLocationName",
-      headerName: "Source Location",
-      width: 150,
-    },
-    {
-      field: "DestinationVendorLocationName",
-      headerName: "Destination Location",
-      width: 170,
-    },
-    {
-      field: "StockMovementTypeName",
-      headerName: "Movement Type",
-      width: 150,
-    },
-    {
-      field: "Status",
-      headerName: "Status",
-      width: 150,
-      renderCell: ({
-        row: { StockMovementStatusID, StockMovementStatusName },
-      }) => (
-        <StatusChips
-          statusID={StockMovementStatusID}
-          name={StockMovementStatusName}
-        />
-      ),
-    },
-    {
-      field: "Actions",
-      headerName: "Actions",
-      width: 100,
-    },
-  ];
+   rows,
+   dates,
+   setDates,
+   isLoading,
+}: TablesPropsInterface<ActualStock>) => {
+   const columns: GridColDef[] = [
+      {
+         field: 'id',
+         headerName: 'No.',
+         sortable: false,
+         width: 50,
+      },
+      {
+         field: 'StockNO',
+         headerName: 'Stock No.',
+         width: 150,
+      },
+      {
+         field: 'AddedByName',
+         headerName: 'Added By',
+         width: 150,
+      },
+      {
+         field: 'DateAdded',
+         headerName: 'Date Added',
+         width: 180,
+      },
+      {
+         field: 'SourceVendorLocationName',
+         headerName: 'Source Location',
+         width: 150,
+      },
+      {
+         field: 'DestinationVendorLocationName',
+         headerName: 'Destination Location',
+         width: 170,
+      },
+      {
+         field: 'StockMovementTypeName',
+         headerName: 'Movement Type',
+         width: 150,
+      },
+      {
+         field: 'Status',
+         headerName: 'Status',
+         width: 150,
+         renderCell: ({ row: { StockMovementStatusID, StockMovementStatusName } }) => (
+            <StatusChips statusID={StockMovementStatusID} name={StockMovementStatusName} />
+         ),
+      },
+      {
+         field: 'Actions',
+         headerName: 'Actions',
+         width: 100,
+      },
+   ];
 
-  const toolbar = () => <DataGridToolbar dates={dates} setDates={setDates} />;
+   const toolbar = () => <DataGridToolbar dates={dates} setDates={setDates} />;
 
-  return (
-    <DataGrid
-      columns={columns}
-      rows={getIndexedRows(rows)}
-      slots={{ toolbar }}
-      checkboxSelection
-      getRowId={(row) => row.id}
-      loading={isLoading}
-    />
-  );
+   return (
+      <DataGrid
+         columns={columns}
+         rows={getIndexedRows(rows)}
+         slots={{ toolbar }}
+         checkboxSelection
+         getRowId={(row) => row.id}
+         loading={isLoading}
+      />
+   );
 };
 
 export default ActualStockGrid;

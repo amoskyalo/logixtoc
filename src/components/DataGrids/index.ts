@@ -4,5 +4,6 @@ import EditToolbar from './EditToolbar';
 import DataGridActions from './DataGridActions';
 import DataGridEditNDelete from './DataGridEditNDelete';
 
+export * from './types';
 export { default as DataGrid } from './DataGrid';
 export { DataGridContainer, DataGridToolbar, EditToolbar, DataGridActions, DataGridEditNDelete }

@@ -1,17 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Box } from "@mui/material";
-import { MainBar } from "@/components/NavigationBar";
+import React from 'react';
+import { Box } from '@mui/material';
+import { MainBar } from '@/components/NavigationBar';
 
-const DashboardLayout = ({
-  children,
-}: Readonly<{ children: React.ReactNode }>) => {
-  return (
-    <Box sx={{ height: "100vh" }}>
-      <MainBar>{children}</MainBar>
-    </Box>
-  );
+const DashboardLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+   return (
+      <Box sx={{ height: '100vh' }}>
+         <MainBar>{children}</MainBar>
+      </Box>
+   );
 };
 
 export default DashboardLayout;

@@ -6,16 +6,16 @@ import { GridColDef } from "@mui/x-data-grid";
 import { StockMovement } from "@/api";
 import { getIndexedRows } from "@/utils";
 import { StatusChips } from "@/components/Chips";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box } from "@mui/material";
-import { DataGridProps } from "@/app/dashboard/types";
+import { TablesPropsInterface } from "@/Types";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const StockMovementGrid = ({
   rows,
   setDates,
   dates,
   isLoading,
-}: DataGridProps<StockMovement>) => {
+}: TablesPropsInterface<StockMovement>) => {
   const columns: GridColDef[] = [
     {
       field: "id",

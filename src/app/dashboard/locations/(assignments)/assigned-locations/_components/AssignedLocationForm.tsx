@@ -9,8 +9,8 @@ import { Formik, Form } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 
 type Props = {
    locations: LocationsArrayInterface[];
@@ -54,14 +54,7 @@ const AssignedLocationForm = ({
          addedBy,
       };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            setLoading(false);
-            toast.success(data.Message);
-            onClose();
-            refetch();
-         },
-      });
+      mutate(payload, mutateOptions({ setLoading, onClose, refetch }));
    };
 
    return (

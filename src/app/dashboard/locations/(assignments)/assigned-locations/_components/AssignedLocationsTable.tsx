@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DataGrid, DataGridContainer, DataGridToolbar } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows } from '@/utils';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedLocationObject, useDeleteAssignedLocation } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
@@ -22,7 +22,7 @@ const AssignedLocationsTable = ({
    const { isMobile } = useResponsiveness();
    const { mutate } = useDeleteAssignedLocation();
 
-   const handleClose = () => {
+   const onClose = () => {
       setActiveParam('');
    };
 
@@ -30,14 +30,7 @@ const AssignedLocationsTable = ({
       setLoading(true);
       mutate(
          { VendorID, addedBy, vendorLocationAssignmentID: activeParam },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               handleClose();
-               refetch!();
-               setLoading(false);
-            },
-         },
+         mutateOptions({ setLoading, refetch, onClose }),
       );
    };
 
@@ -104,7 +97,7 @@ const AssignedLocationsTable = ({
          <DeleteDialog
             open={Number.isInteger(activeParam)}
             loading={loading}
-            onCancel={handleClose}
+            onCancel={onClose}
             onOkay={handleDelete}
          />
       </>

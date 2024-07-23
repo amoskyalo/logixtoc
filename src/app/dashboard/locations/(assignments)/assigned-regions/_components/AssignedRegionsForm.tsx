@@ -8,8 +8,8 @@ import { SelectField, AutoCompleteField } from '@/components/Inputs';
 import { MenuItem, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 import * as Yup from 'yup';
 
 type Props = {
@@ -47,14 +47,7 @@ const AssignedRegionsForm = ({
          })),
       };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            toast.success(data.Message);
-            setLoading(false);
-            onClose();
-            refetch();
-         },
-      });
+      mutate(payload, mutateOptions({ refetch, onClose, setLoading }));
    };
 
    return (

@@ -3,12 +3,11 @@
 import { DataGridEditNDelete, DataGrid, DataGridToolbar } from '@/components/DataGrids';
 import { TablesPropsInterface } from '@/Types';
 import { ProductBrand, useDeleteVendorProductBrand } from '@/api';
-import { getColumnWidth, getIndexedRows } from '@/utils';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { GridColDef } from '@mui/x-data-grid';
 import { useResponsiveness, useGetUser } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
-import { toast } from 'react-toastify';
 
 const BrandTable = ({ rows, onAdd, isLoading, refetch }: TablesPropsInterface<ProductBrand>) => {
    const [loading, setLoading] = useState(false);
@@ -66,14 +65,7 @@ const BrandTable = ({ rows, onAdd, isLoading, refetch }: TablesPropsInterface<Pr
 
       mutate(
          { VendorID, addedBy, vendorProductBrandID: params },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               refetch!();
-               setLoading(false);
-               setParams('');
-            },
-         },
+         mutateOptions({ refetch, setLoading, onClose: () => setParams('') }),
       );
    };
 

@@ -9,8 +9,8 @@ import { MenuItem, Stack } from '@mui/material';
 import { LocationsArrayInterface, VendorAccount, usePostAssignedAccount } from '@/api';
 import { SubmitButton } from '@/components/Buttons';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 
 type Props = {
    locations: LocationsArrayInterface[];
@@ -47,14 +47,7 @@ const AssignedAcountsForm = ({
          })),
       };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            toast.success(data.Message);
-            onClose();
-            refetch();
-            setLoading(false);
-         },
-      });
+      mutate(payload, mutateOptions({ onClose, refetch, setLoading }));
    };
 
    return (

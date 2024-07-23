@@ -2,7 +2,7 @@
 
 import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
 import { AssignedProductInterface, useDeleteAssignedProducts } from '@/api';
-import { getIndexedRows, getColumnWidth } from '@/utils';
+import { getIndexedRows, getColumnWidth, mutateOptions } from '@/utils';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useGetUser, useResponsiveness } from '@/hooks';
@@ -24,7 +24,7 @@ const AssignedProductsTable = ({
    const { isMobile } = useResponsiveness();
    const { mutate } = useDeleteAssignedProducts();
 
-   const handleClose = () => {
+   const onClose = () => {
       setActiveParam('');
    };
 
@@ -32,14 +32,7 @@ const AssignedProductsTable = ({
       setLoading(true);
       mutate(
          { VendorID, addedBy, vendorLocationProductTypeID: activeParam },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               refetch!();
-               handleClose();
-               setLoading(false);
-            },
-         },
+         mutateOptions({ refetch, onClose, setLoading }),
       );
    };
 
@@ -98,7 +91,7 @@ const AssignedProductsTable = ({
          <DeleteDialog
             loading={loading}
             onOkay={handleDelete}
-            onCancel={handleClose}
+            onCancel={onClose}
             open={Number.isInteger(activeParam)}
          />
       </>

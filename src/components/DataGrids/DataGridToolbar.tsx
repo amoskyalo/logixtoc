@@ -4,6 +4,8 @@ import {
    GridToolbarColumnsButton,
    GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
+import { useGridApiContext } from '@mui/x-data-grid';
+import { useCallback } from 'react';
 import { Button, Stack, TextField, InputAdornment } from '@mui/material';
 import { getInitialDates } from '@/utils';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,11 +21,19 @@ export type DatesInterface = {
 type PropsInterface = {
    setDates?: any;
    onAdd?: () => void;
-   onSearch?: any;
    dates?: DatesInterface;
 };
 
-const DataGridToolbar = ({ setDates, onSearch, dates, onAdd }: Readonly<PropsInterface>) => {
+const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) => {
+   const apiRef = useGridApiContext();
+
+   const updateSearchValue = useCallback(
+      (newSearchValue: string) => {
+         apiRef.current.setQuickFilterValues([newSearchValue]);
+      },
+      [apiRef],
+   );
+
    return (
       <GridToolbarContainer
          sx={{
@@ -43,9 +53,6 @@ const DataGridToolbar = ({ setDates, onSearch, dates, onAdd }: Readonly<PropsInt
                   showFooter
                   value={dates}
                   showShortcuts={true}
-                  primaryColor="blue"
-                  inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none"
-                  containerClassName="relative border border-gray-300 p-0 h-8 w-[240px] rounded-[5px] hover:border-gray-600"
                   onChange={(newValue) => {
                      if (!newValue?.startDate && !newValue?.endDate) {
                         setDates(getInitialDates());
@@ -53,6 +60,9 @@ const DataGridToolbar = ({ setDates, onSearch, dates, onAdd }: Readonly<PropsInt
                         setDates(newValue);
                      }
                   }}
+                  primaryColor="blue"
+                  inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none"
+                  containerClassName="relative border border-gray-300 p-0 h-8 w-[240px] rounded-[5px] hover:border-gray-600"
                />
             )}
 
@@ -60,7 +70,7 @@ const DataGridToolbar = ({ setDates, onSearch, dates, onAdd }: Readonly<PropsInt
                placeholder="Search..."
                size="small"
                sx={{ width: 250 }}
-               onChange={onSearch}
+               onChange={(e) => updateSearchValue(e.target.value)}
                inputProps={{
                   style: {
                      height: '15px',

@@ -2,12 +2,11 @@
 
 import { DataGridToolbar, DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows } from '@/utils';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { StatusChips } from '@/components/Chips';
 import { VendorLocationType, useDeleteVendorLocationTypes } from '@/api';
 import { useGetUser, useResponsiveness } from '@/hooks';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { DeleteDialog } from '@/components/Dialogs';
 import { TablesPropsInterface } from '@/Types';
 
@@ -29,14 +28,7 @@ const LocationTypesGrid = ({
 
       mutate(
          { VendorID, addedBy, vendorLocationTypeID: activeParams },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               refetch!();
-               setLoading(true);
-               setActiveParams('');
-            },
-         },
+         mutateOptions({ refetch, setLoading, onClose: () => setActiveParams('') }),
       );
    };
 

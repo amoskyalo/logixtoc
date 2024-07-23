@@ -1,6 +1,8 @@
 import { statusColors } from "@/Constants";
 import { GridRowModel } from "@mui/x-data-grid";
 import { DatesInterface } from "@/Types";
+import { toast } from "react-toastify";
+import { mutateOptionsArgs } from "./types";
 import dayjs from "dayjs";
 
 export const getStatusChipColor = (statusID: string | number) => {
@@ -25,4 +27,23 @@ export const getInitialDates = (): DatesInterface => {
     const endDate = dayjs().format(format);
 
     return { startDate, endDate }
+}
+
+export const mutateOptions = (args: mutateOptionsArgs) => {
+    const { onClose, refetch, setLoading } = args;
+
+    const options = {
+        onSuccess: ({ data }: any) => {
+            toast.success(data.Message);
+            onClose();
+            setLoading(false);
+            refetch?.();
+        },
+        onError: (error: any) => {
+            toast.error(error.message);
+            setLoading(false);
+        },
+    };
+
+    return options;
 }

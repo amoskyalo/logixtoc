@@ -11,8 +11,8 @@ import {
 import * as Yup from 'yup';
 import { SubmitButton } from '@/components/Buttons';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 
 type InitialValuesInterface = {
    usersArray: Array<{ userID: number }>;
@@ -67,14 +67,7 @@ const AssignedUsersForm = ({
          addedBy: UserID,
       };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            toast.success(data.Message);
-            refetch();
-            onClose();
-            setLoading(false);
-         },
-      });
+      mutate(payload, mutateOptions({ setLoading, onClose, refetch }));
    };
 
    return (

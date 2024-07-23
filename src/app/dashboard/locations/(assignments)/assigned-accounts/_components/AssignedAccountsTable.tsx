@@ -1,15 +1,13 @@
 'use client';
 
-import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
-import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { getIndexedRows } from '@/utils';
+import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
+import { GridColDef } from '@mui/x-data-grid';
+import { getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedAccount, useDeleteAssignedAccount } from '@/api';
 import { useGetUser } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
-import { toast } from 'react-toastify';
 import { TablesPropsInterface } from '@/Types';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedAccountsTable = ({
    rows,
@@ -27,7 +25,7 @@ const AssignedAccountsTable = ({
    const { VendorID, UserID: addedBy } = useGetUser();
    const { mutate } = useDeleteAssignedAccount();
 
-   const handleCancel = () => {
+   const onClose = () => {
       setOpen(false);
       setActiveParams({
          vendorAccountID: '',
@@ -40,14 +38,7 @@ const AssignedAccountsTable = ({
 
       mutate(
          { VendorID, addedBy, ...activeParams },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               handleCancel();
-               refetch!();
-               setLoading(false);
-            },
-         },
+         mutateOptions({ refetch, setLoading, onClose }),
       );
    };
 
@@ -103,12 +94,10 @@ const AssignedAccountsTable = ({
          headerName: 'Actions',
          getActions: ({ row: { VendorAccountID, VendorLocationID } }) => {
             return [
-               <GridActionsCellItem
-                  label="Delete"
-                  key="Delete"
-                  color="error"
-                  icon={<DeleteIcon />}
-                  onClick={() => {
+               <DataGridEditNDelete
+                  key="delete"
+                  actions={['delete']}
+                  onDelete={() => {
                      setOpen(true);
                      setActiveParams({
                         vendorAccountID: VendorAccountID,
@@ -134,12 +123,7 @@ const AssignedAccountsTable = ({
             slots={{ toolbar }}
          />
 
-         <DeleteDialog
-            open={open}
-            onCancel={handleCancel}
-            onOkay={handleDelete}
-            loading={loading}
-         />
+         <DeleteDialog open={open} onCancel={onClose} onOkay={handleDelete} loading={loading} />
       </>
    );
 };

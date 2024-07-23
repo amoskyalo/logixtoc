@@ -1,15 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridToolbar, DataGridContainer } from '@/components/DataGrids';
+import {
+   DataGrid,
+   DataGridToolbar,
+   DataGridContainer,
+   DataGridEditNDelete,
+} from '@/components/DataGrids';
 import { DeleteDialog } from '@/components/Dialogs';
-import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
 import { VendorLocationUserAssignmentRow, useDeleteVendorLocationUserAssignement } from '@/api';
-import { getColumnWidth, getIndexedRows } from '@/utils';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { toast } from 'react-toastify';
 import { TablesPropsInterface } from '@/Types';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedUsersTable = ({
    isLoading,
@@ -24,7 +27,7 @@ const AssignedUsersTable = ({
    const { isMobile } = useResponsiveness();
    const { mutate } = useDeleteVendorLocationUserAssignement();
 
-   const handleClose = () => {
+   const onClose = () => {
       setActiveParam('');
    };
 
@@ -32,14 +35,7 @@ const AssignedUsersTable = ({
       setLoading(true);
       mutate(
          { VendorID, addedBy, vendorLocationUserAssignmentID: activeParam },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               handleClose();
-               setLoading(false);
-               refetch!();
-            },
-         },
+         mutateOptions({ refetch, onClose, setLoading }),
       );
    };
 
@@ -72,12 +68,10 @@ const AssignedUsersTable = ({
          width: 100,
          getActions: ({ row: { VendorLocationUserAssignmentID } }) => {
             return [
-               <GridActionsCellItem
-                  key="delete"
-                  label="delete"
-                  icon={<DeleteIcon />}
-                  color="error"
-                  onClick={() => setActiveParam(VendorLocationUserAssignmentID)}
+               <DataGridEditNDelete
+                  key="action"
+                  onDelete={() => setActiveParam(VendorLocationUserAssignmentID)}
+                  actions={['delete']}
                />,
             ];
          },
@@ -101,7 +95,7 @@ const AssignedUsersTable = ({
 
          <DeleteDialog
             open={Number.isInteger(activeParam)}
-            onCancel={handleClose}
+            onCancel={onClose}
             loading={loading}
             onOkay={handleDelete}
          />

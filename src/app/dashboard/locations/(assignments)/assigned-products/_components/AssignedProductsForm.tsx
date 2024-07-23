@@ -9,8 +9,8 @@ import { ProductType, LocationsArrayInterface, usePostAssignedProducts } from '@
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 
 type Props = {
    locations: LocationsArrayInterface[];
@@ -41,18 +41,7 @@ const AssignedProductsForm = ({
          addedBy,
       };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            toast.success(data.Message);
-            onClose();
-            setLoading(false);
-            refetch();
-         },
-         onError: (error) => {
-            toast.error(error.message);
-            setLoading(false);
-         },
-      });
+      mutate(payload, mutateOptions({ onClose, refetch, setLoading }));
    };
 
    const validationSchema = () =>

@@ -1,16 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { DataGrid, DataGridContainer, DataGridToolbar } from '@/components/DataGrids';
-import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { getColumnWidth } from '@/utils';
+import { useState } from 'react';
+import {
+   DataGrid,
+   DataGridContainer,
+   DataGridToolbar,
+   DataGridEditNDelete,
+} from '@/components/DataGrids';
+import { GridColDef } from '@mui/x-data-grid';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { LocationsArrayInterface, useDeleteVendorLocation } from '@/api';
 import { useGetUser, useResponsiveness } from '@/hooks';
 import { DeleteDialog } from '@/components/Dialogs';
-import { toast } from 'react-toastify';
 import { TablesPropsInterface } from '@/Types';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
 type RowParamsInterface = {
    addedBy: string;
@@ -70,25 +72,15 @@ const LocationsTable = ({
          type: 'actions',
          getActions: ({ row: { AddedByName, VendorLocationID } }) => {
             return [
-               <GridActionsCellItem
-                  key="edit"
-                  label="Edit"
-                  color="success"
-                  // onClick={() => console.log(row)}
-                  icon={<EditIcon />}
-               />,
-               <GridActionsCellItem
-                  key="delete"
-                  label="Delete"
-                  color="error"
-                  onClick={() => {
+               <DataGridEditNDelete
+                  key="actions"
+                  onDelete={() => {
                      setActiveParams({
                         addedBy: AddedByName,
                         vendorLocationID: VendorLocationID,
                      });
                      setOpen(true);
                   }}
-                  icon={<DeleteIcon />}
                />,
             ];
          },
@@ -104,21 +96,14 @@ const LocationsTable = ({
             addedBy: UserID,
             vendorLocationID,
          },
-         {
-            onSuccess: () => {
-               setLoading(false);
-               toast.success('Locaion deleted successfuly!');
-               setActiveParams(initialParams);
-               refetch!();
-               setOpen(false);
-            },
-            onError: () => {
-               setLoading(false);
-               toast.error('Error while deleting location!');
+         mutateOptions({
+            setLoading,
+            refetch,
+            onClose: () => {
                setActiveParams(initialParams);
                setOpen(false);
             },
-         },
+         }),
       );
    };
 
@@ -126,18 +111,12 @@ const LocationsTable = ({
       return <DataGridToolbar onAdd={onAdd} />;
    };
 
-   const indexedRows = useMemo(() => {
-      return rows.map((row, index) => {
-         return { id: index + 1, ...row };
-      });
-   }, [rows]);
-
    return (
       <>
          <DataGridContainer>
             <DataGrid
                columns={columns}
-               rows={indexedRows}
+               rows={getIndexedRows(rows)}
                slots={{ toolbar }}
                loading={isLoading}
                getRowId={(row) => row.id}

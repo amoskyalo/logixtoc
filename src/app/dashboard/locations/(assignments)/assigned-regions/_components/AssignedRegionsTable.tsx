@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows } from '@/utils';
+import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedRegionObjInterface, useDeleteAssignedRegions } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { toast } from 'react-toastify';
 import { TablesPropsInterface } from '@/Types';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -31,7 +30,7 @@ const AssignedRegionsTable = ({
    const { isMobile } = useResponsiveness();
    const { mutate } = useDeleteAssignedRegions();
 
-   const handleClose = () => {
+   const onClose = () => {
       setOpen(false);
       setActiveParam({
          vendorLocationID: '',
@@ -44,14 +43,7 @@ const AssignedRegionsTable = ({
 
       mutate(
          { VendorID, addedBy, ...activeParam },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               handleClose();
-               setLoading(false);
-               refetch!();
-            },
-         },
+         mutateOptions({ refetch, setLoading, onClose }),
       );
    };
 
@@ -114,7 +106,7 @@ const AssignedRegionsTable = ({
             checkboxSelection
          />
 
-         <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={handleClose} />
+         <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={onClose} />
       </>
    );
 };

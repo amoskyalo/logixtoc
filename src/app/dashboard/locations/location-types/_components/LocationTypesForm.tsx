@@ -9,8 +9,8 @@ import { MenuItem, Stack } from '@mui/material';
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
 import { FormsPropsInterface } from '@/Types';
+import { mutateOptions } from '@/utils';
 
 type Props = {
    systemLocationTypes: SystemLocationType[];
@@ -35,17 +35,7 @@ const LocationTypesForm = ({
    const handleSubmit = (data: FormikValues) => {
       setLoading(true);
 
-      mutate(
-         { VendorID, addedBy, ...data },
-         {
-            onSuccess: ({ data }) => {
-               toast.success(data.Message);
-               setLoading(false);
-               onClose();
-               refetch();
-            },
-         },
-      );
+      mutate({ VendorID, addedBy, ...data }, mutateOptions({ onClose, refetch, setLoading }));
    };
 
    const validationSchema = () =>

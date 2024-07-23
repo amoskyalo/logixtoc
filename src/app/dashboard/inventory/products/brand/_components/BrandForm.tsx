@@ -10,7 +10,7 @@ import { MenuItem, Stack } from '@mui/material';
 import { SubmitButton } from '@/components/Buttons';
 import { ProductClass, useAddVendorProductBrand } from '@/api';
 import { useGetUser } from '@/hooks';
-import { toast } from 'react-toastify';
+import { mutateOptions } from '@/utils';
 
 type FormikValues = {
    productClassID: number;
@@ -38,20 +38,9 @@ const BrandForm = ({
    const handleSubmit = (data: FormikValues) => {
       setLoading(true);
 
-      const payload = {
-         VendorID,
-         AddedBy,
-         ...data,
-      };
+      const payload = { VendorID, AddedBy, ...data };
 
-      mutate(payload, {
-         onSuccess: ({ data }) => {
-            toast.success(data.Message);
-            refetch();
-            onClose();
-            setLoading(false);
-         },
-      });
+      mutate(payload, mutateOptions({ refetch, onClose, setLoading }));
    };
 
    return (

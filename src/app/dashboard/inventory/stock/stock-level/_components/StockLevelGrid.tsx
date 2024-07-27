@@ -1,7 +1,7 @@
 'use client';
 
 import { GridColDef } from '@mui/x-data-grid';
-import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
+import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
 import { VendorStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 import { TablesPropsInterface } from '@/Types';
@@ -72,7 +72,8 @@ const StockLevelGrid = ({
       {
          field: 'Actions',
          headerName: 'Actions',
-         width: 100,
+         type: 'actions',
+         getActions: () => [<DataGridEditNDelete key="options" actions={['options']} />],
       },
    ];
 

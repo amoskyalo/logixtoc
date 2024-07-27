@@ -3,11 +3,12 @@ import {
    GridToolbarExport,
    GridToolbarColumnsButton,
    GridToolbarDensitySelector,
+   useGridApiContext,
 } from '@mui/x-data-grid';
-import { useGridApiContext } from '@mui/x-data-grid';
 import { useCallback } from 'react';
 import { Button, Stack, TextField, InputAdornment } from '@mui/material';
 import { getInitialDates } from '@/utils';
+import { useResponsiveness } from '@/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
@@ -26,6 +27,7 @@ type PropsInterface = {
 
 const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) => {
    const apiRef = useGridApiContext();
+   const { isMobile } = useResponsiveness();
 
    const updateSearchValue = useCallback(
       (newSearchValue: string) => {
@@ -46,13 +48,18 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
             paddingX: '8px',
          }}
       >
-         <Stack direction="row" spacing={1}>
+         <Stack
+            direction={isMobile ? 'column' : 'row'}
+            spacing={1}
+            sx={{ width: '100%' }}
+         >
             {dates && (
                <Datepicker
                   readOnly
-                  showFooter
                   value={dates}
-                  showShortcuts={true}
+                  showFooter={!isMobile}
+                  showShortcuts={!isMobile}
+                  useRange={!isMobile}
                   onChange={(newValue) => {
                      if (!newValue?.startDate && !newValue?.endDate) {
                         setDates(getInitialDates());
@@ -61,15 +68,15 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
                      }
                   }}
                   primaryColor="blue"
-                  inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none"
-                  containerClassName="relative border border-gray-300 p-0 h-8 w-[240px] rounded-[5px] hover:border-gray-600"
+                  inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none bg-transparent"
+                  containerClassName={`relative border border-gray-600 p-0 h-8 rounded-[5px] hover:border-gray-600 bg-transparent ${isMobile ? '100%' : 'w-[240px]'}`}
                />
             )}
 
             <TextField
                placeholder="Search..."
                size="small"
-               sx={{ width: 250 }}
+               sx={{ width: !isMobile ? 250 : '100%' }}
                onChange={(e) => updateSearchValue(e.target.value)}
                inputProps={{
                   style: {

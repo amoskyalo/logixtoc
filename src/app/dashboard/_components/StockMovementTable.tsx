@@ -30,7 +30,7 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
       {
          field: 'StockMovementStatusID',
          headerName: 'Status',
-         width: 150,
+         width: 110,
          renderCell: ({ row: { StockMovementStatusID, StockMovementStatusName } }) => (
             <StatusChips statusID={StockMovementStatusID} name={StockMovementStatusName} />
          ),
@@ -45,6 +45,7 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
                columns={columns}
                getRowId={(row) => row.DateAdded}
                loading={loading}
+               hideFooter
             />
          </SectionsBox>
       </Grid>

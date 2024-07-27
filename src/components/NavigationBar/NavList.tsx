@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { routes } from '@/Constants';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTheme } from '@mui/material/styles';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const NavList = ({
@@ -24,8 +25,14 @@ const NavList = ({
 }>) => {
    const pathname = usePathname();
    const router = useRouter();
+   const {
+      palette: { mode },
+   } = useTheme();
 
    const [openSubTabs, setOpenSubTabs] = useState<string[]>([]);
+
+   const textColor = mode === 'dark' ? '#31c886' : '#10333f';
+   const backgroundColor = mode === 'dark' ? '#122627' : 'rgba(16, 51, 63, 0.2)';
 
    function isActiveTab(path: string, isSubTab?: boolean) {
       if (isSubTab || path === '/dashboard') {
@@ -40,7 +47,7 @@ const NavList = ({
    function additionalStyles(tab: string, isSubTab?: boolean) {
       return {
          transition: 'color 0.5s ease',
-         color: isActiveTab(tab, isSubTab) ? 'rgba(255, 255, 255,0.8)' : 'rgba(255, 255, 255, 0.4)',
+         color: isActiveTab(tab, isSubTab) ? textColor : '#a5acb2',
       };
    }
 
@@ -70,18 +77,21 @@ const NavList = ({
                   sx={{
                      display: 'flex',
                      transition: 'background-color 0.3s ease',
-                     borderRadius: 2,
+                     borderRadius: 1,
                      ':hover': {
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderRadius: 1,
                      },
-                     ...(isActiveTab(path) ? { backgroundColor: 'rgba(255, 255, 255, 0.1)' } : {}),
+                     marginBottom: 1,
+                     ...(isActiveTab(path) ? { backgroundColor } : {}),
                   }}
                >
                   <ListItemButton
                      sx={{
-                        minHeight: 48,
+                        minHeight: 44,
+                        height: 44,
                         justifyContent: open ? 'initial' : 'center',
-                        ...additionalStyles(name),
+                        ...additionalStyles(path),
                      }}
                   >
                      <ListItemIcon
@@ -91,9 +101,19 @@ const NavList = ({
                            justifyContent: 'center',
                         }}
                      >
-                        <Icon sx={additionalStyles(name)} />
+                        <Icon sx={{ fontSize: 20, ...additionalStyles(path) }} />
                      </ListItemIcon>
-                     {open && <ListItemText primary={name} />}
+                     {open && (
+                        <ListItemText
+                           primary={name}
+                           sx={{
+                              '& .MuiTypography-root': {
+                                 fontWeight: 600,
+                                 ...additionalStyles(path),
+                              },
+                           }}
+                        />
+                     )}
 
                      {open && subTabs && (
                         <KeyboardArrowRightIcon

@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGridToolbar, DataGrid } from '@/components/DataGrids';
+import { DataGridToolbar, DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { ActualStock } from '@/api';
 import { getIndexedRows } from '@/utils';
@@ -61,7 +61,8 @@ const ActualStockGrid = ({
       {
          field: 'Actions',
          headerName: 'Actions',
-         width: 100,
+         type: 'actions',
+         getActions: () => [<DataGridEditNDelete key="options" actions={['options']} />],
       },
    ];
 

@@ -13,39 +13,9 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useResponsiveness } from '@/hooks';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
-
-export const options = {
-   maintainAspectRatio: false,
-   responsive: true,
-   plugins: {
-      title: {
-         display: false,
-      },
-   },
-   scales: {
-      y: {
-         grid: {
-            display: false,
-         },
-         ticks: {
-            stepSize: 50,
-            beginAtZero: true,
-         },
-         beginAtZero: true,
-         padding: 10,
-         border: {
-            display: false,
-         },
-      },
-      x: {
-         grid: {
-            color: 'rgba(244, 245, 249, 1)',
-         },
-      },
-   },
-};
 
 export type LineChartInterface = {
    data: {
@@ -64,6 +34,11 @@ export type LineChartInterface = {
 
 const LineChart = ({ data, loading }: LineChartInterface) => {
    const { isMobile } = useResponsiveness();
+   const {
+      palette: { mode },
+   } = useTheme();
+
+   const ticksColor = mode === 'dark' ? 'rgba(244, 245, 249, 1)' : '';
 
    const styles = {
       display: 'flex',
@@ -71,6 +46,41 @@ const LineChart = ({ data, loading }: LineChartInterface) => {
       alignItems: 'center',
       height: '100%',
       width: '100%',
+   };
+
+   const options = {
+      maintainAspectRatio: false,
+      responsive: true,
+      plugins: {
+         title: {
+            display: false,
+         },
+      },
+      scales: {
+         y: {
+            grid: {
+               display: false,
+            },
+            border: {
+               display: false,
+            },
+            ticks: {
+               stepSize: 50,
+               beginAtZero: true,
+               color: ticksColor,
+            },
+            beginAtZero: true,
+            padding: 10,
+         },
+         x: {
+            grid: {
+               color: 'rgba(244, 245, 249, 1)',
+            },
+            ticks: {
+               color: ticksColor,
+            },
+         },
+      },
    };
 
    return (

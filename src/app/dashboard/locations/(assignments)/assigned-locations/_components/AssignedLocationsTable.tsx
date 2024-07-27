@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { DataGrid, DataGridContainer, DataGridToolbar } from '@/components/DataGrids';
+import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedLocationObject, useDeleteAssignedLocation } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { toast } from 'react-toastify';
 import { TablesPropsInterface } from '@/Types';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -84,7 +83,6 @@ const AssignedLocationsTable = ({
 
    return (
       <>
-         <DataGridContainer>
             <DataGrid
                columns={columns}
                rows={getIndexedRows(rows)}
@@ -92,7 +90,6 @@ const AssignedLocationsTable = ({
                slots={{ toolbar }}
                checkboxSelection
             />
-         </DataGridContainer>
 
          <DeleteDialog
             open={Number.isInteger(activeParam)}

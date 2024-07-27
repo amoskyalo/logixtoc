@@ -1,12 +1,19 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { ContainerInterface } from './types';
+import { useTheme } from '@mui/material/styles';
 
 const Container = ({ title, children, renderActionButton }: Readonly<ContainerInterface>) => {
+   const {
+      palette: { mode },
+   } = useTheme();
+
+   const isDarkMode = mode === 'dark';
+
    return (
       <Box
          sx={{
-            backgroundColor: 'white',
+            backgroundColor: isDarkMode ? '#1c252e' : 'white',
             padding: 4,
             borderRadius: 2,
             display: 'flex',

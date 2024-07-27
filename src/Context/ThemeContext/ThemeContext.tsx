@@ -2,15 +2,34 @@
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
+import { useMemo, useState } from 'react';
+import { createContext } from 'react';
+
+export const ThemeContext = createContext<any>('');
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
+   const [mode, setMode] = useState<'dark' | 'light'>('dark');
    const { isMobile } = useResponsiveness();
 
    const theme = createTheme({
       palette: {
-         primary: { main: '#10333f' },
+         mode,
+         primary: { main: '#31c886' },
          secondary: { main: '#c1e547' },
          primaryGray: { main: '#F3F4F6' },
+         ...(mode === 'dark'
+            ? {
+                 background: {
+                    default: '#131a22',
+                 },
+                 text: {
+                    primary: '#f8f9fc',
+                 },
+              }
+            : {
+                 primary: { main: '#10333f' },
+                 background: { default: '#f3f4f6' },
+              }),
       },
       typography: {
          fontFamily: ['Quicksand', 'sans-serif'].join(','),
@@ -35,10 +54,29 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
                },
             },
          },
+         MuiAppBar: {
+            styleOverrides: {
+               colorPrimary: {
+                  backgroundColor: mode === 'dark' ? '#131a22' : 'white',
+               },
+            },
+         },
       },
    });
 
-   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+   const value = useMemo(
+      () => ({
+         mode,
+         setMode,
+      }),
+      [mode, setMode],
+   );
+
+   return (
+      <ThemeContext.Provider value={value}>
+         <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      </ThemeContext.Provider>
+   );
 };
 
 export { ThemeWrapper };

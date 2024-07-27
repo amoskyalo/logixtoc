@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import {
    DataGrid,
-   DataGridContainer,
    DataGridToolbar,
    DataGridEditNDelete,
 } from '@/components/DataGrids';
@@ -113,7 +112,6 @@ const LocationsTable = ({
 
    return (
       <>
-         <DataGridContainer>
             <DataGrid
                columns={columns}
                rows={getIndexedRows(rows)}
@@ -122,7 +120,6 @@ const LocationsTable = ({
                getRowId={(row) => row.id}
                checkboxSelection
             />
-         </DataGridContainer>
 
          <DeleteDialog
             open={open}

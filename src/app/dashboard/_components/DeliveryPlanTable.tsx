@@ -56,6 +56,7 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
                columns={columns}
                getRowId={(row) => row.DateAdded}
                loading={loading}
+               hideFooter
             />
          </SectionsBox>
       </Grid>

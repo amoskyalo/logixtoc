@@ -1,13 +1,28 @@
 import { CardsInterface } from '../types';
 import { Box, Typography } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
 import FiberSmartRecordIcon from '@mui/icons-material/FiberSmartRecord';
 
 const Cards = (props: Readonly<CardsInterface>) => {
    const { cardBackground, title, subTitle, color, iconBackground, Icon, percentages, value } =
       props;
 
+   const {
+      palette: { mode },
+   } = useTheme();
+
+   const isDarkMode = mode === 'dark';
+
+   const backgroundColor = isDarkMode ? '#1c252e' : 'white';
+
+   const textColor = cardBackground && isDarkMode ? "rgba(0, 0, 0, 0.7)" : '';
+
+   const StyledTypography = styled(Typography)(() => ({
+      color: textColor,
+   }))
+
    return (
-      <Box sx={{ backgroundColor: cardBackground ?? 'white', p: 2, borderRadius: 2 }}>
+      <Box sx={{ backgroundColor: cardBackground ?? backgroundColor, p: 2, borderRadius: 2 }}>
          <Box
             sx={{
                borderLeft: `3px solid ${color}`,
@@ -18,10 +33,10 @@ const Cards = (props: Readonly<CardsInterface>) => {
             }}
          >
             <Box>
-               <Typography variant="subtitle1">{title}</Typography>
+               <StyledTypography variant="subtitle1">{title}</StyledTypography>
                <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 0.5 }}>
-                  <Typography variant="body2">{subTitle}: </Typography>
-                  <Typography variant="subtitle1">{value}</Typography>
+                  <StyledTypography variant="body2">{subTitle}: </StyledTypography>
+                  <StyledTypography variant="subtitle1">{value}</StyledTypography>
                </Box>
             </Box>
             <Box
@@ -44,9 +59,9 @@ const Cards = (props: Readonly<CardsInterface>) => {
                      sx={{ fontSize: 12 }}
                      color={index == 0 ? 'primary' : 'success'}
                   />
-                  <Typography variant="caption" sx={{ fontWeight: 700 }}>
+                  <StyledTypography variant="caption" sx={{ fontWeight: 700 }}>
                      {text}: {isNaN(value) ? '--' : `${value}%`}
-                  </Typography>
+                  </StyledTypography>
                </Box>
             ))}
          </Box>

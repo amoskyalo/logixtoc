@@ -2,13 +2,12 @@
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
-import { useMemo, useState } from 'react';
-import { createContext } from 'react';
+import { useMemo, useState, createContext } from 'react';
 
 export const ThemeContext = createContext<any>('');
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
-   const [mode, setMode] = useState<'dark' | 'light'>('dark');
+   const [mode, setMode] = useState<'dark' | 'light'>('light');
    const { isMobile } = useResponsiveness();
 
    const theme = createTheme({

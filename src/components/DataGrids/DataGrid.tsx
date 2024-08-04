@@ -39,18 +39,16 @@ const Grid = (props: DataGridProps) => {
                      outline: 'none !important',
                   },
                   '& .MuiDataGrid-row': {
-                     borderBottom: '1px dotted #272e36',
+                     borderBottom: '1px #272e36',
                   },
                },
                '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
                   outline: 'none !important',
                },
                borderColor: 'transparent',
-               borderStyle: 'dotted',
                ...(!isDarkMode && {
                   backgroundColor: 'white',
                   borderRadius: 2,
-                  borderColor: 'transparent',
                   '& .odd-row': {
                      backgroundColor: 'rgba(245,250,254, 0.9)',
                   },

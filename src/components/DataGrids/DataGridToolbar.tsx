@@ -5,11 +5,13 @@ import {
    GridToolbarDensitySelector,
    useGridApiContext,
 } from '@mui/x-data-grid';
-import { useCallback } from 'react';
-import { Button, Stack, TextField, InputAdornment } from '@mui/material';
+import { useCallback, useState, useEffect } from 'react';
+import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box } from '@mui/material';
 import { getInitialDates } from '@/utils';
 import { useResponsiveness } from '@/hooks';
+import { styled, useTheme } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import Datepicker from 'react-tailwindcss-datepicker';
@@ -25,9 +27,42 @@ type PropsInterface = {
    dates?: DatesInterface;
 };
 
+type SearchProps = TextFieldProps & {
+   isMobile: boolean;
+   searching: boolean;
+   dates: boolean;
+};
+
+const StyledSearchBox = styled(TextField)<SearchProps>(({ isMobile, searching, dates }) => ({
+   width:  300,
+   transition: 'width 0.5s ease',
+   cursor: 'pointer',
+   ...(isMobile && {
+      width: searching || !dates ? '100%' : 55,
+   }),
+}));
+
+const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(
+   ({ isMobile, searching }) => ({
+      width: '240px',
+      transition: 'width 0.5s ease',
+      ...(isMobile && {
+         width: searching ? '0' : '100%',
+      }),
+   }),
+);
+
 const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) => {
    const apiRef = useGridApiContext();
    const { isMobile } = useResponsiveness();
+   const {
+      palette: { mode },
+   } = useTheme();
+
+   const isDarkMode = mode === 'dark';
+
+   const [searchValue, setSearchValue] = useState('');
+   const [searching, setSearching] = useState(false);
 
    const updateSearchValue = useCallback(
       (newSearchValue: string) => {
@@ -35,6 +70,10 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
       },
       [apiRef],
    );
+
+   useEffect(() => {
+      updateSearchValue(searchValue);
+   }, [searchValue, updateSearchValue]);
 
    return (
       <GridToolbarContainer
@@ -48,36 +87,39 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
             paddingX: '8px',
          }}
       >
-         <Stack
-            direction={isMobile ? 'column' : 'row'}
-            spacing={1}
-            // sx={{ ...isMobile && {width: '100%'} }}
-         >
+         <Stack direction={'row'} spacing={1} className="w-full lg:w-max">
             {dates && (
-               <Datepicker
-                  readOnly
-                  value={dates}
-                  showFooter={!isMobile}
-                  showShortcuts={!isMobile}
-                  useRange={!isMobile}
-                  onChange={(newValue) => {
-                     if (!newValue?.startDate && !newValue?.endDate) {
-                        setDates(getInitialDates());
-                     } else {
-                        setDates(newValue);
-                     }
-                  }}
-                  primaryColor="blue"
-                  inputClassName="w-full rounded-md font-bold h-full pl-2 focus:outline-none bg-transparent"
-                  containerClassName={`relative border border-gray-600 p-0 h-8 rounded-[5px] hover:border-gray-600 bg-transparent ${isMobile ? '100%' : 'w-[240px]'}`}
-               />
+               <StyledCalendar isMobile={isMobile} searching={searching}>
+                  <Datepicker
+                     readOnly
+                     value={dates}
+                     showFooter={!isMobile}
+                     showShortcuts={!isMobile}
+                     useRange={!isMobile}
+                     onChange={(newValue) => {
+                        if (!newValue?.startDate && !newValue?.endDate) {
+                           setDates(getInitialDates());
+                        } else {
+                           setDates(newValue);
+                        }
+                     }}
+                     primaryColor="blue"
+                     inputClassName="w-full rounded-md h-full pl-2 bg-transparent focus:outline-none lg:font-bold"
+                     containerClassName={`relative border ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} p-0 h-8 rounded-[5px] hover:border-gray-600 bg-transparent w-full`}
+                     toggleClassName={`${searching && isMobile ? 'hidden' : ''}`}
+                  />
+               </StyledCalendar>
             )}
 
-            <TextField
+            <StyledSearchBox
+               dates={Boolean(dates)}
+               searching={searching}
+               isMobile={isMobile}
                placeholder="Search..."
                size="small"
-               sx={{ width: !isMobile ? 250 : '100%' }}
-               onChange={(e) => updateSearchValue(e.target.value)}
+               onChange={(e) => setSearchValue(e.target.value)}
+               onClick={() => setSearching(true)}
+               value={searchValue}
                inputProps={{
                   style: {
                      height: '15px',
@@ -86,15 +128,32 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
                InputProps={{
                   startAdornment: (
                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
+                        <SearchIcon fontSize="small" sx={{ cursor: 'pointer' }} />
+                     </InputAdornment>
+                  ),
+                  endAdornment: (
+                     <InputAdornment position="end">
+                        {(searchValue || (isMobile && searching && Boolean(dates))) && (
+                           <CloseIcon
+                              fontSize="small"
+                              sx={{ cursor: 'pointer' }}
+                              onClick={(e) => {
+                                 e.stopPropagation();
+                                 setSearching(false);
+                                 setSearchValue('');
+                              }}
+                           />
+                        )}
                      </InputAdornment>
                   ),
                }}
             />
          </Stack>
 
-         <Stack direction="row">
-            <GridToolbarColumnsButton />
+         <Stack direction="row" justifyContent="flex-end" className="w-full lg:w-max">
+            <div className="hidden lg:block">
+               <GridToolbarColumnsButton />
+            </div>
             <GridToolbarDensitySelector />
             <GridToolbarExport />
             <Button startIcon={<FilterListOffIcon />} color="primary" size="small" onClick={onAdd}>

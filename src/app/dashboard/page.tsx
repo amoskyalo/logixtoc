@@ -29,7 +29,7 @@ const DashboardPage = () => {
             rowGap: 6,
          }}
       >
-         <Box sx={{ overflow: isMobile ? 'scroll' : 'none' }}>
+         <Box className="overflow-scroll lg:overflow-hidden">
             <DashboardStaticsCards
                loading={isLoading}
                TotalCustomers={dashboardData?.TotalCustomers ?? 0}

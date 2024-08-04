@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
+import * as Yup from 'yup';
+import { useState } from 'react';
 import { FormDialog } from '@/components/Dialogs';
 import { Formik, Form } from 'formik';
-import { SelectField, AutoCompleteField } from '@/components/Inputs';
-import { MenuItem, Stack } from '@mui/material';
-import {
-   LocationsArrayInterface,
-   VendorUserObjectInterface,
-   usePostVendorLocationUserAssignmentTx,
-} from '@/api';
-import * as Yup from 'yup';
+import { SelectSingleLocation, AutoCompleteField } from '@/components/Inputs';
+import { Stack } from '@mui/material';
+import { VendorUserObjectInterface, usePostVendorLocationUserAssignmentTx } from '@/api';
 import { SubmitButton } from '@/components/Buttons';
 import { useGetUser } from '@/hooks';
 import { FormsPropsInterface } from '@/Types';
 import { mutateOptions } from '@/utils';
-
-type InitialValuesInterface = {
-   usersArray: Array<{ userID: number }>;
-   vendorLocationID: number;
-};
 
 type OptionsInterface = {
    userID: number;
@@ -25,7 +16,6 @@ type OptionsInterface = {
 };
 
 type Props = {
-   locations: LocationsArrayInterface[];
    vendorUsers: VendorUserObjectInterface[];
 };
 
@@ -33,7 +23,6 @@ const AssignedUsersForm = ({
    open,
    refetch,
    onClose,
-   locations,
    vendorUsers,
 }: FormsPropsInterface & Props) => {
    const [loading, setLoading] = useState<boolean>(false);
@@ -77,25 +66,12 @@ const AssignedUsersForm = ({
             validationSchema={getValidationSchema()}
             initialValues={initialValues}
          >
-            {({ errors, touched, values, getFieldProps, setFieldValue }) => {
-               function getProps(field: keyof InitialValuesInterface) {
-                  const error = touched[field] && Boolean(errors[field]);
-                  const helperText =
-                     touched[field] && (errors[field] as string | boolean | undefined);
-
-                  return { error, helperText, ...getFieldProps(field) };
-               }
-
+            {(formik) => {
+               const { errors, touched, values, setFieldValue } = formik;
                return (
                   <Form>
                      <Stack spacing={3}>
-                        <SelectField {...getProps('vendorLocationID')} label="Locations">
-                           {locations.map(({ VendorLocationID, VendorLocationName }) => (
-                              <MenuItem key={VendorLocationID} value={VendorLocationID}>
-                                 {VendorLocationName}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
+                        <SelectSingleLocation {...formik} />
 
                         <AutoCompleteField
                            label="Users"

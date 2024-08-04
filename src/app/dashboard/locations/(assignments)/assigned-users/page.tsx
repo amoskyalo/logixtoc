@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AssignedUsersTable, AssignedUsersForm } from './_compoents';
-import { useGetVendorLocationUserAssignment, useGetVendorLocation, useGetVendorUsers } from '@/api';
+import { useGetVendorLocationUserAssignment, useGetVendorUsers } from '@/api';
 import { useGetUser } from '@/hooks';
 
 const AssignedUsers = () => {
@@ -13,11 +13,6 @@ const AssignedUsers = () => {
    const { VendorID } = useGetUser();
 
    const { data: vendorUsers } = useGetVendorUsers({ VendorID });
-
-   const { data: vendorLocations } = useGetVendorLocation({
-      VendorID,
-      VendorLocationTypeID: 0,
-   });
 
    const { data, isLoading, refetch, isRefetching } = useGetVendorLocationUserAssignment({
       VendorID,
@@ -39,7 +34,6 @@ const AssignedUsers = () => {
             open={open}
             refetch={refetch}
             onClose={() => setOpen(false)}
-            locations={vendorLocations?.Data ?? []}
             vendorUsers={vendorUsers?.Data ?? []}
          />
       </>

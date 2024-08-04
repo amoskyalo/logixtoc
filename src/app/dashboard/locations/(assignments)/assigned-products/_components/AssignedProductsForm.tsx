@@ -2,10 +2,10 @@
 
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
-import { MenuItem, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { FormDialog } from '@/components/Dialogs';
-import { AutoCompleteField, SelectField } from '@/components/Inputs';
-import { ProductType, LocationsArrayInterface, usePostAssignedProducts } from '@/api';
+import { AutoCompleteField, SelectSingleLocation } from '@/components/Inputs';
+import { ProductType, usePostAssignedProducts } from '@/api';
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
@@ -13,14 +13,12 @@ import { FormsPropsInterface } from '@/Types';
 import { mutateOptions } from '@/utils';
 
 type Props = {
-   locations: LocationsArrayInterface[];
    products: ProductType[];
 };
 
 const AssignedProductsForm = ({
    open,
    onClose,
-   locations,
    products,
    refetch,
 }: FormsPropsInterface & Props) => {
@@ -60,22 +58,13 @@ const AssignedProductsForm = ({
                productTypeArray: [],
             }}
          >
-            {({ values, touched, errors, getFieldProps, setFieldValue }) => {
+            {(formik) => {
+               const { values, touched, errors, setFieldValue } = formik;
+
                return (
                   <Form>
                      <Stack spacing={3}>
-                        <SelectField
-                           label="Location"
-                           helperText={touched.vendorLocationID && errors.vendorLocationID}
-                           error={touched.vendorLocationID && Boolean(errors.vendorLocationID)}
-                           {...getFieldProps('vendorLocationID')}
-                        >
-                           {locations.map(({ VendorLocationID, VendorLocationName }) => (
-                              <MenuItem value={VendorLocationID} key={VendorLocationID}>
-                                 {VendorLocationName}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
+                        <SelectSingleLocation {...formik} />
 
                         <AutoCompleteField
                            options={products.map(

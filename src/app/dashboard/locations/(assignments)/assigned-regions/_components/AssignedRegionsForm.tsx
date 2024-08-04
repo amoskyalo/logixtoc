@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { FormDialog } from '@/components/Dialogs';
-import { VendorRegion, LocationsArrayInterface, usePostAssignedRegions } from '@/api';
+import { VendorRegion, usePostAssignedRegions } from '@/api';
 import { useGetUser } from '@/hooks';
-import { SelectField, AutoCompleteField } from '@/components/Inputs';
+import { SelectField, SelectMultipleLocations } from '@/components/Inputs';
 import { MenuItem, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
@@ -14,16 +14,9 @@ import * as Yup from 'yup';
 
 type Props = {
    regions: VendorRegion[];
-   locations: LocationsArrayInterface[];
 };
 
-const AssignedRegionsForm = ({
-   onClose,
-   open,
-   regions,
-   locations,
-   refetch,
-}: FormsPropsInterface & Props) => {
+const AssignedRegionsForm = ({ onClose, open, regions, refetch }: FormsPropsInterface & Props) => {
    const [loading, setLoading] = useState(false);
 
    const { VendorID, UserID: addedBy } = useGetUser();
@@ -32,7 +25,7 @@ const AssignedRegionsForm = ({
    const validationSchema = () =>
       Yup.object().shape({
          vendorRegionID: Yup.number().required('Region field is required'),
-         vendorLocationArrays: Yup.array().min(1, 'Atleast one location is required'),
+         locationsArray: Yup.array().min(1, 'Atleast one location is required'),
       });
 
    const handleSubmit = (data: any) => {
@@ -42,7 +35,7 @@ const AssignedRegionsForm = ({
          VendorID,
          addedBy,
          vendorRegionID: data.vendorRegionID,
-         vendorLocationArrays: data.vendorLocationArrays.map((v: any) => ({
+         vendorLocationArrays: data.locationsArray.map((v: any) => ({
             vendorLocationID: v.vendorLocationID,
          })),
       };
@@ -57,10 +50,12 @@ const AssignedRegionsForm = ({
             validationSchema={validationSchema()}
             initialValues={{
                vendorRegionID: '' as unknown as number,
-               vendorLocationArrays: [],
+               locationsArray: [],
             }}
          >
-            {({ values, errors, touched, getFieldProps, setFieldValue }) => {
+            {(formik) => {
+               const { errors, touched, getFieldProps } = formik;
+
                return (
                   <Form>
                      <Stack spacing={3}>
@@ -77,26 +72,7 @@ const AssignedRegionsForm = ({
                            ))}
                         </SelectField>
 
-                        <AutoCompleteField
-                           options={locations.map(({ VendorLocationID, VendorLocationName }) => ({
-                              title: VendorLocationName,
-                              vendorLocationID: VendorLocationID,
-                           }))}
-                           getOptionLabel={(option: any) => option.title}
-                           multiple
-                           value={values.vendorLocationArrays}
-                           label="Locations"
-                           onChange={(event: React.SyntheticEvent, value: any) =>
-                              setFieldValue('vendorLocationArrays', value)
-                           }
-                           error={
-                              touched.vendorLocationArrays && Boolean(errors.vendorLocationArrays)
-                           }
-                           helperText={
-                              touched.vendorLocationArrays &&
-                              (errors.vendorLocationArrays as string)
-                           }
-                        />
+                        <SelectMultipleLocations {...formik} label="Locations" />
                         <SubmitButton text="Submit" loading={loading} />
                      </Stack>
                   </Form>

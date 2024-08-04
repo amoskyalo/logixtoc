@@ -2,19 +2,15 @@
 
 import * as Yup from 'yup';
 import { FormDialog } from '@/components/Dialogs';
-import { SelectField, AutoCompleteField } from '@/components/Inputs';
-import { MenuItem, Stack } from '@mui/material';
-import { LocationsArrayInterface, usePostAssignedLocations } from '@/api';
+import { SelectSingleLocation, SelectMultipleLocations } from '@/components/Inputs';
+import { Stack } from '@mui/material';
+import { usePostAssignedLocations } from '@/api';
 import { Formik, Form } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
 import { FormsPropsInterface } from '@/Types';
 import { mutateOptions } from '@/utils';
-
-type Props = {
-   locations: LocationsArrayInterface[];
-};
 
 type FormiValuesInterface = {
    vendorLocationID: number;
@@ -24,12 +20,7 @@ type FormiValuesInterface = {
    }>;
 };
 
-const AssignedLocationForm = ({
-   open,
-   onClose,
-   locations,
-   refetch,
-}: FormsPropsInterface & Props) => {
+const AssignedLocationForm = ({ open, onClose, refetch }: FormsPropsInterface) => {
    const [loading, setLoading] = useState<boolean>(false);
 
    const { VendorID, UserID: addedBy } = useGetUser();
@@ -67,39 +58,12 @@ const AssignedLocationForm = ({
                vendorLocationID: '' as unknown as number,
             }}
          >
-            {({ errors, touched, values, setFieldValue, getFieldProps }) => {
+            {(formik) => {
                return (
                   <Form>
                      <Stack spacing={3}>
-                        <SelectField
-                           label="Location"
-                           error={touched.vendorLocationID && Boolean(errors.vendorLocationID)}
-                           helperText={touched.vendorLocationID && errors.vendorLocationID}
-                           {...getFieldProps('vendorLocationID')}
-                        >
-                           {locations.map(({ VendorLocationID, VendorLocationName }) => (
-                              <MenuItem value={VendorLocationID} key={VendorLocationID}>
-                                 {VendorLocationName}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
-
-                        <AutoCompleteField
-                           options={locations.map((location) => ({
-                              locationName: location.VendorLocationName,
-                              locationID: location.VendorLocationID,
-                           }))}
-                           getOptionLabel={(option: any) => option.locationName}
-                           multiple
-                           value={values.locationsArray}
-                           label="Assigned Locations"
-                           onChange={(event: React.SyntheticEvent, value: any) =>
-                              setFieldValue('locationsArray', value)
-                           }
-                           error={touched.locationsArray && Boolean(errors.locationsArray)}
-                           helperText={touched.locationsArray && (errors.locationsArray as string)}
-                        />
-
+                        <SelectSingleLocation {...formik} />
+                        <SelectMultipleLocations {...formik} label="Assigned Locations" />
                         <SubmitButton text="Submit" loading={loading} />
                      </Stack>
                   </Form>

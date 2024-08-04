@@ -3,27 +3,20 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { SelectField, AutoCompleteField } from '@/components/Inputs';
+import { AutoCompleteField, SelectSingleLocation } from '@/components/Inputs';
 import { FormDialog } from '@/components/Dialogs';
-import { MenuItem, Stack } from '@mui/material';
-import { LocationsArrayInterface, VendorAccount, usePostAssignedAccount } from '@/api';
+import { Stack } from '@mui/material';
+import { VendorAccount, usePostAssignedAccount } from '@/api';
 import { SubmitButton } from '@/components/Buttons';
 import { useGetUser } from '@/hooks';
 import { FormsPropsInterface } from '@/Types';
 import { mutateOptions } from '@/utils';
 
 type Props = {
-   locations: LocationsArrayInterface[];
    accounts: VendorAccount[];
 };
 
-const AssignedAcountsForm = ({
-   open,
-   onClose,
-   refetch,
-   locations,
-   accounts,
-}: FormsPropsInterface & Props) => {
+const AssignedAcountsForm = ({ open, onClose, refetch, accounts }: FormsPropsInterface & Props) => {
    const [loading, setLoading] = useState(false);
 
    const { VendorID, UserID: addedBy } = useGetUser();
@@ -60,22 +53,13 @@ const AssignedAcountsForm = ({
                vendorLocationID: '' as unknown as number,
             }}
          >
-            {({ getFieldProps, touched, errors, values, setFieldValue }) => {
+            {(formik) => {
+               const { touched, errors, values, setFieldValue } = formik;
+
                return (
                   <Form>
                      <Stack spacing={3}>
-                        <SelectField
-                           label="Locations"
-                           helperText={touched.vendorLocationID && errors.vendorLocationID}
-                           error={touched.vendorLocationID && Boolean(errors.vendorLocationID)}
-                           {...getFieldProps('vendorLocationID')}
-                        >
-                           {locations.map(({ VendorLocationID, VendorLocationName }) => (
-                              <MenuItem value={VendorLocationID} key={VendorLocationID}>
-                                 {VendorLocationName}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
+                        <SelectSingleLocation {...formik} />
 
                         <AutoCompleteField
                            options={accounts.map(({ VendorAccountName, VendorAccountID }) => ({

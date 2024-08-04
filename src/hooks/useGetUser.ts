@@ -1,3 +1,5 @@
+'use client';
+
 import { UserInterface } from "@/api/hooks";
 
 export const useGetUser = (): UserInterface => {

@@ -5,6 +5,7 @@ import { Chip, Grid } from '@mui/material';
 import { SectionsBox, StockMovementTableInterface } from '.';
 import { GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/navigation';
+import { getIndexedRows } from '@/utils';
 
 const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
    const router = useRouter();
@@ -41,9 +42,9 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
       <Grid item lg={6} xs={12}>
          <SectionsBox title="Stock movement" renderActionButton={renderActionButton}>
             <DataGrid
-               rows={rows}
+               rows={getIndexedRows(rows)}
                columns={columns}
-               getRowId={(row) => row.DateAdded}
+               getRowId={(row) => row.id}
                loading={loading}
                hideFooter
             />

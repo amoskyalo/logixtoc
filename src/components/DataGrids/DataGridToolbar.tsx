@@ -51,7 +51,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
          <Stack
             direction={isMobile ? 'column' : 'row'}
             spacing={1}
-            sx={{ width: '100%' }}
+            // sx={{ ...isMobile && {width: '100%'} }}
          >
             {dates && (
                <Datepicker

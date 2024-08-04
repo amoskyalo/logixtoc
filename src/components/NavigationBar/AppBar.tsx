@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import {
    MenuList,
@@ -24,7 +24,6 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
-import { toast } from 'react-toastify';
 
 const flexStyles = {
    display: 'flex',
@@ -80,19 +79,11 @@ const AppBar = ({
    const { isMobile } = useResponsiveness();
    const { status } = useConnectivityStatus();
    const { mode, setMode } = useContext(ThemeContext);
+   const user = useGetUser();
 
-   const { FirstName, LastName, CountryFlag, ImageURL } = useGetUser();
    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
    const handleToggleTheme = () => (mode === 'dark' ? setMode('light') : setMode('dark'));
-
-   useEffect(() => {
-      if (status === 'offline') {
-         toast.error('Looks like you are offline, please check your connectivity');
-      } else {
-         toast.success('Back online');
-      }
-   }, [status]);
 
    return (
       <Bar>
@@ -111,7 +102,7 @@ const AppBar = ({
                      </IconButton>
                   )}
                   <Box>
-                     <Typography variant="caption">Hello {`${FirstName} ${LastName}`}👋</Typography>
+                     <Typography variant="caption">Hello {`${user?.FirstName} ${user?.LastName}`}👋</Typography>
                      <Typography variant="body2" sx={{ fontWeight: 800 }}>
                         Esque Energy
                      </Typography>
@@ -129,8 +120,8 @@ const AppBar = ({
                         }
                      }}
                   >
-                     <Image src="/kenya.jpg" height={16} width={24} alt={CountryFlag} />
-                     <Typography variant="body1">{CountryFlag?.toLocaleUpperCase()}</Typography>
+                     <Image src="/kenya.jpg" height={16} width={24} alt={user?.CountryFlag} />
+                     <Typography variant="body1">{user?.CountryFlag?.toLocaleUpperCase()}</Typography>
                      <KeyboardArrowDownIcon />
                   </Box>
                   <Tooltip title={`Turn ${mode === 'light' ? 'off' : 'on'} the light`}>
@@ -149,7 +140,7 @@ const AppBar = ({
                   >
                      <Avatar
                         sx={{ width: 32, height: 32, ml: 1 }}
-                        src={ImageURL}
+                        src={user?.ImageURL}
                         className="profile"
                      />
                   </StyledBadge>
@@ -164,7 +155,7 @@ const AppBar = ({
                      {countries.map(({ name, flag }) => (
                         <MenuItem sx={{ minHeight: 10, height: 16, py: 2 }} key={name}>
                            <ListItemIcon>
-                              <Image src={flag} height={16} width={24} alt={CountryFlag} />
+                              <Image src={flag} height={16} width={24} alt={user?.CountryFlag} />
                            </ListItemIcon>
                            <ListItemText>{name}</ListItemText>
                         </MenuItem>

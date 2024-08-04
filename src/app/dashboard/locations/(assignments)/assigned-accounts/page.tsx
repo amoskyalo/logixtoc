@@ -1,7 +1,7 @@
 'use client';
 
 import { AssignedAccountsTable, AssignedAcountsForm } from './_components';
-import { useGetAssignedAccounts, useGetVendorAccounts, useGetVendorLocation } from '@/api';
+import { useGetAssignedAccounts, useGetVendorAccounts } from '@/api';
 import { useGetUser } from '@/hooks';
 import { useState } from 'react';
 
@@ -13,11 +13,6 @@ const AssignedAccounts = () => {
    const { data: vendorAccounts } = useGetVendorAccounts({
       VendorID,
       VendorAccountTypeID: 0,
-   });
-
-   const { data: vendorLocations } = useGetVendorLocation({
-      VendorID,
-      VendorLocationTypeID: 0,
    });
 
    const {
@@ -42,7 +37,6 @@ const AssignedAccounts = () => {
 
          <AssignedAcountsForm
             open={open}
-            locations={vendorLocations?.Data ?? []}
             accounts={vendorAccounts?.Data ?? []}
             refetch={refetch}
             onClose={() => setOpen(false)}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useGetUser } from '@/hooks';
-import { useGetVendorAssignedLocations, useGetVendorLocation } from '@/api';
+import { useGetVendorAssignedLocations } from '@/api';
 import { AssignedLocationsTable, AssignedLocationForm } from './_components';
 
 const AssignedLocations = () => {
@@ -11,10 +11,7 @@ const AssignedLocations = () => {
    const [open, setOpen] = useState<boolean>(false);
 
    const { VendorID } = useGetUser();
-   const { data: locations } = useGetVendorLocation({
-      VendorID,
-      VendorLocationTypeID: 0,
-   });
+
    const { data, isLoading, refetch, isRefetching } = useGetVendorAssignedLocations({
       VendorID,
       PageNO: page,
@@ -34,7 +31,6 @@ const AssignedLocations = () => {
          <AssignedLocationForm
             open={open}
             onClose={() => setOpen(false)}
-            locations={locations?.Data ?? []}
             refetch={refetch}
          />
       </>

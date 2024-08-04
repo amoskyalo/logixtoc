@@ -1,8 +1,7 @@
 import { styled, Theme, CSSObject, useTheme } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
 import { useState } from 'react';
-import Box from '@mui/material/Box';
-import { BoxProps } from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
@@ -79,24 +78,8 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
    const {
       palette: { mode },
    } = useTheme();
-   const [open, setOpen] = useState(true);
+   const [open] = useState(true);
    const [expand, setExpand] = useState(false);
-
-   // const handleDrawerOpen = () => {
-   //    if (isMobile) {
-   //       setExpand(!expand);
-   //    } else {
-   //       setOpen(true);
-   //    }
-   // };
-
-   // const handleDrawerClose = () => {
-   //    if (isMobile) {
-   //       setExpand(!expand);
-   //    } else {
-   //       setOpen(false);
-   //    }
-   // };
 
    const SideBar = () => (
       <NavBarContainer isMobile={isMobile}>
@@ -145,25 +128,26 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
    return (
       <Box sx={{ display: 'flex' }}>
          <CssBaseline />
-         {isMobile ? (
-            <Box
-               sx={{
-                  position: 'fixed',
-                  left: expand ? 0 : -1000,
-                  top: 0,
-                  width: drawerWidth,
-                  zIndex: 999999,
-                  height: '100vh',
-                  transition: 'left 0.9s ease-in-out',
-               }}
-            >
-               <SideBar />
-            </Box>
-         ) : (
+         <Box
+            sx={{
+               position: 'fixed',
+               left: expand ? 0 : -1000,
+               top: 0,
+               width: drawerWidth,
+               zIndex: 999999,
+               height: '100vh',
+               transition: 'left 0.9s ease-in-out',
+            }}
+            className="lg:hidden"
+         >
+            <SideBar />
+         </Box>
+
+         <div className="hidden lg:block">
             <Drawer variant="permanent" open={open}>
                <SideBar />
             </Drawer>
-         )}
+         </div>
 
          <Box component="main" sx={{ flexGrow: 1, width: `calc(100% - ${drawerWidth}px)` }}>
             <AppBar open={open} expand={expand} setExpand={setExpand} />

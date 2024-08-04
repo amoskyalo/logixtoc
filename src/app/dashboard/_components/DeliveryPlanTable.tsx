@@ -8,6 +8,7 @@ import { Chip, Grid } from '@mui/material';
 import { StatusChips } from '@/components/Chips';
 import { useRouter } from 'next/navigation';
 import { useResponsiveness } from '@/hooks';
+import { getIndexedRows } from '@/utils';
 
 const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
    const router = useRouter();
@@ -52,9 +53,9 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
       <Grid item lg={6} xs={12}>
          <SectionsBox title="Delivery plan" renderActionButton={renderActionButton}>
             <DataGrid
-               rows={rows}
+               rows={getIndexedRows(rows)}
                columns={columns}
-               getRowId={(row) => row.DateAdded}
+               getRowId={(row) => row.id}
                loading={loading}
                hideFooter
             />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useGetAssignedRegions, useGetRegions, useGetVendorLocation } from '@/api';
+import { useGetAssignedRegions, useGetRegions } from '@/api';
 import { AssignedRegionsTable, AssignedRegionsForm } from './_components';
 import { useGetUser } from '@/hooks';
 
@@ -12,10 +12,6 @@ const AssignedRegions = () => {
 
    const { VendorID } = useGetUser();
    const { data: vendorRegions } = useGetRegions({ VendorID });
-   const { data: vendorLocations } = useGetVendorLocation({
-      VendorID,
-      VendorLocationTypeID: 0,
-   });
    const {
       data: assignedRegions,
       isLoading,
@@ -43,7 +39,6 @@ const AssignedRegions = () => {
             refetch={refetch}
             onClose={() => setOpen(false)}
             regions={vendorRegions?.Data ?? []}
-            locations={vendorLocations?.Data ?? []}
          />
       </>
    );

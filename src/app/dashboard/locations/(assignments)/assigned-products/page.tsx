@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { AssignedProductsTable, AssignedProductsForm } from './_components';
 import { useGetUser } from '@/hooks';
-import { useGetAssignedProducts, useGetProductTypes, useGetVendorLocation } from '@/api';
+import { useGetAssignedProducts, useGetProductTypes } from '@/api';
 
 const AssignedProducts = () => {
    const [page, setPage] = useState<number>(1);
@@ -12,10 +12,6 @@ const AssignedProducts = () => {
 
    const { VendorID } = useGetUser();
    const { data: vendorProducts } = useGetProductTypes({ VendorID });
-   const { data: vendorLocations } = useGetVendorLocation({
-      VendorID,
-      VendorLocationTypeID: 0,
-   });
    const {
       data: assignedProducts,
       isLoading,
@@ -41,7 +37,6 @@ const AssignedProducts = () => {
             open={open}
             onClose={() => setOpen(false)}
             products={vendorProducts?.Data ?? []}
-            locations={vendorLocations?.Data ?? []}
             refetch={refetch}
          />
       </>

@@ -34,7 +34,7 @@ type SearchProps = TextFieldProps & {
 };
 
 const StyledSearchBox = styled(TextField)<SearchProps>(({ isMobile, searching, dates }) => ({
-   width:  300,
+   width: 300,
    transition: 'width 0.5s ease',
    cursor: 'pointer',
    ...(isMobile && {
@@ -151,9 +151,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) =
          </Stack>
 
          <Stack direction="row" justifyContent="flex-end" className="w-full lg:w-max">
-            <div className="hidden lg:block">
-               <GridToolbarColumnsButton />
-            </div>
+            {!isMobile && <GridToolbarColumnsButton />}
             <GridToolbarDensitySelector />
             <GridToolbarExport />
             <Button startIcon={<FilterListOffIcon />} color="primary" size="small" onClick={onAdd}>

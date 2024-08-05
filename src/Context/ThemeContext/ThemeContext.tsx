@@ -60,6 +60,11 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
                },
             },
          },
+         MuiUseMediaQuery: {
+            defaultProps: {
+               noSsr: true,
+            },
+         },
       },
    });
 

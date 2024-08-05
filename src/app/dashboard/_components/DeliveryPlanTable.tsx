@@ -57,6 +57,7 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
                columns={columns}
                getRowId={(row) => row.id}
                loading={loading}
+               hideToolbar
                hideFooter
             />
          </SectionsBox>

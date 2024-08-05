@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGridEditNDelete, DataGrid, DataGridToolbar } from '@/components/DataGrids';
+import { DataGridEditNDelete, DataGrid } from '@/components/DataGrids';
 import { TablesPropsInterface } from '@/Types';
 import { ProductBrand, useDeleteVendorProductBrand } from '@/api';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
@@ -69,16 +69,14 @@ const BrandTable = ({ rows, onAdd, isLoading, refetch }: TablesPropsInterface<Pr
       );
    };
 
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
-
    return (
       <>
          <DataGrid
             rows={getIndexedRows(rows)}
             columns={columns}
-            slots={{ toolbar }}
             getRowId={(row) => row.id}
             loading={isLoading}
+            onAdd={onAdd}
             checkboxSelection
          />
 

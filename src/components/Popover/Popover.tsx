@@ -1,7 +1,7 @@
 import MuiPopover from '@mui/material/Popover';
 
 type PropsInterface = {
-   anchorEl: HTMLButtonElement | HTMLDivElement | null;
+   anchorEl: null | HTMLElement;
    children: React.ReactNode;
    open: boolean;
    handleClose: () => void;

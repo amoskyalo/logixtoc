@@ -1,12 +1,11 @@
 'use client';
 
-import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
+import { DataGrid } from '@/components/DataGrids';
 import { AssignedProductInterface, useDeleteAssignedProducts } from '@/api';
 import { getIndexedRows, getColumnWidth, mutateOptions } from '@/utils';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { toast } from 'react-toastify';
 import { DeleteDialog } from '@/components/Dialogs';
 import { TablesPropsInterface } from '@/Types';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,8 +34,6 @@ const AssignedProductsTable = ({
          mutateOptions({ refetch, onClose, setLoading }),
       );
    };
-
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
 
    const columns: GridColDef[] = [
       {
@@ -83,7 +80,7 @@ const AssignedProductsTable = ({
          <DataGrid
             rows={getIndexedRows(rows)}
             loading={isLoading}
-            slots={{ toolbar }}
+            onAdd={onAdd}
             columns={columns}
             checkboxSelection
          />

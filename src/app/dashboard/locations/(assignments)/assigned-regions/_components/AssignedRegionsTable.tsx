@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
-import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedRegionObjInterface, useDeleteAssignedRegions } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
 import { TablesPropsInterface } from '@/Types';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedRegionsTable = ({
    rows,
@@ -47,8 +46,6 @@ const AssignedRegionsTable = ({
       );
    };
 
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
-
    const columns: GridColDef[] = [
       {
          field: 'id',
@@ -77,12 +74,10 @@ const AssignedRegionsTable = ({
          type: 'actions',
          getActions: ({ row: { VendorLocationID, VendorRegionID } }) => {
             return [
-               <GridActionsCellItem
-                  label="Delete"
-                  key="Delete"
-                  color="error"
-                  icon={<DeleteIcon />}
-                  onClick={() => {
+               <DataGridEditNDelete
+                  actions={['delete']}
+                  key="actions"
+                  onDelete={() => {
                      setActiveParam({
                         vendorLocationID: VendorLocationID,
                         vendorRegionID: VendorRegionID,
@@ -101,7 +96,7 @@ const AssignedRegionsTable = ({
             rows={getIndexedRows(rows)}
             columns={columns}
             getRowId={(row) => row.id}
-            slots={{ toolbar }}
+            onAdd={onAdd}
             loading={isLoading}
             checkboxSelection
          />

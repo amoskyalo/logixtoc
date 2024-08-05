@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGridToolbar, DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { StatusChips } from '@/components/Chips';
@@ -31,8 +31,6 @@ const LocationTypesGrid = ({
          mutateOptions({ refetch, setLoading, onClose: () => setActiveParams('') }),
       );
    };
-
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
 
    const columns: GridColDef[] = [
       {
@@ -91,9 +89,9 @@ const LocationTypesGrid = ({
             rows={getIndexedRows(rows)}
             loading={isLoading}
             columns={columns}
-            slots={{ toolbar }}
             getRowId={(row) => row.id}
             checkboxSelection
+            onAdd={onAdd}
          />
 
          <DeleteDialog

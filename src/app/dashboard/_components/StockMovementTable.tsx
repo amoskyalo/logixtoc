@@ -46,6 +46,7 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
                columns={columns}
                getRowId={(row) => row.id}
                loading={loading}
+               hideToolbar
                hideFooter
             />
          </SectionsBox>

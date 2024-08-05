@@ -2,7 +2,7 @@ import { styled, Theme, CSSObject, useTheme } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
 import { useState } from 'react';
 import Box, { BoxProps } from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
+import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -47,10 +47,10 @@ const NavBarContainer = styled(Box)<BoxProps & { isMobile: boolean }>(({ theme, 
    display: 'flex',
    flexDirection: 'column',
    backgroundColor: theme.palette.mode === 'dark' ? '#131a22' : '#f3f4f6',
-   ...(isMobile && { boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.1)' }),
+   width: drawerWidth,
 }));
 
-const Drawer = styled(MuiDrawer, {
+const DesktopDrawer = styled(Drawer, {
    shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
    width: drawerWidth,
@@ -128,26 +128,16 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
    return (
       <Box sx={{ display: 'flex' }}>
          <CssBaseline />
-         <Box
-            sx={{
-               position: 'fixed',
-               left: expand ? 0 : -1000,
-               top: 0,
-               width: drawerWidth,
-               zIndex: 999999,
-               height: '100vh',
-               transition: 'left 0.9s ease-in-out',
-            }}
-            className="lg:hidden"
-         >
-            <SideBar />
-         </Box>
 
-         <div className="hidden lg:block">
-            <Drawer variant="permanent" open={open}>
+         {isMobile ? (
+            <Drawer open={expand}>
                <SideBar />
             </Drawer>
-         </div>
+         ) : (
+            <DesktopDrawer variant="permanent" open={open}>
+               <SideBar />
+            </DesktopDrawer>
+         )}
 
          <Box component="main" sx={{ flexGrow: 1, width: `calc(100% - ${drawerWidth}px)` }}>
             <AppBar open={open} expand={expand} setExpand={setExpand} />

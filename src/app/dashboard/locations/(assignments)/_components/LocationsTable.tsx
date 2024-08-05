@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-   DataGrid,
-   DataGridToolbar,
-   DataGridEditNDelete,
-} from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { LocationsArrayInterface, useDeleteVendorLocation } from '@/api';
@@ -106,20 +102,16 @@ const LocationsTable = ({
       );
    };
 
-   const toolbar = () => {
-      return <DataGridToolbar onAdd={onAdd} />;
-   };
-
    return (
       <>
-            <DataGrid
-               columns={columns}
-               rows={getIndexedRows(rows)}
-               slots={{ toolbar }}
-               loading={isLoading}
-               getRowId={(row) => row.id}
-               checkboxSelection
-            />
+         <DataGrid
+            columns={columns}
+            rows={getIndexedRows(rows)}
+            onAdd={onAdd}
+            loading={isLoading}
+            getRowId={(row) => row.id}
+            checkboxSelection
+         />
 
          <DeleteDialog
             open={open}

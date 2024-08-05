@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGridToolbar, DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { ActualStock } from '@/api';
 import { getIndexedRows } from '@/utils';
@@ -66,13 +66,12 @@ const ActualStockGrid = ({
       },
    ];
 
-   const toolbar = () => <DataGridToolbar dates={dates} setDates={setDates} />;
-
    return (
       <DataGrid
          columns={columns}
          rows={getIndexedRows(rows)}
-         slots={{ toolbar }}
+         dates={dates}
+         setDates={setDates}
          checkboxSelection
          getRowId={(row) => row.id}
          loading={isLoading}

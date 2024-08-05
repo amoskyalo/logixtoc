@@ -9,3 +9,22 @@ export type PropsInterface<R> = {
         endDate: string;
     };
 };
+
+export type DatesInterface = {
+    startDate: string;
+    endDate: string;
+ };
+ 
+export type ToolbarProps = {
+    setDates?: any;
+    onAdd?: () => void;
+    dates?: DatesInterface;
+ };
+ 
+ export type FooterProps = {
+    pageNo?: number;
+    pageSize?: number;
+    count?: number;
+    setPageSize?: () => void;
+    setPageNo?: () => void;
+ }

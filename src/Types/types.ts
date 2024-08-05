@@ -7,6 +7,11 @@ export type TablesPropsInterface<R> = {
     rows: R[],
     onAdd?: () => void;
     refetch?: () => void;
+    count?:number;
+    pageNo?:number;
+    pageSize?: number;
+    setPageSize?: any;
+    setPageNo?: any;
     isLoading: boolean;
     setDates?: any;
     dates?: {

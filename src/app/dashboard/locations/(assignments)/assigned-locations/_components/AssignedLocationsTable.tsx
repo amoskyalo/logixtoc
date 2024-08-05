@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DataGrid, DataGridToolbar } from '@/components/DataGrids';
+import { DataGrid } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedLocationObject, useDeleteAssignedLocation } from '@/api';
@@ -79,17 +79,15 @@ const AssignedLocationsTable = ({
       },
    ];
 
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
-
    return (
       <>
-            <DataGrid
-               columns={columns}
-               rows={getIndexedRows(rows)}
-               loading={isLoading}
-               slots={{ toolbar }}
-               checkboxSelection
-            />
+         <DataGrid
+            columns={columns}
+            rows={getIndexedRows(rows)}
+            loading={isLoading}
+            onAdd={onAdd}
+            checkboxSelection
+         />
 
          <DeleteDialog
             open={Number.isInteger(activeParam)}

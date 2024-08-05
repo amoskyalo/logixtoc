@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedAccount, useDeleteAssignedAccount } from '@/api';
@@ -110,8 +110,6 @@ const AssignedAccountsTable = ({
       },
    ];
 
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
-
    return (
       <>
          <DataGrid
@@ -120,7 +118,7 @@ const AssignedAccountsTable = ({
             getRowId={(row) => row.id}
             checkboxSelection
             loading={isLoading}
-            slots={{ toolbar }}
+            onAdd={onAdd}
          />
 
          <DeleteDialog open={open} onCancel={onClose} onOkay={handleDelete} loading={loading} />

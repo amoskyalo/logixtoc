@@ -34,6 +34,11 @@ const StockLevel = () => {
          isLoading={isLoading || isRefetching}
          setDates={setDates}
          dates={dates}
+         pageNo={page}
+         pageSize={pageSize}
+         setPageNo={setPage}
+         setPageSize={setPageSize}
+         count={stockLevel?.TotalCount}
       />
    );
 };

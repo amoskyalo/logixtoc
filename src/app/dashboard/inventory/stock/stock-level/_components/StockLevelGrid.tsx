@@ -1,7 +1,7 @@
 'use client';
 
 import { GridColDef } from '@mui/x-data-grid';
-import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { VendorStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 import { TablesPropsInterface } from '@/Types';
@@ -11,6 +11,11 @@ const StockLevelGrid = ({
    rows,
    setDates,
    dates,
+   setPageNo,
+   setPageSize,
+   pageNo,
+   pageSize,
+   count,
 }: TablesPropsInterface<VendorStock>) => {
    const columns: GridColDef[] = [
       {
@@ -77,16 +82,20 @@ const StockLevelGrid = ({
       },
    ];
 
-   const toolbar = () => <DataGridToolbar setDates={setDates} dates={dates} />;
-
    return (
       <DataGrid
          checkboxSelection
          columns={columns}
          rows={getIndexedRows(rows)}
-         slots={{ toolbar }}
+         setDates={setDates}
+         dates={dates}
          loading={isLoading}
          getRowId={(row) => row.id}
+         count={count}
+         pageSize={pageSize}
+         pageNo={pageNo}
+         setPageSize={setPageSize}
+         setPageNo={setPageNo}
       />
    );
 };

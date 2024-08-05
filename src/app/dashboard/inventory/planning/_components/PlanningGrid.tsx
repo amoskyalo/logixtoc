@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { StatusChips } from '@/components/Chips';
 import { DeliveryPlan } from '@/api';
@@ -63,8 +63,6 @@ const PlanningGrid = ({ rows, isLoading, dates, setDates }: TablesPropsInterface
       },
    ];
 
-   const toolbar = () => <DataGridToolbar dates={dates} setDates={setDates} onAdd={() => null} />;
-
    return (
       <DataGrid
          checkboxSelection
@@ -72,7 +70,9 @@ const PlanningGrid = ({ rows, isLoading, dates, setDates }: TablesPropsInterface
          rows={getIndexedRows(rows)}
          loading={isLoading}
          getRowId={(row) => row.id}
-         slots={{ toolbar }}
+         dates={dates}
+         setDates={setDates}
+         onAdd={() => null}
       />
    );
 };

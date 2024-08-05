@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridToolbar, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
 import { DeleteDialog } from '@/components/Dialogs';
 import { GridColDef } from '@mui/x-data-grid';
 import { VendorLocationUserAssignmentRow, useDeleteVendorLocationUserAssignement } from '@/api';
@@ -73,15 +73,13 @@ const AssignedUsersTable = ({
       },
    ];
 
-   const toolbar = () => <DataGridToolbar onAdd={onAdd} />;
-
    return (
       <>
          <DataGrid
             rows={getIndexedRows(rows)}
             columns={columns}
             loading={isLoading}
-            slots={{ toolbar }}
+            onAdd={onAdd}
             getRowId={(row) => row.id}
             checkboxSelection
          />

@@ -85,7 +85,6 @@ const AssignedLocationsTable = ({
             rows={getIndexedRows(rows)}
             loading={isLoading}
             onAdd={onAdd}
-            checkboxSelection
          />
 
          <DeleteDialog

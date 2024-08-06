@@ -81,7 +81,6 @@ const AssignedProductsTable = ({
             loading={isLoading}
             onAdd={onAdd}
             columns={columns}
-            checkboxSelection
          />
 
          <DeleteDialog

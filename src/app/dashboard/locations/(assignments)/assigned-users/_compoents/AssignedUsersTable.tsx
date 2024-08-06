@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { DeleteDialog } from '@/components/Dialogs';
 import { GridColDef } from '@mui/x-data-grid';
 import { VendorLocationUserAssignmentRow, useDeleteVendorLocationUserAssignement } from '@/api';
@@ -62,7 +62,7 @@ const AssignedUsersTable = ({
          width: 100,
          getActions: ({ row: { VendorLocationUserAssignmentID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   key="action"
                   onDelete={() => setActiveParam(VendorLocationUserAssignmentID)}
                   actions={['delete']}
@@ -79,8 +79,6 @@ const AssignedUsersTable = ({
             columns={columns}
             loading={isLoading}
             onAdd={onAdd}
-            getRowId={(row) => row.id}
-            checkboxSelection
          />
 
          <DeleteDialog

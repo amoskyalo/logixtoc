@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { ActualStock } from '@/api';
 import { getIndexedRows } from '@/utils';
@@ -56,7 +56,7 @@ const ActualStockGrid = ({ rows, dates, setDates, isLoading }: GridProps<ActualS
          field: 'Actions',
          headerName: 'Actions',
          type: 'actions',
-         getActions: () => [<DataGridEditNDelete key="options" actions={['options']} />],
+         getActions: () => [<DataGridActions key="options" actions={['options']} />],
       },
    ];
 
@@ -66,8 +66,6 @@ const ActualStockGrid = ({ rows, dates, setDates, isLoading }: GridProps<ActualS
          rows={getIndexedRows(rows)}
          dates={dates}
          setDates={setDates}
-         checkboxSelection
-         getRowId={(row) => row.id}
          loading={isLoading}
       />
    );

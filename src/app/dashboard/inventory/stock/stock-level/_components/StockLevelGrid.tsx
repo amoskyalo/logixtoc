@@ -1,7 +1,7 @@
 'use client';
 
 import { GridColDef } from '@mui/x-data-grid';
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { VendorStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 
@@ -77,19 +77,17 @@ const StockLevelGrid = ({
          field: 'Actions',
          headerName: 'Actions',
          type: 'actions',
-         getActions: () => [<DataGridEditNDelete key="options" actions={['options']} />],
+         getActions: () => [<DataGridActions key="options" actions={['options']} />],
       },
    ];
 
    return (
       <DataGrid
-         checkboxSelection
          columns={columns}
          rows={getIndexedRows(rows)}
          setDates={setDates}
          dates={dates}
          loading={isLoading}
-         getRowId={(row) => row.id}
          count={count}
          pageSize={pageSize}
          pageNo={pageNo}

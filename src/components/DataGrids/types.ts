@@ -1,29 +1,28 @@
 import { DataGridProps } from "@mui/x-data-grid";
 import { PaginationProps } from "@mui/material";
-
-export type DatesInterface = {
+export interface DatesInterface {
     startDate: string;
     endDate: string;
 };
 
 export type GridProps<R> = {
     rows: R[],
-    onAdd?: () => void;
-    refetch?: () => void;
     count?:number;
     pageNo?:number;
     pageSize?: number;
-    setPageSize?: any;
-    setPageNo?: any;
     isLoading: boolean;
-    setDates?: any;
     dates?: DatesInterface;
+    setDates?: any;
+    onAdd?: () => void;
+    refetch?: () => void;
+    setPageSize?: (size: number) => void;
+    setPageNo?: (size: number) => void;
 };
  
 export type DataGridToolbarProps = {
     setDates?: any;
-    onAdd?: () => void;
     dates?: DatesInterface;
+    onAdd?: () => void;
 };
  
 export type DataGridFooterProps = PaginationProps & {
@@ -42,10 +41,10 @@ export type DataGridRowEditActionsProps = {
 };
 
 export type DataGridActionsProps = {
+    actions?: Array<'edit' | 'delete' | 'options'>;
     onEdit?: () => void;
     onDelete?: () => void;
     onOptions?: () => void;
-    actions?: Array<'edit' | 'delete' | 'options'>;
 };
 
 export type AllDataGridProps = DataGridProps & DataGridToolbarProps & {

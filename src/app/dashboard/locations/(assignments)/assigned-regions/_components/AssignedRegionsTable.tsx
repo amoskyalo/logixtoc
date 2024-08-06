@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedRegionObjInterface, useDeleteAssignedRegions } from '@/api';
@@ -73,7 +73,7 @@ const AssignedRegionsTable = ({
          type: 'actions',
          getActions: ({ row: { VendorLocationID, VendorRegionID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   actions={['delete']}
                   key="actions"
                   onDelete={() => {
@@ -94,10 +94,8 @@ const AssignedRegionsTable = ({
          <DataGrid
             rows={getIndexedRows(rows)}
             columns={columns}
-            getRowId={(row) => row.id}
             onAdd={onAdd}
             loading={isLoading}
-            checkboxSelection
          />
 
          <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={onClose} />

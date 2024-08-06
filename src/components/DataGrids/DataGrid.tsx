@@ -12,13 +12,15 @@ const Grid = (props: AllDataGridProps) => {
       setDates,
       onAdd,
       dates,
-      loading,
       count,
       pageSize,
       pageNo,
       setPageSize,
       setPageNo,
+      getRowId,
+      loading,
       hideToolbar = false,
+      checkboxSelection = true,
       ...otherProps
    } = props;
 
@@ -46,10 +48,10 @@ const Grid = (props: AllDataGridProps) => {
             autoHeight={true}
             disableColumnMenu={true}
             loading={loading}
-            getRowClassName={(params) => {
-               return params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row';
-            }}
+            getRowClassName={({indexRelativeToCurrentPage}) => (indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
             slots={{ footer, ...(!hideToolbar && { toolbar }) }}
+            getRowId={getRowId || (row => row.id)}
+            checkboxSelection
             {...otherProps}
             sx={{
                '&>.MuiDataGrid-main': {

@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGridEditNDelete, DataGrid, GridProps } from '@/components/DataGrids';
+import { DataGridActions, DataGrid, GridProps } from '@/components/DataGrids';
 import { ProductBrand, useDeleteVendorProductBrand } from '@/api';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { GridColDef } from '@mui/x-data-grid';
@@ -49,7 +49,7 @@ const BrandTable = ({ rows, onAdd, isLoading, refetch }: GridProps<ProductBrand>
          type: 'actions',
          getActions: ({ row: { VendorProductBrandID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   key="actions"
                   onEdit={() => null}
                   onDelete={() => setParams(VendorProductBrandID)}
@@ -73,10 +73,8 @@ const BrandTable = ({ rows, onAdd, isLoading, refetch }: GridProps<ProductBrand>
          <DataGrid
             rows={getIndexedRows(rows)}
             columns={columns}
-            getRowId={(row) => row.id}
             loading={isLoading}
             onAdd={onAdd}
-            checkboxSelection
          />
 
          <DeleteDialog

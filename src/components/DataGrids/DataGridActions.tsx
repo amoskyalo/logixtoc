@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const DataGridEditNDelete = ({
+const DataGridActions = ({
    onEdit,
    onDelete,
    onOptions,
@@ -55,4 +55,4 @@ const DataGridEditNDelete = ({
    return actionComponents.map(({ component }) => component());
 };
 
-export default DataGridEditNDelete;
+export default DataGridActions;

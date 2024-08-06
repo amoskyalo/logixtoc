@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { LocationsArrayInterface, useDeleteVendorLocation } from '@/api';
@@ -66,7 +66,7 @@ const LocationsTable = ({
          type: 'actions',
          getActions: ({ row: { AddedByName, VendorLocationID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   key="actions"
                   onDelete={() => {
                      setActiveParams({
@@ -108,8 +108,6 @@ const LocationsTable = ({
             rows={getIndexedRows(rows)}
             onAdd={onAdd}
             loading={isLoading}
-            getRowId={(row) => row.id}
-            checkboxSelection
          />
 
          <DeleteDialog

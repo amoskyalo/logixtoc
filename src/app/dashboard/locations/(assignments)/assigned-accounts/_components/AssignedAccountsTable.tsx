@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedAccount, useDeleteAssignedAccount } from '@/api';
@@ -88,7 +88,7 @@ const AssignedAccountsTable = ({ rows, isLoading, refetch, onAdd }: GridProps<As
          headerName: 'Actions',
          getActions: ({ row: { VendorAccountID, VendorLocationID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   key="delete"
                   actions={['delete']}
                   onDelete={() => {
@@ -109,8 +109,6 @@ const AssignedAccountsTable = ({ rows, isLoading, refetch, onAdd }: GridProps<As
          <DataGrid
             columns={columns}
             rows={getIndexedRows(rows)}
-            getRowId={(row) => row.id}
-            checkboxSelection
             loading={isLoading}
             onAdd={onAdd}
          />

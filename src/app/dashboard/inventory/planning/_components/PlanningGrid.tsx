@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { StatusChips } from '@/components/Chips';
 import { DeliveryPlan } from '@/api';
@@ -56,19 +56,15 @@ const PlanningGrid = ({ rows, isLoading, dates, setDates }: GridProps<DeliveryPl
          field: 'Actions',
          headerName: 'Actions',
          type: 'actions',
-         getActions: () => {
-            return [<DataGridEditNDelete key="actions" />];
-         },
+         getActions: () => [<DataGridActions key="actions" />],
       },
    ];
 
    return (
       <DataGrid
-         checkboxSelection
          columns={columns}
          rows={getIndexedRows(rows)}
          loading={isLoading}
-         getRowId={(row) => row.id}
          dates={dates}
          setDates={setDates}
          onAdd={() => null}

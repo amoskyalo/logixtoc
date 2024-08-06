@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { StatusChips } from '@/components/Chips';
@@ -67,7 +67,7 @@ const LocationTypesGrid = ({ isLoading, rows, refetch, onAdd }: GridProps<Vendor
          headerName: 'Actions',
          getActions: ({ row: { VendorLocationTypeID } }) => {
             return [
-               <DataGridEditNDelete
+               <DataGridActions
                   key="actions"
                   onDelete={() => setActiveParams(VendorLocationTypeID)}
                   onEdit={() => null}
@@ -83,8 +83,6 @@ const LocationTypesGrid = ({ isLoading, rows, refetch, onAdd }: GridProps<Vendor
             rows={getIndexedRows(rows)}
             loading={isLoading}
             columns={columns}
-            getRowId={(row) => row.id}
-            checkboxSelection
             onAdd={onAdd}
          />
 

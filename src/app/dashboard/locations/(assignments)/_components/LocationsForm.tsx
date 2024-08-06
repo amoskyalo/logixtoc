@@ -85,7 +85,6 @@ const LocationsForm = ({ onClose, open }: FormsPropsInterface) => {
             <DataGrid
                columns={columns}
                rows={rows}
-               getRowId={(row) => row.id}
                slots={{ toolbar }}
                rowModesModel={rowModels}
                onRowModesModelChange={handleRowModesModelChange}

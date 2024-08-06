@@ -44,7 +44,6 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
             <DataGrid
                rows={getIndexedRows(rows)}
                columns={columns}
-               getRowId={(row) => row.id}
                loading={loading}
                hideToolbar
                hideFooter

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
+import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { StockMovement } from '@/api';
 import { getIndexedRows } from '@/utils';
@@ -57,9 +57,7 @@ const StockMovementGrid = ({ rows, setDates, dates, isLoading }: GridProps<Stock
          field: 'Action',
          type: 'actions',
          headerName: 'Actions',
-         getActions: () => {
-            return [<DataGridEditNDelete key="actions" actions={['options']} />];
-         },
+         getActions: () => [<DataGridActions key="actions" actions={['options']} />],
       },
    ];
 
@@ -67,10 +65,8 @@ const StockMovementGrid = ({ rows, setDates, dates, isLoading }: GridProps<Stock
       <DataGrid
          columns={columns}
          rows={getIndexedRows(rows)}
-         checkboxSelection
          dates={dates}
          setDates={setDates}
-         getRowId={(row) => row.id}
          loading={isLoading}
       />
    );

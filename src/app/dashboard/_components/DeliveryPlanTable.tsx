@@ -55,7 +55,6 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
             <DataGrid
                rows={getIndexedRows(rows)}
                columns={columns}
-               getRowId={(row) => row.id}
                loading={loading}
                hideToolbar
                hideFooter

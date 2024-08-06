@@ -78,8 +78,8 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                <StyledCalendar isMobile={isMobile} searching={searching}>
                   <Datepicker
                      readOnly
+                     showFooter
                      value={dates}
-                     showFooter={!isMobile}
                      showShortcuts={!isMobile}
                      useRange={!isMobile}
                      onChange={(newValue) => {

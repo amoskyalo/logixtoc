@@ -14,6 +14,7 @@ import {
    Typography,
    IconButton,
    Badge,
+   BoxProps,
 } from '@mui/material';
 import { Popover } from '../Popover';
 import { countries } from '@/Constants';
@@ -31,12 +32,15 @@ const flexStyles = {
    alignItems: 'center',
 };
 
-const Bar = styled(Box)(({ theme }) => ({
+const Bar = styled(Box)<BoxProps & { isSmallScreen: boolean }>(({ theme, isSmallScreen }) => ({
    backgroundColor: theme.palette.mode === 'dark' ? '#131a22' : '',
    position: 'sticky',
    top: 0,
    width: '100%',
-   boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.3)',
+   boxShadow:
+      theme.palette.mode === 'dark' && isSmallScreen
+         ? '0px 0px 24px rgba(0, 0, 0, 1)'
+         : '0px 0px 4px rgba(0, 0, 0, 0.3)',
    backdropFilter: 'blur(24px)',
    WebkitBackdropFilter: 'blur(24px)',
    zIndex: 99,
@@ -76,21 +80,25 @@ const AppBar = ({
    setExpand,
    expand,
 }: Readonly<{ open: boolean; setExpand: (arg: boolean) => void; expand: boolean }>) => {
-   const { isMobile } = useResponsiveness();
+   const { isMobile, isTablet } = useResponsiveness();
    const { status } = useConnectivityStatus();
    const { mode, setMode } = useContext(ThemeContext);
    const user = useGetUser();
 
    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
-   const handleToggleTheme = () => (mode === 'dark' ? setMode('light') : setMode('dark'));
+   const handleToggleTheme = () => {
+      const setModeTo = mode === 'light' ? 'dark' : 'light';
+      localStorage.setItem('userTheme', setModeTo);
+      setMode(setModeTo);
+   };
 
    return (
-      <Bar>
+      <Bar isSmallScreen={isMobile || isTablet}>
          <Toolbar>
-            <Box sx={{ width: '100%', ...flexStyles }}>
+            <Box sx={{ width: '100%', py: isMobile || isTablet ? 1 : 0, ...flexStyles }}>
                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  {(!open || isMobile) && (
+                  {(!open || isMobile || isTablet) && (
                      <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -102,7 +110,9 @@ const AppBar = ({
                      </IconButton>
                   )}
                   <Box>
-                     <Typography variant="caption">Hello {`${user?.FirstName} ${user?.LastName}`}👋</Typography>
+                     <Typography variant="caption">
+                        Hello {`${user?.FirstName} ${user?.LastName}`}👋
+                     </Typography>
                      <Typography variant="body2" sx={{ fontWeight: 800 }}>
                         Esque Energy
                      </Typography>
@@ -121,7 +131,9 @@ const AppBar = ({
                      }}
                   >
                      <Image src="/kenya.jpg" height={16} width={24} alt={user?.CountryFlag} />
-                     <Typography variant="body1">{user?.CountryFlag?.toLocaleUpperCase()}</Typography>
+                     <Typography variant="body1">
+                        {user?.CountryFlag?.toLocaleUpperCase()}
+                     </Typography>
                      <KeyboardArrowDownIcon />
                   </Box>
                   <Tooltip title={`Turn ${mode === 'light' ? 'off' : 'on'} the light`}>

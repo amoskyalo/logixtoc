@@ -46,14 +46,14 @@ const DashboardPage = () => {
          </Box>
 
          <Grid container spacing={4}>
-            <Grid item lg={8} xs={12}>
+            <Grid item md={8} xs={12}>
                <DashboardProductPerfomanceChart
                   DailyPerformanceArray={dashboardData?.DailyPerformanceArray ?? []}
                   loading={isLoading}
                />
             </Grid>
 
-            <Grid item lg={4} xs={12}>
+            <Grid item md={4} xs={12}>
                <DashboardSalesPerformanceChart
                   PerformanceArray={dashboardData?.PerformanceArray ?? []}
                   loading={isLoading}

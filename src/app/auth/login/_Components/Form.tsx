@@ -47,6 +47,7 @@ const LoginForm = () => {
             }}
             onSubmit={handleLogin}
             validationSchema={validationSchema()}
+            validateOnBlur={false}
          >
             {({ touched, errors, getFieldProps }) => {
                function getProps(field: string) {

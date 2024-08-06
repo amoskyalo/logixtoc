@@ -20,7 +20,7 @@ const Auth = ({ children }: Readonly<{ children: React.ReactNode }>) => {
          }}
       >
          <Grid container sx={{ height: '100%' }}>
-            <Grid item lg={7} xs={0} sx={{ ...center }}>
+            <Grid item lg={7} xs={0} sx={{ ...center }} className="hidden md:flex">
                <Image alt="logixtoc" src="/auth.svg" height={600} width={600} />
             </Grid>
 

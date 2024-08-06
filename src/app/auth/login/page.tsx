@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
 import { Form } from './_Components';
+import Image from 'next/image';
 
 const Login = () => {
    return (
@@ -11,10 +11,8 @@ const Login = () => {
             flexDirection: 'column',
             alignItems: 'center',
             rowGap: 4,
-            padding: 8,
-            width: '100%',
          }}
-         className="glassmorphism"
+         className="glassmorphism w-[90%] mx-auto p-8 md:w-full md:px-16 md:py-8"
       >
          <Image src="/iconlogo.png" height={75} width={75} alt="logo" />
          <Box>

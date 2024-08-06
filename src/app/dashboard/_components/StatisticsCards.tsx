@@ -17,7 +17,7 @@ const StatisticsCards = ({
    TodayMaintenanceRequest,
    PlannedMaintenanceRequest,
 }: StatisticsCardsInterface) => {
-   const { isMobile } = useResponsiveness();
+   const { isMobile, isTablet } = useResponsiveness();
 
    const cards: CardsInterface[] = [
       {
@@ -87,7 +87,7 @@ const StatisticsCards = ({
    ];
 
    return (
-      <Grid container spacing={2} sx={{ ...(isMobile ? { width: 1200 } : {}) }}>
+      <Grid container spacing={2} sx={{ ...(isMobile || isTablet ? { width: 1200 } : {}) }}>
          {cards.map(
             ({
                title,

@@ -1,19 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { MainBar, AppBar } from '@/components/NavigationBar';
-import Joyride from 'react-joyride';
-import CssBaseline from '@mui/material/CssBaseline';
+import { MainBar } from '@/components/NavigationBar';
+import { useGetUser, useGetUserDeviceTheme } from '@/hooks';
 
-const steps = [
-   {
-      target: '.profile',
-      content: 'profile.',
-   },
-];
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+   const { UserToken } = useGetUser();
+   const { mode } = useGetUserDeviceTheme();
 
-const DashboardLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+   useEffect(() => {
+      if (!UserToken) {
+         window.location.replace('/auth/login');
+      }
+   }, [UserToken]);
+
+   useEffect(() => {
+      if (typeof window !== 'undefined') {
+         const userTheme = localStorage.getItem('userTheme');
+
+         if (!userTheme) {
+            localStorage.setItem('userTheme', mode);
+         }
+      }
+   }, [mode]);
+
+   if (!UserToken) {
+      return null;
+   }
+
    return (
       <Box sx={{ height: '100vh', overflowX: 'hidden', width: '100vw' }}>
          <MainBar>{children}</MainBar>

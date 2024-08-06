@@ -17,8 +17,8 @@ export const getColumnWidth = (width: number, isMobile: boolean) => {
     }
 }
 
-export const getIndexedRows = (rows: GridRowModel[]) => {
-    return rows.map((row, index) => ({ id: index + 1, ...row }))
+export const getIndexedRows = (rows?: GridRowModel[]) => {
+    return rows?.map((row, index) => ({ id: index + 1, ...row }))
 }
 
 export const getInitialDates = (): DatesInterface => {

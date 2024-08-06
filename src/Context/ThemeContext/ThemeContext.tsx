@@ -2,13 +2,20 @@
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
-import { useMemo, useState, createContext } from 'react';
+import { useMemo, useState, createContext, useEffect } from 'react';
 
 export const ThemeContext = createContext<any>('');
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
-   const [mode, setMode] = useState<'dark' | 'light'>('light');
    const { isMobile } = useResponsiveness();
+
+   const [mode, setMode] = useState<'dark' | 'light'>();
+
+   useEffect(() => {
+      if (typeof window !== 'undefined') {
+         setMode(localStorage.getItem('userTheme') ?? ('light' as any));
+      }
+   }, []);
 
    const theme = createTheme({
       palette: {
@@ -40,6 +47,9 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
          h6: {
             fontWeight: '700',
             fontSize: 20,
+         },
+         h5: {
+            fontWeight: '700',
          },
          h4: {
             fontWeight: '700',

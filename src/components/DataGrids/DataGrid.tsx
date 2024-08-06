@@ -48,10 +48,12 @@ const Grid = (props: AllDataGridProps) => {
             autoHeight={true}
             disableColumnMenu={true}
             loading={loading}
-            getRowClassName={({indexRelativeToCurrentPage}) => (indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
+            getRowClassName={({ indexRelativeToCurrentPage }) =>
+               indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row'
+            }
             slots={{ footer, ...(!hideToolbar && { toolbar }) }}
-            getRowId={getRowId || (row => row.id)}
-            checkboxSelection
+            getRowId={getRowId || ((row) => row.id)}
+            checkboxSelection={checkboxSelection}
             {...otherProps}
             sx={{
                '&>.MuiDataGrid-main': {

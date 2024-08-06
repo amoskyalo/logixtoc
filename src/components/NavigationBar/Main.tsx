@@ -2,6 +2,7 @@ import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { useResponsiveness, useThemeMode } from '@/hooks';
 import { useState } from 'react';
 import Box, { BoxProps } from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
@@ -74,13 +75,13 @@ const flexStyles = {
 };
 
 export default function MainBar({ children }: Readonly<{ children: React.ReactNode }>) {
-   const { isMobile } = useResponsiveness();
+   const { isMobile, isTablet } = useResponsiveness();
    const { isDarkMode } = useThemeMode();
    const [open] = useState(true);
    const [expand, setExpand] = useState(false);
 
    const SideBar = () => (
-      <NavBarContainer isMobile={isMobile}>
+      <NavBarContainer isMobile={isMobile || isTablet}>
          <DrawerHeader>
             <Box
                sx={{
@@ -102,6 +103,8 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                </IconButton>
             </Box>
          </DrawerHeader>
+
+         <Divider />
          <Box
             sx={{
                flex: 1,
@@ -117,16 +120,16 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                },
             }}
          >
-            <NavList open={open} setExpanded={setExpand} isMobile={isMobile} />
+            <NavList open={open} setExpanded={setExpand} isMobile={isMobile || isTablet} />
          </Box>
       </NavBarContainer>
    );
 
    return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', minHeight: "100%" }}>
          <CssBaseline />
 
-         {isMobile ? (
+         {isMobile || isTablet ? (
             <Drawer open={expand}>
                <SideBar />
             </Drawer>
@@ -141,10 +144,9 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
             <Box
                sx={{
                   flexGrow: 1,
-                  px: 3,
-                  pt: 3,
-                  overflow: 'auto',
-                  height: '100%',
+                  px: 2,
+                  pt: 2,
+                  pb: 2,
                }}
             >
                {children}

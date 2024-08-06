@@ -1,6 +1,6 @@
 import { statusColors } from "@/Constants";
 import { GridRowModel } from "@mui/x-data-grid";
-import { DatesInterface } from "@/Types";
+import { DatesInterface } from "@/components/DataGrids";
 import { toast } from "react-toastify";
 import { mutateOptionsArgs } from "./types";
 import dayjs from "dayjs";

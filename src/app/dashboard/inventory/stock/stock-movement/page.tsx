@@ -33,6 +33,10 @@ const Stock = () => {
          rows={movementHistory?.Data ?? []}
          setDates={setDates}
          dates={dates}
+         setPageNo={setPage}
+         pageNo={page}
+         setPageSize={setPageSize}
+         pageSize={pageSize}
       />
    );
 };

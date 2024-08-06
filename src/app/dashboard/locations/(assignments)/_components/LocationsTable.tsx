@@ -19,10 +19,10 @@ const initialParams: RowParamsInterface = {
 };
 
 const LocationsTable = ({
-   onAdd,
    rows,
    isLoading,
    refetch,
+   ...otherProps
 }: Readonly<GridProps<LocationsArrayInterface>>) => {
    const [loading, setLoading] = useState<boolean>(false);
    const [open, setOpen] = useState<boolean>(false);
@@ -106,8 +106,8 @@ const LocationsTable = ({
          <DataGrid
             columns={columns}
             rows={getIndexedRows(rows)}
-            onAdd={onAdd}
             loading={isLoading}
+            {...otherProps}
          />
 
          <DeleteDialog

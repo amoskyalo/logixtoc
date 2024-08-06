@@ -54,6 +54,7 @@ const DeliveryPlanTable = ({ loading, rows }: DeliveryPlanTableInterface) => {
          <SectionsBox title="Delivery plan" renderActionButton={renderActionButton}>
             <DataGrid
                rows={getIndexedRows(rows)}
+               checkboxSelection={false}
                columns={columns}
                loading={loading}
                hideToolbar

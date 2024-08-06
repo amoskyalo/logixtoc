@@ -28,6 +28,10 @@ const AssignedUsers = () => {
             isLoading={isLoading || isRefetching}
             onAdd={() => setOpen(true)}
             refetch={refetch}
+            setPageNo={setPage}
+            setPageSize={setPageSize}
+            pageSize={pageSize}
+            pageNo={page}
          />
 
          <AssignedUsersForm

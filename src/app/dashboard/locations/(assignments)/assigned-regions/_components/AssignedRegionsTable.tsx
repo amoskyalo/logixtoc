@@ -12,7 +12,7 @@ const AssignedRegionsTable = ({
    rows,
    isLoading,
    refetch,
-   onAdd,
+   ...otherProps
 }: GridProps<AssignedRegionObjInterface>) => {
    const [open, setOpen] = useState(false);
    const [loading, setLoading] = useState(false);
@@ -94,8 +94,8 @@ const AssignedRegionsTable = ({
          <DataGrid
             rows={getIndexedRows(rows)}
             columns={columns}
-            onAdd={onAdd}
             loading={isLoading}
+            {...otherProps}
          />
 
          <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={onClose} />

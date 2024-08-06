@@ -43,6 +43,7 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
          <SectionsBox title="Stock movement" renderActionButton={renderActionButton}>
             <DataGrid
                rows={getIndexedRows(rows)}
+               checkboxSelection={false}
                columns={columns}
                loading={loading}
                hideToolbar

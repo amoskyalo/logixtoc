@@ -26,6 +26,11 @@ const Locations = () => {
             rows={data?.Data || []}
             isLoading={isLoading || isRefetching}
             refetch={refetch}
+            pageNo={page}
+            setPageNo={setPage}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            count={data?.TotalCount}
          />
          <LocationsForm open={open} onClose={() => setOpen(false)} refetch={refetch} />
       </>

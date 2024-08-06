@@ -26,13 +26,13 @@ const AssignedLocations = () => {
             isLoading={isLoading || isRefetching}
             onAdd={() => setOpen(true)}
             refetch={refetch}
+            pageNo={page}
+            pageSize={pageSize}
+            setPageNo={setPage}
+            setPageSize={setPageSize}
          />
 
-         <AssignedLocationForm
-            open={open}
-            onClose={() => setOpen(false)}
-            refetch={refetch}
-         />
+         <AssignedLocationForm open={open} onClose={() => setOpen(false)} refetch={refetch} />
       </>
    );
 };

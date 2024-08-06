@@ -31,6 +31,11 @@ const ActualStock = () => {
          isLoading={isLoading || isRefetching}
          setDates={setDates}
          dates={dates}
+         pageNo={page}
+         setPageNo={setPage}
+         pageSize={pageSize}
+         setPageSize={setPageSize}
+         count={actualStock?.TotalCount}
       />
    );
 };

@@ -6,7 +6,7 @@ import { StatusChips } from '@/components/Chips';
 import { DeliveryPlan } from '@/api';
 import { getIndexedRows } from '@/utils';
 
-const PlanningGrid = ({ rows, isLoading, dates, setDates }: GridProps<DeliveryPlan>) => {
+const PlanningGrid = ({ rows, isLoading, ...otherProps }: GridProps<DeliveryPlan>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',
@@ -61,14 +61,7 @@ const PlanningGrid = ({ rows, isLoading, dates, setDates }: GridProps<DeliveryPl
    ];
 
    return (
-      <DataGrid
-         columns={columns}
-         rows={getIndexedRows(rows)}
-         loading={isLoading}
-         dates={dates}
-         setDates={setDates}
-         onAdd={() => null}
-      />
+      <DataGrid columns={columns} rows={getIndexedRows(rows)} loading={isLoading} {...otherProps} />
    );
 };
 

@@ -5,17 +5,7 @@ import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { VendorStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 
-const StockLevelGrid = ({
-   isLoading,
-   rows,
-   setDates,
-   dates,
-   setPageNo,
-   setPageSize,
-   pageNo,
-   pageSize,
-   count,
-}: GridProps<VendorStock>) => {
+const StockLevelGrid = ({ isLoading, rows, ...otherProps }: GridProps<VendorStock>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',
@@ -81,20 +71,7 @@ const StockLevelGrid = ({
       },
    ];
 
-   return (
-      <DataGrid
-         columns={columns}
-         rows={getIndexedRows(rows)}
-         setDates={setDates}
-         dates={dates}
-         loading={isLoading}
-         count={count}
-         pageSize={pageSize}
-         pageNo={pageNo}
-         setPageSize={setPageSize}
-         setPageNo={setPageNo}
-      />
-   );
+   return <DataGrid columns={columns} rows={getIndexedRows(rows)} {...otherProps} />;
 };
 
 export default StockLevelGrid;

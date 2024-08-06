@@ -11,9 +11,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedProductsTable = ({
    rows,
-   onAdd,
    isLoading,
    refetch,
+   ...otherParams
 }: GridProps<AssignedProductInterface>) => {
    const [loading, setLoading] = useState(false);
    const [activeParam, setActiveParam] = useState<string | number>('');
@@ -79,8 +79,8 @@ const AssignedProductsTable = ({
          <DataGrid
             rows={getIndexedRows(rows)}
             loading={isLoading}
-            onAdd={onAdd}
             columns={columns}
+            {...otherParams}
          />
 
          <DeleteDialog

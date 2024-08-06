@@ -11,8 +11,8 @@ import { useGetUser, useResponsiveness } from '@/hooks';
 const AssignedUsersTable = ({
    isLoading,
    rows,
-   onAdd,
    refetch,
+   ...otherParams
 }: GridProps<VendorLocationUserAssignmentRow>) => {
    const [activeParam, setActiveParam] = useState<string | number>('');
    const [loading, setLoading] = useState<boolean>(false);
@@ -78,7 +78,7 @@ const AssignedUsersTable = ({
             rows={getIndexedRows(rows)}
             columns={columns}
             loading={isLoading}
-            onAdd={onAdd}
+            {...otherParams}
          />
 
          <DeleteDialog

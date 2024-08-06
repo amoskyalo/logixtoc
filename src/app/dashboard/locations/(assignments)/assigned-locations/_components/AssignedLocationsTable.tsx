@@ -10,8 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const AssignedLocationsTable = ({
    rows,
    isLoading,
-   onAdd,
    refetch,
+   ...otherParams
 }: GridProps<AssignedLocationObject>) => {
    const [loading, setLoading] = useState<boolean>(false);
    const [activeParam, setActiveParam] = useState<string | number>('');
@@ -84,7 +84,7 @@ const AssignedLocationsTable = ({
             columns={columns}
             rows={getIndexedRows(rows)}
             loading={isLoading}
-            onAdd={onAdd}
+            {...otherParams}
          />
 
          <DeleteDialog

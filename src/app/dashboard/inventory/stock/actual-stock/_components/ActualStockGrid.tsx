@@ -6,7 +6,7 @@ import { ActualStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 import { StatusChips } from '@/components/Chips';
 
-const ActualStockGrid = ({ rows, dates, setDates, isLoading }: GridProps<ActualStock>) => {
+const ActualStockGrid = ({ rows, isLoading, ...otherProps }: GridProps<ActualStock>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',
@@ -61,13 +61,7 @@ const ActualStockGrid = ({ rows, dates, setDates, isLoading }: GridProps<ActualS
    ];
 
    return (
-      <DataGrid
-         columns={columns}
-         rows={getIndexedRows(rows)}
-         dates={dates}
-         setDates={setDates}
-         loading={isLoading}
-      />
+      <DataGrid columns={columns} rows={getIndexedRows(rows)} loading={isLoading} {...otherProps} />
    );
 };
 

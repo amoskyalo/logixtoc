@@ -31,6 +31,11 @@ const AssignedProducts = () => {
             isLoading={isLoading || isRefetching}
             rows={assignedProducts?.Data ?? []}
             refetch={refetch}
+            pageNo={page}
+            pageSize={pageSize}
+            setPageNo={setPage}
+            setPageSize={setPageSize}
+            count={assignedProducts?.TotalCount}
          />
 
          <AssignedProductsForm

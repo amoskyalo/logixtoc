@@ -32,6 +32,10 @@ const AssignedRegions = () => {
             isLoading={isLoading || isRefetching}
             refetch={refetch}
             onAdd={() => setOpen(true)}
+            setPageNo={setPage}
+            setPageSize={setPageSize}
+            pageNo={page}
+            pageSize={pageSize}
          />
 
          <AssignedRegionsForm

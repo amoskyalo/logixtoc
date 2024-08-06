@@ -1,14 +1,10 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { ContainerInterface } from './types';
-import { useTheme } from '@mui/material/styles';
+import { useThemeMode } from '@/hooks';
 
 const Container = ({ title, children, renderActionButton }: Readonly<ContainerInterface>) => {
-   const {
-      palette: { mode },
-   } = useTheme();
-
-   const isDarkMode = mode === 'dark';
+   const { isDarkMode } = useThemeMode();
 
    return (
       <Box

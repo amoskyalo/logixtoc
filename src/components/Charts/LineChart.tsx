@@ -11,9 +11,8 @@ import {
    Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useResponsiveness } from '@/hooks';
+import { useResponsiveness, useThemeMode } from '@/hooks';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 
@@ -34,11 +33,9 @@ export type LineChartInterface = {
 
 const LineChart = ({ data, loading }: LineChartInterface) => {
    const { isMobile } = useResponsiveness();
-   const {
-      palette: { mode },
-   } = useTheme();
+   const { isDarkMode } = useThemeMode();
 
-   const ticksColor = mode === 'dark' ? 'rgba(244, 245, 249, 1)' : '';
+   const ticksColor = isDarkMode ? 'rgba(244, 245, 249, 1)' : '';
 
    const styles = {
       display: 'flex',

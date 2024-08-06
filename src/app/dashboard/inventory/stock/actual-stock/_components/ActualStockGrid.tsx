@@ -1,18 +1,12 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { ActualStock } from '@/api';
 import { getIndexedRows } from '@/utils';
 import { StatusChips } from '@/components/Chips';
-import { TablesPropsInterface } from '@/Types';
 
-const ActualStockGrid = ({
-   rows,
-   dates,
-   setDates,
-   isLoading,
-}: TablesPropsInterface<ActualStock>) => {
+const ActualStockGrid = ({ rows, dates, setDates, isLoading }: GridProps<ActualStock>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',

@@ -1,10 +1,9 @@
 'use client';
 
 import { GridColDef } from '@mui/x-data-grid';
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { VendorStock } from '@/api';
 import { getIndexedRows } from '@/utils';
-import { TablesPropsInterface } from '@/Types';
 
 const StockLevelGrid = ({
    isLoading,
@@ -16,7 +15,7 @@ const StockLevelGrid = ({
    pageNo,
    pageSize,
    count,
-}: TablesPropsInterface<VendorStock>) => {
+}: GridProps<VendorStock>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',

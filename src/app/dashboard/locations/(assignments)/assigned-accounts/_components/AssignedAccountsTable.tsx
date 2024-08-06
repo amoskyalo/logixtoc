@@ -1,20 +1,14 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedAccount, useDeleteAssignedAccount } from '@/api';
 import { useGetUser } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
-import { TablesPropsInterface } from '@/Types';
 
-const AssignedAccountsTable = ({
-   rows,
-   isLoading,
-   refetch,
-   onAdd,
-}: TablesPropsInterface<AssignedAccount>) => {
+const AssignedAccountsTable = ({ rows, isLoading, refetch, onAdd }: GridProps<AssignedAccount>) => {
    const [loading, setLoading] = useState(false);
    const [open, setOpen] = useState(false);
    const [activeParams, setActiveParams] = useState({

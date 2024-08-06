@@ -1,13 +1,9 @@
 import React from 'react';
 import { Skeleton, Box, Card } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { useThemeMode } from '@/hooks';
 
 const CardsSkeleton = () => {
-   const {
-      palette: { mode },
-   } = useTheme();
-
-   const isDarkMode = mode === 'dark';
+   const { isDarkMode } = useThemeMode();
 
    return (
       <Card

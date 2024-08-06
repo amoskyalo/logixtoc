@@ -1,20 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { DeleteDialog } from '@/components/Dialogs';
 import { GridColDef } from '@mui/x-data-grid';
 import { VendorLocationUserAssignmentRow, useDeleteVendorLocationUserAssignement } from '@/api';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { TablesPropsInterface } from '@/Types';
 
 const AssignedUsersTable = ({
    isLoading,
    rows,
    onAdd,
    refetch,
-}: TablesPropsInterface<VendorLocationUserAssignmentRow>) => {
+}: GridProps<VendorLocationUserAssignmentRow>) => {
    const [activeParam, setActiveParam] = useState<string | number>('');
    const [loading, setLoading] = useState<boolean>(false);
 

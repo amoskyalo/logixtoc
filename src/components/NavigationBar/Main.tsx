@@ -1,5 +1,5 @@
-import { styled, Theme, CSSObject, useTheme } from '@mui/material/styles';
-import { useResponsiveness } from '@/hooks';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { useResponsiveness, useThemeMode } from '@/hooks';
 import { useState } from 'react';
 import Box, { BoxProps } from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -75,9 +75,7 @@ const flexStyles = {
 
 export default function MainBar({ children }: Readonly<{ children: React.ReactNode }>) {
    const { isMobile } = useResponsiveness();
-   const {
-      palette: { mode },
-   } = useTheme();
+   const { isDarkMode } = useThemeMode();
    const [open] = useState(true);
    const [expand, setExpand] = useState(false);
 
@@ -114,8 +112,7 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                   width: '8px',
                },
                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor:
-                     mode === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.1)',
+                  backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.1)',
                   borderRadius: '10px',
                },
             }}

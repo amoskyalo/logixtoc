@@ -1,13 +1,12 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { StatusChips } from '@/components/Chips';
 import { DeliveryPlan } from '@/api';
 import { getIndexedRows } from '@/utils';
-import { TablesPropsInterface } from '@/Types';
 
-const PlanningGrid = ({ rows, isLoading, dates, setDates }: TablesPropsInterface<DeliveryPlan>) => {
+const PlanningGrid = ({ rows, isLoading, dates, setDates }: GridProps<DeliveryPlan>) => {
    const columns: GridColDef[] = [
       {
          field: 'id',

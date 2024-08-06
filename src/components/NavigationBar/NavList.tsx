@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { routes } from '@/Constants';
 import { usePathname, useRouter } from 'next/navigation';
-import { useTheme } from '@mui/material/styles';
+import { useThemeMode } from '@/hooks';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const NavList = ({
@@ -25,14 +25,12 @@ const NavList = ({
 }>) => {
    const pathname = usePathname();
    const router = useRouter();
-   const {
-      palette: { mode },
-   } = useTheme();
+   const { isDarkMode } = useThemeMode();
 
    const [openSubTabs, setOpenSubTabs] = useState<string[]>([]);
 
-   const textColor = mode === 'dark' ? '#31c886' : '#10333f';
-   const backgroundColor = mode === 'dark' ? '#122627' : 'rgba(16, 51, 63, 0.2)';
+   const color = isDarkMode ? '#31c886' : '#10333f';
+   const backgroundColor = isDarkMode ? '#122627' : 'rgba(16, 51, 63, 0.2)';
 
    function isActiveTab(path: string, isSubTab?: boolean) {
       if (isSubTab || path === '/dashboard') {
@@ -47,7 +45,7 @@ const NavList = ({
    function additionalStyles(tab: string, isSubTab?: boolean) {
       return {
          transition: 'color 0.5s ease',
-         color: isActiveTab(tab, isSubTab) ? textColor : '#a5acb2',
+         color: isActiveTab(tab, isSubTab) ? color : '#a5acb2',
       };
    }
 

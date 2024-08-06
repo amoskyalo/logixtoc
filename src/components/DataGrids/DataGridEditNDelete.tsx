@@ -1,21 +1,15 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGridActionsProps } from './types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-type PropsInterface = {
-   onEdit?: () => void;
-   onDelete?: () => void;
-   onOptions?: () => void;
-   actions?: Array<'edit' | 'delete' | 'options'>;
-};
 
 const DataGridEditNDelete = ({
    onEdit,
    onDelete,
    onOptions,
    actions = ['edit', 'delete'],
-}: PropsInterface) => {
+}: DataGridActionsProps) => {
    const actionComponents: {
       name: 'edit' | 'delete' | 'options';
       component: () => JSX.Element;

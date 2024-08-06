@@ -1,6 +1,6 @@
 'use client';
 
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { StatusChips } from '@/components/Chips';
@@ -8,14 +8,8 @@ import { VendorLocationType, useDeleteVendorLocationTypes } from '@/api';
 import { useGetUser, useResponsiveness } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
-import { TablesPropsInterface } from '@/Types';
 
-const LocationTypesGrid = ({
-   isLoading,
-   rows,
-   refetch,
-   onAdd,
-}: TablesPropsInterface<VendorLocationType>) => {
+const LocationTypesGrid = ({ isLoading, rows, refetch, onAdd }: GridProps<VendorLocationType>) => {
    const [activeParams, setActiveParams] = useState<string | number>('');
    const [loading, setLoading] = useState<boolean>(false);
 

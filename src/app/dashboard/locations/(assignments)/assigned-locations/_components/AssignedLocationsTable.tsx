@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { DataGrid } from '@/components/DataGrids';
+import { DataGrid, GridProps } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedLocationObject, useDeleteAssignedLocation } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { TablesPropsInterface } from '@/Types';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedLocationsTable = ({
@@ -13,7 +12,7 @@ const AssignedLocationsTable = ({
    isLoading,
    onAdd,
    refetch,
-}: TablesPropsInterface<AssignedLocationObject>) => {
+}: GridProps<AssignedLocationObject>) => {
    const [loading, setLoading] = useState<boolean>(false);
    const [activeParam, setActiveParam] = useState<string | number>('');
 

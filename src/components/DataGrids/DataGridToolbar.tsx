@@ -8,24 +8,14 @@ import {
 import { useCallback, useState, useEffect } from 'react';
 import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box } from '@mui/material';
 import { getInitialDates } from '@/utils';
-import { useResponsiveness } from '@/hooks';
-import { styled, useTheme } from '@mui/material/styles';
+import { useResponsiveness, useThemeMode } from '@/hooks';
+import { styled } from '@mui/material/styles';
+import { DataGridToolbarProps } from './types';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import Datepicker from 'react-tailwindcss-datepicker';
-
-export type DatesInterface = {
-   startDate: string;
-   endDate: string;
-};
-
-type PropsInterface = {
-   setDates?: any;
-   onAdd?: () => void;
-   dates?: DatesInterface;
-};
 
 type SearchProps = TextFieldProps & {
    isMobile: boolean;
@@ -52,14 +42,10 @@ const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(
    }),
 );
 
-const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<PropsInterface>) => {
+const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarProps>) => {
    const apiRef = useGridApiContext();
    const { isMobile } = useResponsiveness();
-   const {
-      palette: { mode },
-   } = useTheme();
-
-   const isDarkMode = mode === 'dark';
+   const { isDarkMode } = useThemeMode();
 
    const [searchValue, setSearchValue] = useState('');
    const [searching, setSearching] = useState(false);

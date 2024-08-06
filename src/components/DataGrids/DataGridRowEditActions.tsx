@@ -1,26 +1,18 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGridRowEditActionsProps } from './types';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 
-type ActionCellInterface = {
-   id: string | number;
-   isEditMode: boolean;
-   handleSaveClick: (arg: string | number) => void;
-   handleCancelClick: (arg: string | number) => void;
-   handleEditClick: (arg: string | number) => void;
-   handleDeleteClick: (arg: string | number) => void;
-};
-
-const DataGridActions = ({
+const DataGridRowEditActions = ({
    id,
    isEditMode,
    handleSaveClick,
    handleEditClick,
    handleCancelClick,
    handleDeleteClick,
-}: ActionCellInterface) => {
+}: DataGridRowEditActionsProps) => {
    if (isEditMode) {
       return [
          <GridActionsCellItem
@@ -59,4 +51,4 @@ const DataGridActions = ({
    ];
 };
 
-export default DataGridActions;
+export default DataGridRowEditActions;

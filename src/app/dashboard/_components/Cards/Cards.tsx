@@ -1,25 +1,22 @@
 import { CardsInterface } from '../types';
 import { Box, Typography } from '@mui/material';
-import { useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { useThemeMode } from '@/hooks';
 import FiberSmartRecordIcon from '@mui/icons-material/FiberSmartRecord';
 
 const Cards = (props: Readonly<CardsInterface>) => {
    const { cardBackground, title, subTitle, color, iconBackground, Icon, percentages, value } =
       props;
 
-   const {
-      palette: { mode },
-   } = useTheme();
-
-   const isDarkMode = mode === 'dark';
+   const { isDarkMode } = useThemeMode();
 
    const backgroundColor = isDarkMode ? '#1c252e' : 'white';
 
-   const textColor = cardBackground && isDarkMode ? "rgba(0, 0, 0, 0.7)" : '';
+   const text = cardBackground && isDarkMode ? 'rgba(0, 0, 0, 0.7)' : '';
 
    const StyledTypography = styled(Typography)(() => ({
-      color: textColor,
-   }))
+      color: text,
+   }));
 
    return (
       <Box sx={{ backgroundColor: cardBackground ?? backgroundColor, p: 2, borderRadius: 2 }}>

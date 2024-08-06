@@ -1,20 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { DataGrid, DataGridEditNDelete } from '@/components/DataGrids';
+import { DataGrid, DataGridEditNDelete, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { AssignedRegionObjInterface, useDeleteAssignedRegions } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
 import { useGetUser, useResponsiveness } from '@/hooks';
-import { TablesPropsInterface } from '@/Types';
 
 const AssignedRegionsTable = ({
    rows,
    isLoading,
    refetch,
    onAdd,
-}: TablesPropsInterface<AssignedRegionObjInterface>) => {
+}: GridProps<AssignedRegionObjInterface>) => {
    const [open, setOpen] = useState(false);
    const [loading, setLoading] = useState(false);
    const [activeParam, setActiveParam] = useState<{

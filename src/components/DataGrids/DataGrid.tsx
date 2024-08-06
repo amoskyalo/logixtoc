@@ -1,24 +1,13 @@
 'use client';
 
-import React from 'react';
-import { DataGrid, DataGridProps } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { ToolbarProps, FooterProps } from './types';
+import { AllDataGridProps } from './types';
+import { useThemeMode } from '@/hooks';
 import DataGridFooter from './DataGridFooter';
 import DataGridToolbar from './DataGridToolbar';
 
-const Grid = (
-   props: DataGridProps &
-      FooterProps &
-      ToolbarProps & {
-         hideToolbar?: boolean;
-      },
-) => {
-   const {
-      palette: { mode },
-   } = useTheme();
-
+const Grid = (props: AllDataGridProps) => {
    const {
       setDates,
       onAdd,
@@ -28,11 +17,12 @@ const Grid = (
       pageSize,
       pageNo,
       setPageSize,
+      setPageNo,
       hideToolbar = false,
       ...otherProps
    } = props;
 
-   const isDarkMode = mode === 'dark';
+   const { isDarkMode } = useThemeMode();
 
    const footer = () => (
       <DataGridFooter
@@ -41,9 +31,12 @@ const Grid = (
          pageSize={pageSize}
          page={pageNo}
          setPageSize={setPageSize}
+         onChange={(__, page) => {
+            setPageNo?.(page);
+         }}
       />
    );
-   
+
    const toolbar = () => <DataGridToolbar onAdd={onAdd} setDates={setDates} dates={dates} />;
 
    return (

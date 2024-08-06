@@ -1,21 +1,11 @@
-import {
-   Pagination,
-   Box,
-   Divider,
-   PaginationProps,
-   Stack,
-   Typography,
-   MenuList,
-   MenuItem,
-} from '@mui/material';
+import { Pagination, Box, Divider, Stack, Typography, MenuList, MenuItem } from '@mui/material';
 import { useResponsiveness } from '@/hooks';
 import { useState } from 'react';
 import { Popover } from '../Popover';
+import { DataGridFooterProps } from './types';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const DataGridFooter = (
-   props: PaginationProps & { loading: boolean | undefined; pageSize?: number, setPageSize?: any },
-) => {
+const DataGridFooter = (props: DataGridFooterProps) => {
    const { loading, pageSize, setPageSize, ...otherProps } = props;
    const { isMobile } = useResponsiveness();
 
@@ -38,7 +28,7 @@ const DataGridFooter = (
                      direction="row"
                      alignItems="center"
                      onClick={(event) => setAnchorEl(event.currentTarget)}
-                     sx={{cursor: "pointer"}}
+                     sx={{ cursor: 'pointer' }}
                   >
                      <Typography variant="body1">{pageSize}</Typography>
                      <ArrowDropDownIcon fontSize="medium" />
@@ -56,7 +46,9 @@ const DataGridFooter = (
          >
             <MenuList>
                {[5, 10, 25, 50].map((size) => (
-                  <MenuItem onClick={() => setPageSize(size)} key={size}>{size}</MenuItem>
+                  <MenuItem onClick={() => setPageSize?.(size)} key={size}>
+                     {size}
+                  </MenuItem>
                ))}
             </MenuList>
          </Popover>

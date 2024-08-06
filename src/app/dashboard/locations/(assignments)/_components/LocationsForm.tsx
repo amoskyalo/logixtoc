@@ -8,7 +8,7 @@ import {
    GridRowModesModel,
    GridRowModes,
 } from '@mui/x-data-grid';
-import { EditToolbar, DataGridActions } from '@/components/DataGrids';
+import { EditToolbar, DataGridRowEditActions } from '@/components/DataGrids';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import { useGridRowEditFunctions } from '@/hooks';
@@ -39,7 +39,7 @@ const LocationsForm = ({ onClose, open }: FormsPropsInterface) => {
             const isEditMode = rowModels[id]?.mode === GridRowModes.Edit;
 
             return [
-               <DataGridActions
+               <DataGridRowEditActions
                   id={id}
                   key="actions"
                   isEditMode={isEditMode}
@@ -53,7 +53,7 @@ const LocationsForm = ({ onClose, open }: FormsPropsInterface) => {
       },
    ];
 
-   const newRow: { location: string; locationName: ''; id: number } = {
+   const newRow = {
       location: '',
       locationName: '',
       id: rows.length + 1,

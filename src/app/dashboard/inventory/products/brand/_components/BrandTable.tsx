@@ -1,7 +1,6 @@
 'use client';
 
-import { DataGridEditNDelete, DataGrid } from '@/components/DataGrids';
-import { TablesPropsInterface } from '@/Types';
+import { DataGridEditNDelete, DataGrid, GridProps } from '@/components/DataGrids';
 import { ProductBrand, useDeleteVendorProductBrand } from '@/api';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { GridColDef } from '@mui/x-data-grid';
@@ -9,7 +8,7 @@ import { useResponsiveness, useGetUser } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
 
-const BrandTable = ({ rows, onAdd, isLoading, refetch }: TablesPropsInterface<ProductBrand>) => {
+const BrandTable = ({ rows, onAdd, isLoading, refetch }: GridProps<ProductBrand>) => {
    const [loading, setLoading] = useState(false);
    const [params, setParams] = useState<string | number>('');
 

@@ -44,7 +44,7 @@ const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(
 
 const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarProps>) => {
    const apiRef = useGridApiContext();
-   const { isMobile } = useResponsiveness();
+   const { isMobile, isTablet } = useResponsiveness();
    const { isDarkMode } = useThemeMode();
 
    const [searchValue, setSearchValue] = useState('');
@@ -73,7 +73,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
             paddingX: '8px',
          }}
       >
-         <Stack direction={'row'} spacing={1} className="w-full lg:w-max">
+         <Stack direction={'row'} spacing={1} className="w-full md:w-max">
             {dates && (
                <StyledCalendar isMobile={isMobile} searching={searching}>
                   <Datepicker
@@ -136,8 +136,8 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
             />
          </Stack>
 
-         <Stack direction="row" justifyContent="flex-end" className="w-full lg:w-max">
-            {!isMobile && <GridToolbarColumnsButton />}
+         <Stack direction="row" justifyContent="flex-end" className="w-full md:w-max">
+            {!isMobile && !isTablet && <GridToolbarColumnsButton />}
             <GridToolbarDensitySelector />
             <GridToolbarExport />
             <Button startIcon={<FilterListOffIcon />} color="primary" size="small" onClick={onAdd}>

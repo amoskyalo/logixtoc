@@ -92,7 +92,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                      primaryColor="blue"
                      inputClassName="w-full rounded-md h-full pl-2 bg-transparent focus:outline-none lg:font-bold"
                      containerClassName={`relative border ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} p-0 h-8 rounded-[5px] hover:border-gray-600 bg-transparent w-full`}
-                     toggleClassName={`${searching && isMobile ? 'hidden' : ''}`}
+                     toggleClassName={`${searching && isMobile ? 'opacity-0' : ''}`}
                   />
                </StyledCalendar>
             )}

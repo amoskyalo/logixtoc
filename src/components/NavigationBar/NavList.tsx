@@ -77,7 +77,9 @@ const NavList = ({
                      transition: 'background-color 0.3s ease',
                      borderRadius: 1,
                      ':hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        backgroundColor: isDarkMode
+                           ? 'rgba(255, 255, 255, 0.1)'
+                           : 'rgba(16, 51, 63, 0.2)',
                         borderRadius: 1,
                      },
                      marginBottom: 1,
@@ -134,7 +136,9 @@ const NavList = ({
                         key={name}
                         direction="row"
                         sx={{
-                           borderLeft: '2px solid rgba(255, 255, 255, 0.2)',
+                           borderLeft: isDarkMode
+                              ? '2px solid rgba(255, 255, 255, 0.2)'
+                              : '2px solid rgba(16, 51, 63, 0.2)',
                            ml: 4,
                            mt: 0.5,
                         }}

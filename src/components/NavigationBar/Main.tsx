@@ -95,8 +95,18 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                      alignItems: 'center',
                   }}
                >
-                  <Image src="/iconlogo.png" alt="logo" height={40} width={40} />
-                  <Image src="/mainlogo.png" alt="logo" height={60} width={90} />
+                  <Image
+                     src={isDarkMode ? '/lighticon.png' : '/darkicon.png'}
+                     alt="logo"
+                     height={40}
+                     width={40}
+                  />
+                  <Image
+                     src={isDarkMode ? '/darklogo.png' : '/lightlogo.png'}
+                     alt="logo"
+                     height={60}
+                     width={90}
+                  />
                </Box>
                <IconButton onClick={() => setExpand(false)}>
                   <CloseIcon sx={{ color: '#a5acb2' }} />
@@ -126,7 +136,7 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
    );
 
    return (
-      <Box sx={{ display: 'flex', minHeight: "100%" }}>
+      <Box sx={{ display: 'flex', minHeight: '100%' }}>
          <CssBaseline />
 
          {isMobile || isTablet ? (

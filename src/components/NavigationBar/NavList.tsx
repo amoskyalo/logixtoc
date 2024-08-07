@@ -76,14 +76,18 @@ const NavList = ({
                      display: 'flex',
                      transition: 'background-color 0.3s ease',
                      borderRadius: 1,
-                     ':hover': {
-                        backgroundColor: isDarkMode
-                           ? 'rgba(255, 255, 255, 0.1)'
-                           : 'rgba(16, 51, 63, 0.2)',
-                        borderRadius: 1,
-                     },
                      marginBottom: 1,
                      ...(isActiveTab(path) ? { backgroundColor } : {}),
+                     ...(!isMobile
+                        ? {
+                             ':hover': {
+                                backgroundColor: isDarkMode
+                                   ? 'rgba(255, 255, 255, 0.1)'
+                                   : 'rgba(16, 51, 63, 0.2)',
+                                borderRadius: 1,
+                             },
+                          }
+                        : {}),
                   }}
                >
                   <ListItemButton
@@ -121,9 +125,10 @@ const NavList = ({
                            sx={{
                               ...additionalStyles(name),
                               transform:
-                                 isActiveTab(name) && openSubTabs.includes(name)
-                                    ? 'rotate(180deg)'
+                                 isActiveTab(path) && openSubTabs.includes(name)
+                                    ? 'rotate(90deg)'
                                     : 'none',
+                              transition: 'transform 0.3s ease-in-out',
                            }}
                         />
                      )}

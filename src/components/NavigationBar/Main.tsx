@@ -151,16 +151,7 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
 
          <Box component="main" sx={{ flexGrow: 1, width: `calc(100% - ${drawerWidth}px)` }}>
             <AppBar open={open} expand={expand} setExpand={setExpand} />
-            <Box
-               sx={{
-                  flexGrow: 1,
-                  px: 3,
-                  pt: 2,
-                  pb: 2,
-               }}
-            >
-               {children}
-            </Box>
+            <Box sx={{ flexGrow: 1, p: 2, px: isMobile ? 2 : 3 }}>{children}</Box>
          </Box>
       </Box>
    );

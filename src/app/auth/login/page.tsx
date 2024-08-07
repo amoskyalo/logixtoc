@@ -14,7 +14,7 @@ const Login = () => {
          }}
          className="glassmorphism w-[90%] mx-auto p-8 md:w-full md:px-16 md:py-8"
       >
-         <Image src="/iconlogo.png" height={75} width={75} alt="logo" />
+         <Image src="/darkicon.png" height={75} width={75} alt="logo" />
          <Box>
             <Typography variant="h4" sx={{ color: '#4B5563' }}>
                Welcome Back

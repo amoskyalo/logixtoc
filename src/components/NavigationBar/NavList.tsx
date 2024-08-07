@@ -124,10 +124,7 @@ const NavList = ({
                            onClick={() => handleNavigate(name, path, subTabs)}
                            sx={{
                               ...additionalStyles(name),
-                              transform:
-                                 isActiveTab(path) && openSubTabs.includes(name)
-                                    ? 'rotate(90deg)'
-                                    : 'none',
+                              transform: openSubTabs.includes(name) ? 'rotate(90deg)' : 'none',
                               transition: 'transform 0.3s ease-in-out',
                            }}
                         />

@@ -154,7 +154,7 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
             <Box
                sx={{
                   flexGrow: 1,
-                  px: 2,
+                  px: 3,
                   pt: 2,
                   pb: 2,
                }}

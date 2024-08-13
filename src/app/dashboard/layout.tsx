@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
    }
 
    return (
-      <Box sx={{ height: '100vh', overflowX: 'hidden', width: '100vw' }}>
+      <Box sx={{ height: '100dvh', overflowX: 'hidden', width: '100vw' }}>
          <MainBar>{children}</MainBar>
       </Box>
    );

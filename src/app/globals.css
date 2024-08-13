@@ -8,25 +8,26 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Quicksand', sans-serif;
-  /* overflow-x: hidden !important; */
   box-sizing: border-box;
 }
 
-#side_bar::-webkit-scrollbar{
+#side_bar::-webkit-scrollbar {
   background-color: transparent;
   width: 8px;
 }
 
-#side_bar::-webkit-scrollbar-thumb{
+#side_bar::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, .6);
   border-radius: 10px;
 }
 
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0px 16px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+@media (min-width: 768px) {
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0px 16px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
 }

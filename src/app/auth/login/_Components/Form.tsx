@@ -5,18 +5,21 @@ import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { TextFieldInput } from '@/components/Inputs';
 import { SubmitButton } from '@/components/Buttons';
-import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, InputAdornment, Typography } from '@mui/material';
 import { UserLogins, useUserLogin } from '@/api';
 import { toast } from 'react-toastify';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const LoginForm = () => {
    const { mutate } = useUserLogin();
    const [loading, setLoading] = useState<boolean>(false);
+   const [type, setType] = useState('password');
 
    const validationSchema = () => {
       return Yup.object().shape({
-         password: Yup.string().required('Password field cannot be empty'),
-         phoneNumber: Yup.string().required('Phoner number / email cannot be empty'),
+         password: Yup.string().required('Password field is required'),
+         phoneNumber: Yup.string().required('Phoner number / email is required'),
       });
    };
 
@@ -36,6 +39,10 @@ const LoginForm = () => {
             setLoading(false);
          },
       });
+   };
+
+   const handleChangeType = () => {
+      type === "password" ? setType("text") : setType("password");
    };
 
    return (
@@ -68,7 +75,18 @@ const LoginForm = () => {
                         }}
                      >
                         <TextFieldInput label="Email / Phone Number" {...getProps('phoneNumber')} />
-                        <TextFieldInput label="Password" {...getProps('password')} />
+                        <TextFieldInput
+                           label="Password"
+                           type={type}
+                           {...getProps('password')}
+                           InputProps={{
+                              endAdornment: (
+                                 <InputAdornment onClick={handleChangeType} position="end">
+                                   { type === 'password' ?  <RemoveRedEyeIcon /> : <VisibilityOffIcon /> }
+                                 </InputAdornment>
+                              ),
+                           }}
+                        />
                         <FormControlLabel
                            control={<Checkbox defaultChecked />}
                            label="Remember me"

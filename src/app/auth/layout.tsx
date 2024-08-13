@@ -1,23 +1,19 @@
-import React from 'react';
 import { Box, Grid } from '@mui/material';
 import Image from 'next/image';
 
-const Auth = ({ children }: Readonly<{ children: React.ReactNode }>) => {
-   const center = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-   };
+const center = {
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   width: '100%',
+   height: '100%',
+};
 
+const Auth = ({ children }: Readonly<{ children: React.ReactNode }>) => {
    return (
       <Box
-         sx={{
-            height: '100vh',
-            overflow: 'hidden',
-            background: 'linear-gradient(to right, #10333f,#c1e547, #b9b6f8)',
-         }}
+         sx={{ height: '100vh', overflow: 'hidden' }}
+         className="md:bg-gradient-to-r md:from-[#10333f] md:via-[#c1e547] md:to-[#b9b6f8]"
       >
          <Grid container sx={{ height: '100%' }}>
             <Grid item lg={7} xs={0} sx={{ ...center }} className="hidden md:flex">

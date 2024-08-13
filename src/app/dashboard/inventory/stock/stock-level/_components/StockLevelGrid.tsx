@@ -71,7 +71,9 @@ const StockLevelGrid = ({ isLoading, rows, ...otherProps }: GridProps<VendorStoc
       },
    ];
 
-   return <DataGrid columns={columns} rows={getIndexedRows(rows)} {...otherProps} />;
+   return (
+      <DataGrid columns={columns} loading={isLoading} rows={getIndexedRows(rows)} {...otherProps} />
+   );
 };
 
 export default StockLevelGrid;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useResponsiveness } from '@/hooks';
 import { Dialog, DialogTitle, DialogContent, Box, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -15,6 +15,8 @@ const FormDialog = ({
    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
    title: string;
 }>) => {
+   const { isMobile } = useResponsiveness();
+
    return (
       <Dialog open={open} onClose={onClose} fullWidth maxWidth={maxWidth}>
          <DialogTitle>
@@ -26,7 +28,9 @@ const FormDialog = ({
                   justifyContent: 'space-between',
                }}
             >
-               <Typography variant="h6">{title}</Typography>
+               <Typography variant="h6" sx={{ ...(isMobile && { fontSize: 18 }) }}>
+                  {title}
+               </Typography>
                <IconButton onClick={onClose}>
                   <CloseIcon />
                </IconButton>

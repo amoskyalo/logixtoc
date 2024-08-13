@@ -12,7 +12,7 @@ const Login = () => {
             alignItems: 'center',
             rowGap: 4,
          }}
-         className="glassmorphism w-[90%] mx-auto p-8 md:w-full md:px-16 md:py-8"
+         className="p-8 w-full md:px-16 md:py-8 glassmorphism"
       >
          <Image src="/darkicon.png" height={75} width={75} alt="logo" />
          <Box>

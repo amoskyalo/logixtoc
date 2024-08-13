@@ -44,7 +44,7 @@ export type DataGridActionsProps = {
     actions?: Array<'edit' | 'delete' | 'options'>;
     onEdit?: () => void;
     onDelete?: () => void;
-    onOptions?: () => void;
+    onOptions?: (args: any) => void;
 };
 
 export type AllDataGridProps = DataGridProps & DataGridToolbarProps & {

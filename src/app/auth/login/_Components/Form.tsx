@@ -11,6 +11,40 @@ import { toast } from 'react-toastify';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
+const sx = {
+   '& .MuiInputBase-input:focus': {
+      boxShadow: 'none',
+   },
+   '.MuiFormHelperText-root': {
+      marginLeft: 0.5,
+   },
+
+   '& .MuiInputLabel-root': {
+      color: '#10333f',
+      '&.Mui-error': {
+         color: '#d32f2f',
+      },
+   },
+   '& .MuiInputBase-root': {
+      color: '#10333f',
+      '& .MuiOutlinedInput-notchedOutline': {
+         borderColor: '#10333f',
+      },
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+         borderColor: '#10333f',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+         borderColor: '#10333f',
+      },
+      '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+         borderColor: '#d32f2f',
+      },
+      '&.Mui-error': {
+         color: '#d32f2f',
+      },
+   },
+};
+
 const LoginForm = () => {
    const { mutate } = useUserLogin();
    const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +76,7 @@ const LoginForm = () => {
    };
 
    const handleChangeType = () => {
-      type === "password" ? setType("text") : setType("password");
+      type === 'password' ? setType('text') : setType('password');
    };
 
    return (
@@ -74,25 +108,48 @@ const LoginForm = () => {
                            rowGap: 3,
                         }}
                      >
-                        <TextFieldInput label="Email / Phone Number" {...getProps('phoneNumber')} />
                         <TextFieldInput
+                           label="Email / Phone Number"
+                           {...getProps('phoneNumber')}
+                           sx={sx}
+                        />
+
+                        <TextFieldInput
+                           sx={sx}
                            label="Password"
                            type={type}
                            {...getProps('password')}
                            InputProps={{
                               endAdornment: (
                                  <InputAdornment onClick={handleChangeType} position="end">
-                                   { type === 'password' ?  <RemoveRedEyeIcon /> : <VisibilityOffIcon /> }
+                                    {type === 'password' ? (
+                                       <RemoveRedEyeIcon />
+                                    ) : (
+                                       <VisibilityOffIcon />
+                                    )}
                                  </InputAdornment>
                               ),
                            }}
                         />
                         <FormControlLabel
-                           control={<Checkbox defaultChecked />}
+                           control={
+                              <Checkbox
+                                 defaultChecked
+                                 sx={{
+                                    color: '#10333f',
+                                    '&.Mui-checked': {
+                                       color: '#10333f',
+                                    },
+                                 }}
+                              />
+                           }
                            label="Remember me"
+                           sx={{
+                              color: '#10333f',
+                           }}
                         />
-                        <SubmitButton text="Login" loading={loading} />
-                        <Typography textAlign={'center'} color="primary" variant="body1">
+                        <SubmitButton text="Login" loading={loading} isLogin />
+                        <Typography textAlign={'center'} color="#10333f" variant="body1">
                            Forgot password?
                         </Typography>
                      </Box>

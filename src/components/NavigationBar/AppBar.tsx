@@ -25,6 +25,7 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
+import ke from '../../Assets/kenya.jpg'
 
 const flexStyles = {
    display: 'flex',
@@ -130,7 +131,7 @@ const AppBar = ({
                         }
                      }}
                   >
-                     <Image src="/kenya.jpg" height={16} width={24} alt={user?.CountryFlag} />
+                     <Image src={ke} height={16} width={24} alt={user?.CountryFlag} />
                      <Typography variant="body1">
                         {user?.CountryFlag?.toLocaleUpperCase()}
                      </Typography>

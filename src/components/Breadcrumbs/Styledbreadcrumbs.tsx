@@ -7,7 +7,7 @@ export const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
    return {
       backgroundColor,
-      height: theme.spacing(3),
+      height: theme.spacing(3.5),
       color: theme.palette.text.primary,
       fontWeight: theme.typography.fontWeightRegular,
       cursor: "pointer",

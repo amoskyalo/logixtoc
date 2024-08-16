@@ -1,5 +1,6 @@
 import { Box, Grid } from '@mui/material';
 import Image from 'next/image';
+import auth from '../../Assets/auth.svg';
 
 const center = {
    display: 'flex',
@@ -17,7 +18,7 @@ const Auth = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       >
          <Grid container sx={{ height: '100%' }}>
             <Grid item lg={7} xs={0} sx={{ ...center }} className="hidden md:flex">
-               <Image alt="logixtoc" src="/auth.svg" height={600} width={600} />
+               <Image alt="logixtoc" src={auth} height={600} width={600} />
             </Grid>
 
             <Grid item lg={4} xs={12} sx={{ py: 6, px: 2, ...center }}>

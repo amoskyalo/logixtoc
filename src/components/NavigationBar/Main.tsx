@@ -1,6 +1,10 @@
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { useResponsiveness, useThemeMode } from '@/hooks';
 import { useState } from 'react';
+import darklogo from '../../Assets/darklogo.png';
+import lightlogo from '../../Assets/lightlogo.png';
+import lighticon from '../../Assets/lighticon.png';
+import darkicon from '../../Assets/darkicon.png';
 import Box, { BoxProps } from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -96,13 +100,13 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                   }}
                >
                   <Image
-                     src={isDarkMode ? '/lighticon.png' : '/darkicon.png'}
+                     src={isDarkMode ? lighticon : darkicon}
                      alt="logo"
                      height={40}
                      width={40}
                   />
                   <Image
-                     src={isDarkMode ? '/darklogo.png' : '/lightlogo.png'}
+                     src={isDarkMode ? darklogo : lightlogo}
                      alt="logo"
                      height={60}
                      width={90}

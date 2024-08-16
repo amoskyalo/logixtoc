@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import { MainBar } from '@/components/NavigationBar';
 import { useGetUser, useGetUserDeviceTheme } from '@/hooks';
+import { ThemeWrapper } from '@/Context';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
    const { UserToken } = useGetUser();
@@ -30,9 +31,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
    }
 
    return (
-      <Box sx={{ height: '100dvh', overflowX: 'hidden', width: '100vw' }}>
-         <MainBar>{children}</MainBar>
-      </Box>
+      <ThemeWrapper>
+         <CssBaseline />
+         <Box sx={{ height: '100dvh', overflowX: 'hidden', width: '100vw' }}>
+            <MainBar>{children}</MainBar>
+         </Box>
+      </ThemeWrapper>
    );
 };
 

@@ -1,48 +1,38 @@
 'use client';
 
 import { AssignedAccountsTable, AssignedAcountsForm } from './_components';
-import { useGetAssignedAccounts, useGetVendorAccounts } from '@/api';
-import { useGetUser } from '@/hooks';
+import { useFetch, AssignedAccount, GetUserAccountsParams, VendorAccount } from '@/api';
 import { useState } from 'react';
 
 const AssignedAccounts = () => {
-   const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-   const { VendorID } = useGetUser();
+    const { data: vendorAccounts } = useFetch<VendorAccount, GetUserAccountsParams>('getVendorAccounts', {
+        VendorAccountTypeID: 0,
+    });
 
-   const { data: vendorAccounts } = useGetVendorAccounts({
-      VendorID,
-      VendorAccountTypeID: 0,
-   });
+    const {
+        data: assignedAccounts,
+        isLoading,
+        refetch,
+        isRefetching,
+    } = useFetch<AssignedAccount, { VendorAccountTypeID: number; VendorLocationID: number }>('getAssignedAccounts', {
+        VendorAccountTypeID: 0,
+        VendorLocationID: 0,
+    });
 
-   const {
-      data: assignedAccounts,
-      isLoading,
-      refetch,
-      isRefetching,
-   } = useGetAssignedAccounts({
-      VendorAccountTypeID: 0,
-      VendorID,
-      VendorLocationID: 0,
-   });
+    return (
+        <>
+            <AssignedAccountsTable
+                rows={assignedAccounts?.Data ?? []}
+                isLoading={isLoading || isRefetching}
+                refetch={refetch}
+                onAdd={() => setOpen(true)}
+            />
 
-   return (
-      <>
-         <AssignedAccountsTable
-            rows={assignedAccounts?.Data ?? []}
-            isLoading={isLoading || isRefetching}
-            refetch={refetch}
-            onAdd={() => setOpen(true)}
-         />
-
-         <AssignedAcountsForm
-            open={open}
-            accounts={vendorAccounts?.Data ?? []}
-            refetch={refetch}
-            onClose={() => setOpen(false)}
-         />
-      </>
-   );
+            <AssignedAcountsForm open={open} accounts={vendorAccounts?.Data ?? []} refetch={refetch} onClose={() => setOpen(false)} />
+        </>
+    );
 };
 
 export default AssignedAccounts;

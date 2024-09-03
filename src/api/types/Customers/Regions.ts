@@ -1,6 +1,3 @@
-import { axiosPrivate, urls, GetParams, GetRes } from "@/api";
-import { useQuery } from "@tanstack/react-query";
-
 export type VendorRegionBranch = {
     VendorRegionBranchID: number;
     VendorRegionID: number;
@@ -30,20 +27,3 @@ export type VendorRegion = {
     BranchArray: VendorRegionBranch[];
     AssetsArray: VendorRegionLocationAssignment[];
 }
-
-export type RegionsRes = GetRes & {
-    Data: VendorRegion[];
-};
-
-export const useGetRegions = ({ VendorID }: GetParams) => {
-    return useQuery<RegionsRes>({
-        queryKey: ["regions", VendorID],
-        queryFn: async () => {
-            const res = await axiosPrivate.get(urls.getVendorRegions, {
-                params: { VendorID }
-            });
-
-            return res.data
-        }
-    });
-};

@@ -2,24 +2,22 @@
 
 import { useState } from 'react';
 import { LocationTypesGrid, LocationTypesForm } from './_components';
-import { useGetVendorLocationTypes, useGetSystemLocationTypes } from '@/api';
-import { useGetUser } from '@/hooks';
+import { SystemLocationType, VendorLocationType, useFetch } from '@/api';
 import { PageHeader } from '@/components/Headers';
 import { Stack } from '@mui/material';
 
 const LocationTypes = () => {
    const [open, setOpen] = useState(false);
-
-   const { VendorID } = useGetUser();
-
    const {
       data: locationTypes,
       isLoading,
       isFetching,
       refetch,
-   } = useGetVendorLocationTypes({ VendorID });
+   } = useFetch<VendorLocationType, void>('getVendorLocationType');
 
-   const { data: systemLocationTypes } = useGetSystemLocationTypes({ VendorID });
+   const { data: systemLocationTypes } = useFetch<SystemLocationType, void>(
+      'getSystemLocationType',
+   );
 
    return (
       <Stack spacing={3}>

@@ -4,8 +4,8 @@ import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
 import { StatusChips } from '@/components/Chips';
-import { VendorLocationType, useDeleteVendorLocationTypes } from '@/api';
-import { useGetUser, useResponsiveness } from '@/hooks';
+import { VendorLocationType, useMutate } from '@/api';
+import { useResponsiveness } from '@/hooks';
 import { useState } from 'react';
 import { DeleteDialog } from '@/components/Dialogs';
 
@@ -13,15 +13,16 @@ const LocationTypesGrid = ({ isLoading, rows, refetch, onAdd }: GridProps<Vendor
    const [activeParams, setActiveParams] = useState<string | number>('');
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { VendorID, UserID: addedBy } = useGetUser();
    const { isMobile } = useResponsiveness();
-   const { mutate } = useDeleteVendorLocationTypes();
+   const { mutate } = useMutate<{ vendorLocationTypeID: number | string }>(
+      'deleteVendorLocationType',
+   );
 
    const handleDelete = () => {
       setLoading(true);
 
       mutate(
-         { VendorID, addedBy, vendorLocationTypeID: activeParams },
+         { vendorLocationTypeID: activeParams },
          mutateOptions({ refetch, setLoading, onClose: () => setActiveParams('') }),
       );
    };

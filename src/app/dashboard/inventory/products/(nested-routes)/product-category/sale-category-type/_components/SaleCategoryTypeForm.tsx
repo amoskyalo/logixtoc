@@ -5,99 +5,88 @@ import { FormsPropsInterface } from '@/Types';
 import { MenuItem, Stack } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
-import { ProductUOM, useAddVendorProductCategoryType } from '@/api';
-import { mutateOptions } from '@/utils';
+import { ProductUOM, useMutate } from '@/api';
+import { mutateOptions, getFormikFieldProps } from '@/utils';
 
 type FormikValues = {
-   isAdminSaleOnly: number;
-   vendorProductCategoryTypeName: string;
-   vendorProductUOMID: number;
+    isAdminSaleOnly: number;
+    vendorProductCategoryTypeName: string;
+    vendorProductUOMID: number;
 };
 
 const SaleCategoryTypeForm = ({
-   open,
-   onClose,
-   uomList,
-   VendorID,
-   addedBy,
-   refetch,
-   vendorProductCategoryID,
+    open,
+    onClose,
+    uomList,
+    refetch,
+    vendorProductCategoryID,
 }: FormsPropsInterface & {
-   uomList: ProductUOM[];
-   VendorID: number;
-   addedBy: number;
-   vendorProductCategoryID: number;
+    uomList: ProductUOM[];
+    vendorProductCategoryID: number;
 }) => {
-   const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-   const { mutate } = useAddVendorProductCategoryType();
+    const { mutate } = useMutate<{
+        isAdminSaleOnly: number;
+        vendorProductCategoryTypeName: string;
+        vendorProductUOMID: number;
+        vendorProductCategoryID: number;
+    }>('addVendorProductCategoryType');
 
-   const handleSubmit = (data: FormikValues) => {
-      setLoading(true);
+    const handleSubmit = (data: FormikValues) => {
+        setLoading(true);
 
-      const payload = {
-         VendorID,
-         addedBy,
-         vendorProductCategoryID,
-         ...data,
-      };
+        const payload = {
+            vendorProductCategoryID,
+            ...data,
+        };
 
-      mutate(payload, mutateOptions({ onClose, refetch, setLoading }));
-   };
+        mutate(payload, mutateOptions({ onClose, refetch, setLoading }));
+    };
 
-   return (
-      <FormDialog open={open} onClose={onClose} title="Add New Product Category Type">
-         <Formik
-            initialValues={{
-               isAdminSaleOnly: '' as unknown as number,
-               vendorProductCategoryTypeName: '',
-               vendorProductUOMID: '' as unknown as number,
-            }}
-            onSubmit={handleSubmit}
-         >
-            {({ errors, touched, getFieldProps }) => {
-               function getProps(field: keyof FormikValues) {
-                  const error = touched[field] && Boolean(errors[field]);
-                  const helperText = touched[field] && errors[field];
+    return (
+        <FormDialog open={open} onClose={onClose} title="Add New Product Category Type">
+            <Formik
+                initialValues={{
+                    isAdminSaleOnly: '' as unknown as number,
+                    vendorProductCategoryTypeName: '',
+                    vendorProductUOMID: '' as unknown as number,
+                }}
+                onSubmit={handleSubmit}
+            >
+                {(formik) => {
+                    return (
+                        <Form>
+                            <Stack spacing={3}>
+                                <TextFieldInput label="Product Category Type" {...getFormikFieldProps(formik, 'vendorProductCategoryTypeName')} />
 
-                  return { error, helperText, ...getFieldProps(field) };
-               }
+                                <SelectField label="Product UOM" {...getFormikFieldProps(formik, 'vendorProductUOMID')}>
+                                    {uomList.map(({ VendorProductUOMName, VendorProductUOMID }) => (
+                                        <MenuItem key={VendorProductUOMID} value={VendorProductUOMID}>
+                                            {VendorProductUOMName}
+                                        </MenuItem>
+                                    ))}
+                                </SelectField>
 
-               return (
-                  <Form>
-                     <Stack spacing={3}>
-                        <TextFieldInput
-                           label="Product Category Type"
-                           {...getProps('vendorProductCategoryTypeName')}
-                        />
+                                <SelectField label="Is Admin Sale Only" {...getFormikFieldProps(formik, 'isAdminSaleOnly')}>
+                                    {[
+                                        { label: 'Yes', value: 1 },
+                                        { label: 'No', value: 0 },
+                                    ].map(({ label, value }) => (
+                                        <MenuItem value={value} key={value}>
+                                            {label}
+                                        </MenuItem>
+                                    ))}
+                                </SelectField>
 
-                        <SelectField label="Product UOM" {...getProps('vendorProductUOMID')}>
-                           {uomList.map(({ VendorProductUOMName, VendorProductUOMID }) => (
-                              <MenuItem key={VendorProductUOMID} value={VendorProductUOMID}>
-                                 {VendorProductUOMName}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
-
-                        <SelectField label="Is Admin Sale Only" {...getProps('isAdminSaleOnly')}>
-                           {[
-                              { label: 'Yes', value: 1 },
-                              { label: 'No', value: 0 },
-                           ].map(({ label, value }) => (
-                              <MenuItem value={value} key={value}>
-                                 {label}
-                              </MenuItem>
-                           ))}
-                        </SelectField>
-
-                        <SubmitButton text="Submit" loading={loading} />
-                     </Stack>
-                  </Form>
-               );
-            }}
-         </Formik>
-      </FormDialog>
-   );
+                                <SubmitButton loading={loading} />
+                            </Stack>
+                        </Form>
+                    );
+                }}
+            </Formik>
+        </FormDialog>
+    );
 };
 
 export default SaleCategoryTypeForm;

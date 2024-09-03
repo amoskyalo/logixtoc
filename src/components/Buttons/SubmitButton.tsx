@@ -5,7 +5,7 @@ export const SubmitButton = ({
    text,
    loading,
    isLogin,
-}: Readonly<{ text: string; loading: boolean; isLogin?: boolean }>) => {
+}: Readonly<{ text?: string; loading: boolean; isLogin?: boolean }>) => {
    return (
       <Button
          disableElevation
@@ -22,7 +22,7 @@ export const SubmitButton = ({
          }}
          startIcon={loading ? <CircularProgress color="inherit" size={18} /> : null}
       >
-         {text}
+         {text ?? "Submit"}
       </Button>
    );
 };

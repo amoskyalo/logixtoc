@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
-import { LocationsArrayInterface, useDeleteVendorLocation } from '@/api';
-import { useGetUser, useResponsiveness } from '@/hooks';
+import { LocationsArrayInterface, useMutate } from '@/api';
+import { useResponsiveness } from '@/hooks';
 import { DeleteDialog } from '@/components/Dialogs';
 
 type RowParamsInterface = {
@@ -28,9 +28,8 @@ const LocationsTable = ({
    const [open, setOpen] = useState<boolean>(false);
    const [activeParams, setActiveParams] = useState<RowParamsInterface>(initialParams);
 
-   const { VendorID, UserID } = useGetUser();
    const { isMobile } = useResponsiveness();
-   const { mutate } = useDeleteVendorLocation();
+   const { mutate } = useMutate<{ vendorLocationID: number | string }>('deleteVendorLocation');
 
    const columns: GridColDef[] = [
       {
@@ -85,11 +84,7 @@ const LocationsTable = ({
       const { vendorLocationID } = activeParams;
       setLoading(true);
       mutate(
-         {
-            VendorID,
-            addedBy: UserID,
-            vendorLocationID,
-         },
+         { vendorLocationID },
          mutateOptions({
             setLoading,
             refetch,

@@ -1,39 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { BrandTable, BrandForm } from "./_components";
-import { useGetUser } from "@/hooks";
-import { useGetVendorProductBrand, useGetProductClass } from "@/api";
+import React, { useState } from 'react';
+import { BrandTable, BrandForm } from './_components';
+import { useGetUser } from '@/hooks';
+import { useFetch, ProductClass, ProductBrand } from '@/api';
 
 const Brand = () => {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-  const { VendorID, VendorTypeID } = useGetUser();
-  const {
-    data: brands,
-    isLoading,
-    isRefetching,
-    refetch,
-  } = useGetVendorProductBrand({ VendorID });
-  const { data: productClass } = useGetProductClass({ VendorID, VendorTypeID });
+    const { VendorTypeID } = useGetUser();
+    const { data: brands, isLoading, isRefetching, refetch } = useFetch<ProductBrand, void>('getProductBrands');
+    const { data: productClass } = useFetch<ProductClass, { VendorTypeID: number }>('getProductClass', { VendorTypeID });
 
-  return (
-    <>
-      <BrandTable
-        rows={brands?.Data || []}
-        isLoading={isLoading || isRefetching}
-        onAdd={() => setOpen(true)}
-        refetch={refetch}
-      />
-
-      <BrandForm
-        open={open}
-        onClose={() => setOpen(false)}
-        productClass={productClass?.Data || []}
-        refetch={refetch}
-      />
-    </>
-  );
+    return (
+        <>
+            <BrandTable rows={brands?.Data || []} isLoading={isLoading || isRefetching} onAdd={() => setOpen(true)} refetch={refetch} />
+            <BrandForm open={open} onClose={() => setOpen(false)} productClass={productClass?.Data || []} refetch={refetch} />
+        </>
+    );
 };
 
 export default Brand;

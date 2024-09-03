@@ -5,4 +5,3 @@ export * from './Inventory';
 export * from './HumanResource';
 export * from './Customers';
 export * from './Finance';
-export * from './types';

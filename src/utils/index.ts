@@ -3,6 +3,7 @@ import { GridRowModel } from '@mui/x-data-grid';
 import { DatesInterface } from '@/components/DataGrids';
 import { toast } from 'react-toastify';
 import { mutateOptionsArgs } from './types';
+import { FormikProps } from 'formik';
 import dayjs from 'dayjs';
 
 export const getStatusChipColor = (statusID: string | number) => {
@@ -49,7 +50,33 @@ export const mutateOptions = (args: mutateOptionsArgs) => {
    return options;
 };
 
-export const getMappedObjectArray = <T extends Record<string, any>>(key: keyof T, arr: T[]) => {
-    return arr.map((item) => ({ [key]: item[key] }));
- };
- 
+export const getMappedObjectArray = <Type>(key: keyof Type, arr: Type[]) => {
+   return arr.map((item) => {
+      return { [key]: item[key] } as Pick<Type, typeof key>;
+   });
+};
+
+export const getFormikFieldProps = <Type>(
+   formik: FormikProps<Type>,
+   field: keyof Type,
+   errorNText?: boolean,
+) => {
+   const { values, errors, touched, getFieldProps, setFieldValue } = formik;
+
+   const error = touched[field] && Boolean(errors[field]);
+   const helperText = touched[field] && (errors[field] as any);
+
+   const onChange: any = (__: React.SyntheticEvent, newValue: any) => {
+      setFieldValue(field as string, newValue);
+   };
+
+   const fieldProps = {
+      error,
+      helperText,
+      ...(errorNText
+         ? { onChange, multiple: true, value: values[field] }
+         : getFieldProps(field as string)),
+   };
+
+   return fieldProps;
+};

@@ -2,18 +2,14 @@
 
 import { useState } from 'react';
 import { LocationsTable, LocationsForm } from './_components';
-import { useGetVendorLocation } from '@/api';
-import { useGetUser } from '@/hooks';
+import { LocationsArrayInterface, useFetch } from '@/api';
 
 const Locations = () => {
    const [page, setPage] = useState<number>(1);
    const [pageSize, setPageSize] = useState<number>(100);
    const [open, setOpen] = useState<boolean>(false);
 
-   const { VendorID } = useGetUser();
-
-   const { isLoading, data, refetch, isRefetching } = useGetVendorLocation({
-      VendorID,
+   const { isLoading, data, refetch, isRefetching } = useFetch<LocationsArrayInterface,{ VendorLocationTypeID: number }>('getVendorLocation', {
       VendorLocationTypeID: 0,
       PageSize: pageSize,
       PageNO: page,

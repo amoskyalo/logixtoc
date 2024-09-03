@@ -2,15 +2,14 @@
 
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-import { SystemLocationType, usePostVendorLocationType } from '@/api';
+import { SystemLocationType, useMutate } from '@/api';
 import { FormDialog } from '@/components/Dialogs';
 import { SelectField, TextFieldInput } from '@/components/Inputs';
 import { MenuItem, Stack } from '@mui/material';
 import { SubmitButton } from '@/components/Buttons';
 import { useState } from 'react';
-import { useGetUser } from '@/hooks';
 import { FormsPropsInterface } from '@/Types';
-import { mutateOptions } from '@/utils';
+import { mutateOptions, getFormikFieldProps } from '@/utils';
 
 type Props = {
    systemLocationTypes: SystemLocationType[];
@@ -28,14 +27,14 @@ const LocationTypesForm = ({
    systemLocationTypes,
 }: FormsPropsInterface & Props) => {
    const [loading, setLoading] = useState(false);
-
-   const { VendorID, UserID: addedBy } = useGetUser();
-   const { mutate } = usePostVendorLocationType();
+   const { mutate } = useMutate<{ locationTypeID: number; vendorLocationTypeName: string }>(
+      'postVendorLocationType',
+   );
 
    const handleSubmit = (data: FormikValues) => {
       setLoading(true);
 
-      mutate({ VendorID, addedBy, ...data }, mutateOptions({ onClose, refetch, setLoading }));
+      mutate(data, mutateOptions({ onClose, refetch, setLoading }));
    };
 
    const validationSchema = () =>
@@ -45,7 +44,7 @@ const LocationTypesForm = ({
       });
 
    return (
-      <FormDialog maxWidth="xs" onClose={onClose} open={open} title="Add new location type">
+      <FormDialog onClose={onClose} open={open} title="Add new location type">
          <Formik
             initialValues={{
                locationTypeID: '' as unknown as number,
@@ -54,18 +53,14 @@ const LocationTypesForm = ({
             validationSchema={validationSchema()}
             onSubmit={handleSubmit}
          >
-            {({ getFieldProps, errors, touched }) => {
-               function getProps(field: keyof FormikValues) {
-                  const helperText = touched[field] && errors[field];
-                  const error = touched[field] && Boolean(errors[field]);
-
-                  return { error, helperText, ...getFieldProps(field) };
-               }
-
+            {(formik) => {
                return (
                   <Form>
                      <Stack spacing={3}>
-                        <SelectField label="System Location Type" {...getProps('locationTypeID')}>
+                        <SelectField
+                           label="System Location Type"
+                           {...getFormikFieldProps(formik, 'locationTypeID')}
+                        >
                            {systemLocationTypes.map(({ LocationTypeName, LocationTypeID }) => (
                               <MenuItem value={LocationTypeID} key={LocationTypeID}>
                                  {LocationTypeName}
@@ -75,10 +70,10 @@ const LocationTypesForm = ({
 
                         <TextFieldInput
                            label="Location Type Name"
-                           {...getProps('vendorLocationTypeName')}
+                           {...getFormikFieldProps(formik, 'vendorLocationTypeName')}
                         />
 
-                        <SubmitButton text="Submit" loading={loading} />
+                        <SubmitButton loading={loading} />
                      </Stack>
                   </Form>
                );

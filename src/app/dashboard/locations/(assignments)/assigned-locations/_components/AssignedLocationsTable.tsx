@@ -1,27 +1,19 @@
-import { useState } from 'react';
 import { DataGrid, GridProps } from '@/components/DataGrids';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
-import { AssignedLocationObject, useMutate } from '@/api';
+import { getColumnWidth, getIndexedRows } from '@/utils';
+import { AssignedLocationObject } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
-import { useResponsiveness } from '@/hooks';
+import { useResponsiveness, useGridDelete } from '@/hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedLocationsTable = ({ rows, isLoading, refetch, ...otherParams }: GridProps<AssignedLocationObject>) => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [activeParam, setActiveParam] = useState<string | number>('');
-
     const { isMobile } = useResponsiveness();
-    const { mutate } = useMutate<{ vendorLocationAssignmentID: number | string }>('deleteAssignedLocation');
 
-    const onClose = () => {
-        setActiveParam('');
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-        mutate({ vendorLocationAssignmentID: activeParam }, mutateOptions({ setLoading, refetch, onClose }));
-    };
+    const { loading, handleDelete, onClose, deleteParams, setDeleteParams } = useGridDelete<{ vendorLocationAssignmentID: number | string }>({
+        deleteKey: 'deleteAssignedLocation',
+        initialDeleteParams: { vendorLocationAssignmentID: '' },
+        refetch,
+    });
 
     const columns: GridColDef[] = [
         {
@@ -62,7 +54,7 @@ const AssignedLocationsTable = ({ rows, isLoading, refetch, ...otherParams }: Gr
                         color="error"
                         key="delete"
                         icon={<DeleteIcon />}
-                        onClick={() => setActiveParam(VendorLocationAssignmentID)}
+                        onClick={() => setDeleteParams({ vendorLocationAssignmentID: VendorLocationAssignmentID })}
                     />,
                 ];
             },
@@ -73,7 +65,12 @@ const AssignedLocationsTable = ({ rows, isLoading, refetch, ...otherParams }: Gr
         <>
             <DataGrid columns={columns} rows={getIndexedRows(rows)} loading={isLoading} {...otherParams} />
 
-            <DeleteDialog open={Number.isInteger(activeParam)} loading={loading} onCancel={onClose} onOkay={handleDelete} />
+            <DeleteDialog
+                open={Number.isInteger(deleteParams.vendorLocationAssignmentID)}
+                loading={loading}
+                onCancel={onClose}
+                onOkay={handleDelete}
+            />
         </>
     );
 };

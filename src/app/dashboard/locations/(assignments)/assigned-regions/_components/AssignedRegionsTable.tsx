@@ -1,40 +1,23 @@
 'use client';
 
-import { useState } from 'react';
 import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
-import { AssignedRegionObjInterface, useMutate } from '@/api';
+import { getColumnWidth, getIndexedRows } from '@/utils';
+import { AssignedRegionObjInterface } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
-import { useResponsiveness } from '@/hooks';
+import { useResponsiveness, useGridDelete } from '@/hooks';
 
 const AssignedRegionsTable = ({ rows, isLoading, refetch, ...otherProps }: GridProps<AssignedRegionObjInterface>) => {
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [activeParam, setActiveParam] = useState<{
+    const { isMobile } = useResponsiveness();
+
+    const { handleDelete, loading, open, onClose, setOpen, setDeleteParams } = useGridDelete<{
         vendorLocationID: string | number;
         vendorRegionID: string | number;
     }>({
-        vendorLocationID: '',
-        vendorRegionID: '',
+        deleteKey: 'deleteAssignedRegions',
+        initialDeleteParams: { vendorLocationID: '', vendorRegionID: '' },
+        refetch,
     });
-
-    const { isMobile } = useResponsiveness();
-    const { mutate } = useMutate<{ vendorLocationID: number | string; vendorRegionID: number | string }>('deleteAssignedRegions');
-
-    const onClose = () => {
-        setOpen(false);
-        setActiveParam({
-            vendorLocationID: '',
-            vendorRegionID: '',
-        });
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-
-        mutate(activeParam, mutateOptions({ refetch, setLoading, onClose }));
-    };
 
     const columns: GridColDef[] = [
         {
@@ -68,7 +51,7 @@ const AssignedRegionsTable = ({ rows, isLoading, refetch, ...otherProps }: GridP
                         actions={['delete']}
                         key="actions"
                         onDelete={() => {
-                            setActiveParam({
+                            setDeleteParams({
                                 vendorLocationID: VendorLocationID,
                                 vendorRegionID: VendorRegionID,
                             });
@@ -83,7 +66,6 @@ const AssignedRegionsTable = ({ rows, isLoading, refetch, ...otherProps }: GridP
     return (
         <>
             <DataGrid rows={getIndexedRows(rows)} columns={columns} loading={isLoading} {...otherProps} />
-
             <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={onClose} />
         </>
     );

@@ -2,34 +2,20 @@
 
 import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
-import { getIndexedRows, mutateOptions } from '@/utils';
-import { AssignedAccount, useMutate } from '@/api';
-import { useState } from 'react';
+import { getIndexedRows } from '@/utils';
+import { AssignedAccount } from '@/api';
 import { DeleteDialog } from '@/components/Dialogs';
+import { useGridDelete } from '@/hooks';
 
 const AssignedAccountsTable = ({ rows, isLoading, refetch, onAdd }: GridProps<AssignedAccount>) => {
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [activeParams, setActiveParams] = useState({
-        vendorAccountID: '',
-        vendorLocationID: '',
+    const { handleDelete, open, loading, onClose, setOpen, setDeleteParams } = useGridDelete<{
+        vendorAccountID: string | number;
+        vendorLocationID: string | number;
+    }>({
+        deleteKey: 'deleteAssignedAccount',
+        initialDeleteParams: { vendorAccountID: '', vendorLocationID: '' },
+        refetch,
     });
-
-    const { mutate } = useMutate<{ vendorAccountID: string | number; vendorLocationID: string | number }>('deleteAssignedAccount');
-
-    const onClose = () => {
-        setOpen(false);
-        setActiveParams({
-            vendorAccountID: '',
-            vendorLocationID: '',
-        });
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-
-        mutate(activeParams, mutateOptions({ refetch, setLoading, onClose }));
-    };
 
     const columns: GridColDef[] = [
         {
@@ -88,7 +74,7 @@ const AssignedAccountsTable = ({ rows, isLoading, refetch, onAdd }: GridProps<As
                         actions={['delete']}
                         onDelete={() => {
                             setOpen(true);
-                            setActiveParams({
+                            setDeleteParams({
                                 vendorAccountID: VendorAccountID,
                                 vendorLocationID: VendorLocationID,
                             });

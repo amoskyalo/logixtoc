@@ -1,29 +1,21 @@
 'use client';
 
 import { DataGrid, GridProps } from '@/components/DataGrids';
-import { AssignedProductInterface, useMutate } from '@/api';
-import { getIndexedRows, getColumnWidth, mutateOptions } from '@/utils';
+import { AssignedProductInterface } from '@/api';
+import { getIndexedRows, getColumnWidth } from '@/utils';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { useState } from 'react';
-import { useResponsiveness } from '@/hooks';
+import { useGridDelete, useResponsiveness } from '@/hooks';
 import { DeleteDialog } from '@/components/Dialogs';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const AssignedProductsTable = ({ rows, isLoading, refetch, ...otherParams }: GridProps<AssignedProductInterface>) => {
-    const [loading, setLoading] = useState(false);
-    const [activeParam, setActiveParam] = useState<string | number>('');
-
     const { isMobile } = useResponsiveness();
-    const { mutate } = useMutate<{ vendorLocationProductTypeID: number | string }>('deleteAssignedProducts');
 
-    const onClose = () => {
-        setActiveParam('');
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-        mutate({ vendorLocationProductTypeID: activeParam }, mutateOptions({ refetch, onClose, setLoading }));
-    };
+    const { loading, handleDelete, onClose, deleteParams, setDeleteParams } = useGridDelete<{ vendorLocationProductTypeID: number | string }>({
+        deleteKey: 'deleteAssignedProducts',
+        initialDeleteParams: { vendorLocationProductTypeID: '' },
+        refetch,
+    });
 
     const columns: GridColDef[] = [
         {
@@ -58,7 +50,7 @@ const AssignedProductsTable = ({ rows, isLoading, refetch, ...otherParams }: Gri
                         key="Delete"
                         color="error"
                         icon={<DeleteIcon />}
-                        onClick={() => setActiveParam(VendorLocationProductTypeID)}
+                        onClick={() => setDeleteParams({ vendorLocationProductTypeID: VendorLocationProductTypeID })}
                     />,
                 ];
             },
@@ -69,7 +61,12 @@ const AssignedProductsTable = ({ rows, isLoading, refetch, ...otherParams }: Gri
         <>
             <DataGrid rows={getIndexedRows(rows)} loading={isLoading} columns={columns} {...otherParams} />
 
-            <DeleteDialog loading={loading} onOkay={handleDelete} onCancel={onClose} open={Number.isInteger(activeParam)} />
+            <DeleteDialog
+                loading={loading}
+                onOkay={handleDelete}
+                onCancel={onClose}
+                open={Number.isInteger(deleteParams.vendorLocationProductTypeID)}
+            />
         </>
     );
 };

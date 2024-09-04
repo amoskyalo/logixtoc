@@ -1,26 +1,18 @@
-import { useState } from 'react';
 import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
-import { ProductUOM, useMutate } from '@/api';
+import { ProductUOM } from '@/api';
 import { GridColDef } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
-import { useResponsiveness } from '@/hooks';
+import { getColumnWidth, getIndexedRows } from '@/utils';
+import { useResponsiveness, useGridDelete } from '@/hooks';
 import { DeleteDialog } from '@/components/Dialogs';
 
 const UOMGrid = ({ rows, isLoading, refetch, ...otherProps }: GridProps<ProductUOM>) => {
-    const [vendorProductUOMID, setVendorProductUOMID] = useState('');
-    const [loading, setLoading] = useState(false);
-
     const { isMobile } = useResponsiveness();
-    const { mutate } = useMutate<{ vendorProductUOMID: number | string }>('deleteProductUOM');
 
-    const onClose = () => {
-        setVendorProductUOMID('');
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-        mutate({ vendorProductUOMID }, mutateOptions({ onClose, setLoading, refetch }));
-    };
+    const { handleDelete, loading, onClose, deleteParams, setDeleteParams } = useGridDelete<{ vendorProductUOMID: number | string }>({
+        deleteKey: 'deleteProductUOM',
+        initialDeleteParams: { vendorProductUOMID: '' },
+        refetch,
+    });
 
     const columns: GridColDef[] = [
         {
@@ -55,7 +47,7 @@ const UOMGrid = ({ rows, isLoading, refetch, ...otherProps }: GridProps<ProductU
             headerName: 'Actions',
             type: 'actions',
             getActions: ({ row: { VendorProductUOMID } }) => [
-                <DataGridActions key="Actions" onDelete={() => setVendorProductUOMID(VendorProductUOMID)} />,
+                <DataGridActions key="Actions" onDelete={() => setDeleteParams({ vendorProductUOMID: VendorProductUOMID })} />,
             ],
         },
     ];
@@ -63,7 +55,7 @@ const UOMGrid = ({ rows, isLoading, refetch, ...otherProps }: GridProps<ProductU
     return (
         <div>
             <DataGrid columns={columns} rows={getIndexedRows(rows)} loading={isLoading} {...otherProps} />
-            <DeleteDialog loading={loading} open={Number.isInteger(vendorProductUOMID)} onCancel={onClose} onOkay={handleDelete} />
+            <DeleteDialog loading={loading} open={Number.isInteger(deleteParams.vendorProductUOMID)} onCancel={onClose} onOkay={handleDelete} />
         </div>
     );
 };

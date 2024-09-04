@@ -1,118 +1,74 @@
 'use client';
-
-import { useState } from 'react';
 import { DataGrid, DataGridActions, GridProps } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
-import { getColumnWidth, getIndexedRows, mutateOptions } from '@/utils';
-import { LocationsArrayInterface, useMutate } from '@/api';
-import { useResponsiveness } from '@/hooks';
+import { getColumnWidth, getIndexedRows } from '@/utils';
+import { LocationsArrayInterface } from '@/api';
+import { useResponsiveness, useGridDelete } from '@/hooks';
 import { DeleteDialog } from '@/components/Dialogs';
 
-type RowParamsInterface = {
-   addedBy: string;
-   vendorLocationID: number | string;
-};
+const LocationsTable = ({ rows, isLoading, refetch, ...otherProps }: Readonly<GridProps<LocationsArrayInterface>>) => {
+    const { isMobile } = useResponsiveness();
 
-const initialParams: RowParamsInterface = {
-   addedBy: '',
-   vendorLocationID: '',
-};
+    const { setDeleteParams, handleDelete, loading, open, setOpen } = useGridDelete<{ vendorLocationID: string | number }>({
+        deleteKey: 'deleteVendorLocation',
+        initialDeleteParams: { vendorLocationID: '' },
+        refetch,
+    });
 
-const LocationsTable = ({
-   rows,
-   isLoading,
-   refetch,
-   ...otherProps
-}: Readonly<GridProps<LocationsArrayInterface>>) => {
-   const [loading, setLoading] = useState<boolean>(false);
-   const [open, setOpen] = useState<boolean>(false);
-   const [activeParams, setActiveParams] = useState<RowParamsInterface>(initialParams);
-
-   const { isMobile } = useResponsiveness();
-   const { mutate } = useMutate<{ vendorLocationID: number | string }>('deleteVendorLocation');
-
-   const columns: GridColDef[] = [
-      {
-         field: 'id',
-         headerName: 'No.',
-         width: 60,
-         sortable: false,
-      },
-      {
-         field: 'VendorLocationName',
-         headerName: 'Location',
-         ...getColumnWidth(150, isMobile),
-      },
-      {
-         field: 'VendorLocationTypeName',
-         headerName: 'Type',
-         ...getColumnWidth(150, isMobile),
-      },
-      {
-         field: 'AddedByName',
-         headerName: 'Added By',
-         ...getColumnWidth(150, isMobile),
-      },
-      {
-         field: 'DateAdded',
-         headerName: 'Date Added',
-         ...getColumnWidth(175, isMobile),
-      },
-      {
-         field: 'actions',
-         headerName: 'Actions',
-         width: 100,
-         type: 'actions',
-         getActions: ({ row: { AddedByName, VendorLocationID } }) => {
-            return [
-               <DataGridActions
-                  key="actions"
-                  onDelete={() => {
-                     setActiveParams({
-                        addedBy: AddedByName,
-                        vendorLocationID: VendorLocationID,
-                     });
-                     setOpen(true);
-                  }}
-               />,
-            ];
-         },
-      },
-   ];
-
-   const handleDelete = () => {
-      const { vendorLocationID } = activeParams;
-      setLoading(true);
-      mutate(
-         { vendorLocationID },
-         mutateOptions({
-            setLoading,
-            refetch,
-            onClose: () => {
-               setActiveParams(initialParams);
-               setOpen(false);
+    const columns: GridColDef[] = [
+        {
+            field: 'id',
+            headerName: 'No.',
+            width: 60,
+            sortable: false,
+        },
+        {
+            field: 'VendorLocationName',
+            headerName: 'Location',
+            ...getColumnWidth(150, isMobile),
+        },
+        {
+            field: 'VendorLocationTypeName',
+            headerName: 'Type',
+            ...getColumnWidth(150, isMobile),
+        },
+        {
+            field: 'AddedByName',
+            headerName: 'Added By',
+            ...getColumnWidth(150, isMobile),
+        },
+        {
+            field: 'DateAdded',
+            headerName: 'Date Added',
+            ...getColumnWidth(175, isMobile),
+        },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            type: 'actions',
+            getActions: ({ row: { VendorLocationID } }) => {
+                return [
+                    <DataGridActions
+                        key="actions"
+                        onDelete={() => {
+                            setDeleteParams({
+                                vendorLocationID: VendorLocationID,
+                            });
+                            setOpen(true);
+                        }}
+                    />,
+                ];
             },
-         }),
-      );
-   };
+        },
+    ];
 
-   return (
-      <>
-         <DataGrid
-            columns={columns}
-            rows={getIndexedRows(rows)}
-            loading={isLoading}
-            {...otherProps}
-         />
-
-         <DeleteDialog
-            open={open}
-            loading={loading}
-            onOkay={handleDelete}
-            onCancel={() => setOpen(false)}
-         />
-      </>
-   );
+    return (
+        <>
+            <DataGrid columns={columns} rows={getIndexedRows(rows)} loading={isLoading} {...otherProps} />
+            <DeleteDialog open={open} loading={loading} onOkay={handleDelete} onCancel={() => setOpen(false)} />
+        </>
+    );
 };
 
 export default LocationsTable;

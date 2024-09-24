@@ -17,7 +17,7 @@ Here is the new old version: [Logixtoc old version](https://github.com/amoskyalo
 ### Running the project
 To run this project in your local machine, make sure you clone the repository.
 After clong, run the following commands
-- `yarn` | `npm install` to install dependancies.
+- `yarn` to install dependancies.
 - `yarn dev` | `npm run dev` to run the project.
 
 ### Contribution

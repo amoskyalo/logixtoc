@@ -1,43 +1,32 @@
 'use client';
 
-import { useState } from 'react';
-import { StockLevelGrid } from './_components';
-import { useFetch, GetVendorStockParams, VendorStock } from '@/api';
-import { getInitialDates } from '@/utils';
+import { GetVendorStockParams, VendorStock, APPCRUD } from '@/api';
 
 const StockLevel = () => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [dates, setDates] = useState(getInitialDates());
-
-    const {
-        data: stockLevel,
-        isLoading,
-        isRefetching,
-    } = useFetch<VendorStock, GetVendorStockParams>('getStockLevel', {
-        StartDate: dates.startDate,
-        EndDate: dates.endDate,
-        VendorLocationID: 0,
-        VendorProductBrandID: 0,
-        VendorProductTypeID: 0,
-        VendorProductUOMID: 0,
-        PageSize: pageSize,
-        PageNO: page,
+    const UI = new APPCRUD<VendorStock, void, void, GetVendorStockParams>({
+        grid: {
+            fetchUrl: 'getStockLevel',
+            params: {
+                VendorLocationID: 0,
+                VendorProductBrandID: 0,
+                VendorProductTypeID: 0,
+                VendorProductUOMID: 0,
+            },
+            columns: [
+                { field: 'VendorLocationName', headerName: 'Location', width: 150 },
+                { field: 'VendorProductBrandName', headerName: 'Product Brand', width: 150 },
+                { field: 'VendorProductTypeName', headerName: 'Product Type', width: 150 },
+                { field: 'VendorProductUOMName', headerName: 'Product UOM', width: 150 },
+                { field: 'OpeningStock', headerName: 'Opening Stock', type: 'number', width: 150 },
+                { field: 'ReceivedStock', headerName: 'Received Stock', type: 'number', width: 150 },
+                { field: 'SoldStock', headerName: 'Sold Stock', type: 'number', width: 150 },
+                { field: 'IssuedStock', headerName: 'Issued Stock', type: 'number', width: 150 },
+                { field: 'CurrentStock', headerName: 'Current Stock', type: 'number', width: 150 },
+            ],
+        },
     });
 
-    return (
-        <StockLevelGrid
-            rows={stockLevel?.Data ?? []}
-            isLoading={isLoading || isRefetching}
-            setDates={setDates}
-            dates={dates}
-            pageNo={page}
-            pageSize={pageSize}
-            setPageNo={setPage}
-            setPageSize={setPageSize}
-            count={stockLevel?.TotalCount}
-        />
-    );
+    return UI.render();
 };
 
 export default StockLevel;

@@ -78,7 +78,7 @@ export const routes = [
             {
                 name: "Accounts",
                 Icon: PaymentsRounded,
-                path: "/finance/accounts/accounts",
+                path: "/dashboard/finance/accounts",
             },
 
             {

@@ -54,8 +54,13 @@ axiosPrivate.interceptors.request.use((config) => {
 });
 
 export const useFetch = <T, U>(url: keyof typeof urls, params?: U & FetchParams) => {
+    // T is the response interface;
+    // U is the additional params interface ( can be undefined also );
+
+    const queryKey = [url, params ? JSON.stringify(params) : null];
+
     return useQuery<Response<T>>({
-        queryKey: [url, ...Object.keys(params ?? {})],
+        queryKey,
         queryFn: async () => {
             try {
                 const response = await axiosPrivate.get(urls[url], { params });
@@ -67,12 +72,16 @@ export const useFetch = <T, U>(url: keyof typeof urls, params?: U & FetchParams)
     });
 };
 
-export const useMutate = <PostData>(url: keyof typeof urls) => {
+export const useMutate = <T>(url: keyof typeof urls | undefined | null) => {
+    // T here is the interface of the data we are sending to the API;
+
     return useMutation({
-        mutationFn: async (data: PostData) => {
+        mutationFn: async (data: T) => {
             try {
-                const response = await axiosPrivate.post(urls[url], data);
-                return response;
+                if (url) {
+                    const response = await axiosPrivate.post(urls[url], data);
+                    return response;
+                }
             } catch (error) {
                 console.log(`Failed to post data: ${error}`);
             }

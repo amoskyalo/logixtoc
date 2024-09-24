@@ -1,40 +1,37 @@
 'use client';
 
-import { useState } from 'react';
-import { ActualStockGrid } from './_components';
-import { useFetch, ActualStock as ActualStockProps } from '@/api';
-import { getInitialDates } from '@/utils';
+import { ActualStock as ActualStockProps, APPCRUD } from '@/api';
+import { StatusChips } from '@/components/Chips';
 
+type Params = {
+    VendorLocationID: number;
+};
 const ActualStock = () => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [dates, setDates] = useState(getInitialDates());
-
-    const {
-        data: actualStock,
-        isLoading,
-        isRefetching,
-    } = useFetch<ActualStockProps, { VendorLocationID: number }>('getActualStock', {
-        VendorLocationID: 0,
-        PageNO: page,
-        PageSize: pageSize,
-        StartDate: dates.startDate,
-        EndDate: dates.endDate,
+    const UI = new APPCRUD<ActualStockProps, void, void, Params>({
+        grid: {
+            fetchUrl: 'getActualStock',
+            actions: ['options'],
+            params: { VendorLocationID: 0 },
+            columns: [
+                { field: 'StockNO', headerName: 'Stock No.', width: 150 },
+                { field: 'AddedByName', headerName: 'Added By', width: 150 },
+                { field: 'DateAdded', headerName: 'Date Added', width: 180 },
+                { field: 'SourceVendorLocationName', headerName: 'Source Location', width: 150 },
+                { field: 'DestinationVendorLocationName', headerName: 'Destination Location', width: 170 },
+                { field: 'StockMovementTypeName', headerName: 'Movement Type', width: 150 },
+                {
+                    field: 'Status',
+                    headerName: 'Status',
+                    width: 150,
+                    renderCell: ({ row: { StockMovementStatusID, StockMovementStatusName } }) => (
+                        <StatusChips statusID={StockMovementStatusID} name={StockMovementStatusName} />
+                    ),
+                },
+            ],
+        },
     });
 
-    return (
-        <ActualStockGrid
-            rows={actualStock?.Data ?? []}
-            isLoading={isLoading || isRefetching}
-            setDates={setDates}
-            dates={dates}
-            pageNo={page}
-            setPageNo={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            count={actualStock?.TotalCount}
-        />
-    );
+    return UI.render();
 };
 
 export default ActualStock;

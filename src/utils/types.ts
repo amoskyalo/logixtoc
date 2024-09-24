@@ -1,5 +1,5 @@
 export type mutateOptionsArgs = {
     onClose: () => void;
-    refetch?: () => void;
+    refetch?: () => any;
     setLoading: (arg: boolean) => void;
 }

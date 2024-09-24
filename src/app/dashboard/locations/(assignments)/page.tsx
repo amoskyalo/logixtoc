@@ -1,36 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import { LocationsTable, LocationsForm } from './_components';
-import { LocationsArrayInterface, useFetch } from '@/api';
+import { LocationsArrayInterface, APPCRUD } from '@/api';
+
+type Delete = {
+    vendorLocationID: number;
+};
+
+type Params = {
+    VendorLocationTypeID: number;
+};
 
 const Locations = () => {
-   const [page, setPage] = useState<number>(1);
-   const [pageSize, setPageSize] = useState<number>(100);
-   const [open, setOpen] = useState<boolean>(false);
+    const UI = new APPCRUD<LocationsArrayInterface, void, Delete, Params>({
+        grid: {
+            showDates: false,
+            fetchUrl: 'getVendorLocation',
+            deleteUrl: 'deleteVendorLocation',
+            params: { VendorLocationTypeID: 0 },
+            initialDeleteParams: { vendorLocationID: '' as unknown as number },
+            columns: [
+                { field: 'VendorLocationName', headerName: 'Location', mobileWidth: 150 },
+                { field: 'VendorLocationTypeName', headerName: 'Type', mobileWidth: 150 },
+                { field: 'AddedByName', headerName: 'Added By', mobileWidth: 150 },
+                { field: 'DateAdded', headerName: 'Date Added', mobileWidth: 175 },
+            ],
+        },
+    });
 
-   const { isLoading, data, refetch, isRefetching } = useFetch<LocationsArrayInterface,{ VendorLocationTypeID: number }>('getVendorLocation', {
-      VendorLocationTypeID: 0,
-      PageSize: pageSize,
-      PageNO: page,
-   });
-
-   return (
-      <>
-         <LocationsTable
-            onAdd={() => setOpen(true)}
-            rows={data?.Data || []}
-            isLoading={isLoading || isRefetching}
-            refetch={refetch}
-            pageNo={page}
-            setPageNo={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            count={data?.TotalCount}
-         />
-         <LocationsForm open={open} onClose={() => setOpen(false)} refetch={refetch} />
-      </>
-   );
+    return UI.render();
 };
 
 export default Locations;

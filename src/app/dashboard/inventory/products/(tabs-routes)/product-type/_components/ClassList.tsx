@@ -1,5 +1,5 @@
 import React from 'react';
-import { PropsInterface } from './types';
+import { PropsInterface } from './Dialogs/types';
 import { VendorProductTypeClass } from '@/api';
 import { GridColDef } from '@mui/x-data-grid';
 import { getColumnWidth, getIndexedRows } from '@/utils';

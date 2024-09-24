@@ -1,41 +1,75 @@
 'use client';
 
-import { useState } from 'react';
-import { AssignedUsersTable, AssignedUsersForm } from './_compoents';
-import { useFetch, VendorLocationUserAssignmentRow, VendorUserObjectInterface } from '@/api';
+import { useFetch, VendorLocationUserAssignmentRow, VendorUserObjectInterface, APPCRUD } from '@/api';
+import { AutoCompleteField } from '@/components/Inputs';
+import { getFormikFieldProps } from '@/utils';
+
+type Params = {
+    VendorLocationID: number;
+};
+
+type FormiValues = {
+    vendorLocationID: number;
+    usersArray: Array<{
+        userID: number;
+    }>;
+};
+
+type Delete = {
+    vendorLocationUserAssignmentID: string | number;
+};
 
 const AssignedUsers = () => {
-    const [open, setOpen] = useState(false);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-
     const { data: vendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
 
-    const { data, isLoading, refetch, isRefetching } = useFetch<VendorLocationUserAssignmentRow, { VendorLocationID: number }>(
-        'getVendorLocationUserAssignment',
-        {
-            PageNO: page,
-            PageSize: pageSize,
-            VendorLocationID: 0,
+    const UI = new APPCRUD<VendorLocationUserAssignmentRow, FormiValues, Delete, Params>({
+        grid: {
+            showDates: false,
+            fetchUrl: 'getVendorLocationUserAssignment',
+            deleteUrl: 'deleteVendorLocationUserAssignmentTX',
+            initialDeleteParams: { vendorLocationUserAssignmentID: '' },
+            params: { VendorLocationID: 0 },
+            columns: [
+                { field: 'VendorLocationName', headerName: 'Location', mobileWidth: 150 },
+                { field: 'UserName', headerName: 'Operator', mobileWidth: 150 },
+                { field: 'DateAdded', headerName: 'Date Added', mobileWidth: 200 },
+            ],
         },
-    );
+        form: {
+            title: 'Add New User',
+            submitKey: 'postVendorLocationUserAssignmentTx',
+            initialValues: {
+                usersArray: [],
+                vendorLocationID: '' as unknown as number,
+            },
+            modifyData: (data) => ({
+                vendorLocationID: data.vendorLocationID,
+                usersArray: data.usersArray.map(({ userID }) => ({ userID })),
+            }),
+            inputs: [
+                { label: 'Locations', key: 'vendorLocationID', type: 'singleLocation', validate: true },
+                {
+                    label: 'Users',
+                    key: 'usersArray',
+                    type: 'customInput',
+                    validate: true,
+                    renderInput: (formik) => (
+                        <AutoCompleteField
+                            label="Users"
+                            options={(vendorUsers?.Data ?? []).map(({ UserID, FirstName, LastName }) => ({
+                                userID: UserID,
+                                title: `${FirstName} ${LastName}`,
+                            }))}
+                            getOptionLabel={(option: any) => option.title}
+                            {...getFormikFieldProps(formik, 'usersArray')}
+                        />
+                    ),
+                },
+            ],
+        },
+    });
 
-    return (
-        <>
-            <AssignedUsersTable
-                rows={data?.Data ?? []}
-                isLoading={isLoading || isRefetching}
-                onAdd={() => setOpen(true)}
-                refetch={refetch}
-                setPageNo={setPage}
-                setPageSize={setPageSize}
-                pageSize={pageSize}
-                pageNo={page}
-            />
-
-            <AssignedUsersForm open={open} refetch={refetch} onClose={() => setOpen(false)} vendorUsers={vendorUsers?.Data ?? []} />
-        </>
-    );
+    return UI.render();
 };
 
 export default AssignedUsers;

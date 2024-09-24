@@ -13,7 +13,7 @@ const center = {
 const Auth = ({ children }: Readonly<{ children: React.ReactNode }>) => {
    return (
       <Box
-         sx={{ height: '100vh', overflow: 'hidden' }}
+         sx={{ height: '100vh', overflow: 'hidden !important' }}
          className="md:bg-gradient-to-r md:from-[#10333f] md:via-[#c1e547] md:to-[#b9b6f8]"
       >
          <Grid container sx={{ height: '100%' }}>

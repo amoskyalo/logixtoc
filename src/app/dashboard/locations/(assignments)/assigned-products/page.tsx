@@ -1,43 +1,66 @@
 'use client';
 
-import { useState } from 'react';
-import { AssignedProductsTable, AssignedProductsForm } from './_components';
-import { useFetch, AssignedProductInterface, ProductType } from '@/api';
+import { useFetch, AssignedProductInterface, ProductType, APPCRUD } from '@/api';
+
+type Values = {
+    vendorLocationID: number;
+    productTypeArray: Array<{
+        vendorProductTypeID: number;
+    }>;
+};
+
+type Delete = {
+    vendorLocationProductTypeID: number;
+};
+
+type Params = {
+    VendorLocationID: number;
+};
 
 const AssignedProducts = () => {
-    const [page, setPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [open, setOpen] = useState<boolean>(false);
-
     const { data: vendorProducts } = useFetch<ProductType, void>('getVendorProductTypes');
-    const {
-        data: assignedProducts,
-        isLoading,
-        refetch,
-        isRefetching,
-    } = useFetch<AssignedProductInterface, { VendorLocationID: number }>('getAssignedProducts', {
-        VendorLocationID: 0,
-        PageNO: page,
-        PageSize: pageSize,
+
+    const UI = new APPCRUD<AssignedProductInterface, Values, Delete, Params>({
+        grid: {
+            showDates: false,
+            actions: ['delete'],
+            fetchUrl: 'getAssignedProducts',
+            deleteUrl: 'deleteAssignedProducts',
+            initialDeleteParams: { vendorLocationProductTypeID: '' as unknown as number },
+            params: { VendorLocationID: 0 },
+            columns: [
+                { field: 'VendorLocationName', headerName: 'Location', mobileWidth: 150 },
+                { field: 'VendorProductTypeName', headerName: 'Product Type', mobileWidth: 150 },
+                { field: 'DateAdded', headerName: 'Date Added', mobileWidth: 200 },
+            ],
+        },
+        form: {
+            submitKey: 'postAssignedProducts',
+            title: 'Add New Location Product Type',
+            initialValues: { vendorLocationID: '' as unknown as number, productTypeArray: [] },
+            modifyData: (data) => ({
+                productTypeArray: data.productTypeArray.map((product: any) => ({
+                    vendorProductTypeID: product.vendorProductTypeID,
+                })),
+                vendorLocationID: data.vendorLocationID,
+            }),
+            inputs: [
+                { label: 'Locations', key: 'vendorLocationID', type: 'singleLocation', validate: true },
+                {
+                    label: 'Products',
+                    key: 'productTypeArray',
+                    type: 'multiple',
+                    validate: true,
+                    optionKey: 'vendorProductTypeID',
+                    optionValueKey: 'VendorProductTypeID',
+                    optionLabelKey: 'VendorProductTypeName',
+                    lookups: vendorProducts?.Data ?? []
+                },
+            ],
+        },
     });
 
-    return (
-        <>
-            <AssignedProductsTable
-                onAdd={() => setOpen(true)}
-                isLoading={isLoading || isRefetching}
-                rows={assignedProducts?.Data ?? []}
-                refetch={refetch}
-                pageNo={page}
-                pageSize={pageSize}
-                setPageNo={setPage}
-                setPageSize={setPageSize}
-                count={assignedProducts?.TotalCount}
-            />
-
-            <AssignedProductsForm open={open} onClose={() => setOpen(false)} products={vendorProducts?.Data ?? []} refetch={refetch} />
-        </>
-    );
+    return UI.render();
 };
 
 export default AssignedProducts;

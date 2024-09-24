@@ -1,4 +1,5 @@
-import ProductTypeGrid from './ProductTypeGrid';
-import ProductTypeForm from './ProductTypeForm';
+import UOMList from './UOMList';
+import ClassList from './ClassList';
+import BrandsList from './BrandsList';
 
-export { ProductTypeGrid, ProductTypeForm };
+export { UOMList, ClassList, BrandsList };

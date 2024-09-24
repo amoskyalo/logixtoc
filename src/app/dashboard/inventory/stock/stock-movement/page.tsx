@@ -1,41 +1,43 @@
 'use client';
 
-import { useState } from 'react';
-import { StockMovementGrid } from './_components';
-import { useFetch, StockMovement } from '@/api';
-import { getInitialDates } from '@/utils';
+import { StockMovement, APPCRUD } from '@/api';
+import { StatusChips } from '@/components/Chips';
+
+type Params = {
+    StockMovementTypeID: number;
+    StockMovementStatusID: number;
+    VendorLocationID: number;
+};
 
 const Stock = () => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [dates, setDates] = useState(getInitialDates());
-
-    const {
-        data: movementHistory,
-        isLoading,
-        isRefetching,
-    } = useFetch<StockMovement, { StockMovementTypeID: number; StockMovementStatusID: number; VendorLocationID: number }>('getStockMovementHistory', {
-        StockMovementTypeID: 0,
-        StockMovementStatusID: 99,
-        VendorLocationID: 0,
-        StartDate: dates.startDate,
-        EndDate: dates.endDate,
-        PageNO: page,
-        PageSize: pageSize,
+    const UI = new APPCRUD<StockMovement, void, void, Params>({
+        grid: {
+            fetchUrl: 'getStockMovementHistory',
+            params: {
+                StockMovementTypeID: 0,
+                StockMovementStatusID: 99,
+                VendorLocationID: 0,
+            },
+            columns: [
+                { field: 'StockNO', headerName: 'Stock NO', width: 150 },
+                { field: 'SourceVendorLocationName', headerName: 'Source Location Name', width: 200 },
+                { field: 'DestinationVendorLocationName', headerName: 'Destination Location Name', width: 220 },
+                { field: 'StockMovementTypeName', headerName: 'Stock Movement Type', width: 200 },
+                { field: 'AddedByName', headerName: 'Added By', width: 150 },
+                { field: 'DateAdded', headerName: 'Date Added', width: 200 },
+                {
+                    field: 'Status',
+                    headerName: 'Status',
+                    width: 150,
+                    renderCell: ({ row: { StockMovementStatusName, StockMovementStatusID } }) => (
+                        <StatusChips name={StockMovementStatusName} statusID={StockMovementStatusID} />
+                    ),
+                },
+            ],
+        },
     });
 
-    return (
-        <StockMovementGrid
-            isLoading={isLoading || isRefetching}
-            rows={movementHistory?.Data ?? []}
-            setDates={setDates}
-            dates={dates}
-            setPageNo={setPage}
-            pageNo={page}
-            setPageSize={setPageSize}
-            pageSize={pageSize}
-        />
-    );
+    return UI.render();
 };
 
 export default Stock;

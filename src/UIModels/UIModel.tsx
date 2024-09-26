@@ -106,7 +106,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRecord, setActiveRecord] = useState<any>(null);
 
-    const { isMobile } = useResponsiveness();
+    const { isMobile, isMiniTablet } = useResponsiveness();
 
     const { data, isLoading, isFetching, refetch } = useFetch<Response<R>, any>(fetchUrl, {
         ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
@@ -158,10 +158,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V
 
     const updatedColumns: GridColDef[] = [
         { field: 'id', headerName: 'No.', width: 50, sortable: false },
-        ...columns.map(({ mobileWidth, ...rest }) => {
+        ...columns.map(({ mobileWidth, width, ...rest }) => {
             return {
                 ...rest,
-                ...(isMobile && mobileWidth ? { width: mobileWidth } : { flex: 1 }),
+                ...(width ? { width } : (isMobile || isMiniTablet) && mobileWidth ? { width: mobileWidth } : { flex: 1 }),
             };
         }),
         {
@@ -243,17 +243,17 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V
                 );
 
             case 'mulipleLocation':
-                return <SelectMultipleLocations {...formik} />;
+                return <SelectMultipleLocations {...formik} label={label}/>;
 
             case 'singleLocation':
                 return <SelectSingleLocation {...formik} />;
 
             case 'customInput':
-                if (!isValidElement(renderInput)) {
+                if (!isValidElement(renderInput!(formik))) {
                     throw new Error('Invalid element');
                 }
 
-                return renderInput(formik);
+                return renderInput!(formik);
 
             default:
                 throw new Error('Invalid input type');
@@ -272,7 +272,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}
             />
 
-            {hasNew && formModel && (
+            {formModel && (
                 <FormDialog open={formOpen} title={formModel?.title} onClose={onClose}>
                     <Formik
                         initialValues={formModel?.initialValues}

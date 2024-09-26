@@ -18,7 +18,7 @@ export const APPCRUD = class<R, V, D, P> {
                     validate &&
                     (type === 'text'
                         ? string().required('This field is required')
-                        : type === 'select'
+                        : type === 'select' || type === 'singleLocation'
                           ? string().required('This field is required')
                           : type === 'number'
                             ? number().required('This field is required')

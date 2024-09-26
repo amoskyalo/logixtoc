@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { urls } from '.';
+import { toast } from 'react-toastify';
 export interface FetchParams {
     PageSize?: number;
     PageNO?: number;
@@ -65,8 +66,8 @@ export const useFetch = <T, U>(url: keyof typeof urls, params?: U & FetchParams)
             try {
                 const response = await axiosPrivate.get(urls[url], { params });
                 return response.data;
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                toast.error(error?.message);
             }
         },
     });

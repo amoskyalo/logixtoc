@@ -44,12 +44,12 @@ export const routes = [
             {
                 name: "Stock",
                 Icon: ShowChart,
-                path: "/dashboard/inventory/stock"
+                path: "/dashboard/inventory/stock/stock-movement"
             },
             {
                 name: "Products",
                 Icon: OilBarrel,
-                path: "/dashboard/inventory/products",
+                path: "/dashboard/inventory/products/brand",
             }
         ]
     },
@@ -61,12 +61,12 @@ export const routes = [
             {
                 name: "Locations",
                 Icon: LocationOn,
-                path: "/locations",
+                path: "/dashboard/locations",
             },
             {
                 name: "Location types",
                 Icon: DeliveryDining,
-                path: "/locations/location types",
+                path: "/dashboard/locations/location-types",
             }
         ]
     },
@@ -78,7 +78,7 @@ export const routes = [
             {
                 name: "Accounts",
                 Icon: PaymentsRounded,
-                path: "/finance/accounts/accounts",
+                path: "/dashboard/finance/accounts",
             },
 
             {

@@ -1,22 +1,28 @@
+import ke from '../Assets/kenya.jpg';
+import tz from '../Assets/tanzania.png';
+import ug from '../Assets/uganda.png';
+import rw from '../Assets/rwanda.png';
+import bu from '../Assets/burundi.png';
+
 export const countries = [
-    {
-        name: "Kenya",
-        flag: "/kenya.jpg",
-    },
-    {
-        name: "Tanzania",
-        flag: "/tanzania.png",
-    },
-    {
-        name: "Uganda",
-        flag: "/uganda.png",
-    },
-    {
-        name: "Rwanda",
-        flag: "/rwanda.png",
-    },
-    {
-        name: "Burundi",
-        flag: "/burundi.png",
-    }
+   {
+      name: 'Kenya',
+      flag: ke,
+   },
+   {
+      name: 'Tanzania',
+      flag: tz,
+   },
+   {
+      name: 'Uganda',
+      flag: ug,
+   },
+   {
+      name: 'Rwanda',
+      flag: rw,
+   },
+   {
+      name: 'Burundi',
+      flag: bu,
+   },
 ];

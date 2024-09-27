@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { queryClient } from '@/api';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ToastContainer } from 'react-toastify';
 import { Suspense } from 'react';
 
 import './globals.css';
@@ -22,7 +21,6 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <QueryClientProvider client={queryClient}>
-                    <ToastContainer position="top-center" />
                     <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
                 </QueryClientProvider>
             </body>

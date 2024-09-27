@@ -1,9 +1,12 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { axiosPrivate, urls } from "@/api/";
+'use client';
+
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { axiosPrivate, urls } from '@/api/';
+import { snackbarToast } from '@/components/Snackbar';
 
 export type DailyPerformanceArray = Array<{
     Dates: string;
-    DayName: string
+    DayName: string;
     WeeklyPerformanceArray: Array<{
         DayName: string;
         TotalQuantity: number;
@@ -11,8 +14,8 @@ export type DailyPerformanceArray = Array<{
         TotalVolume: number;
         UOMTypeName: string;
         VendorProductCategoryName: string;
-    }>
-}>
+    }>;
+}>;
 
 export type LatestDeliveryPlanArray = Array<{
     DateAdded: string;
@@ -24,7 +27,7 @@ export type LatestDeliveryPlanArray = Array<{
     DeliveryPlanTypeName: string;
     UserName: string;
     VendorLocationName: string;
-}>
+}>;
 
 export type LatestStockMovementArray = Array<{
     DateAdded: string;
@@ -37,7 +40,7 @@ export type LatestStockMovementArray = Array<{
     StockMovementTypeID: number;
     StockMovementTypeName: string;
     StockNO: string;
-}>
+}>;
 
 export type DashBoardResponse = {
     Data: {
@@ -70,7 +73,7 @@ export type DashBoardResponse = {
         VendorParentName: string;
         VendorStatusID: number;
         VendorTypeName: string;
-    },
+    };
     Error: boolean;
     Message: string;
     Page: number;
@@ -81,22 +84,25 @@ export type DashBoardResponse = {
 
 export type GetVendorMainDashboardParams = {
     VendorID: number;
-    UserID: number
+    UserID: number;
 };
 
 export const useGetVendorMainDashboard = (
     { VendorID, UserID }: GetVendorMainDashboardParams,
-    options?: Omit<UseQueryOptions<DashBoardResponse>, "queryKey" | "queryFun">
-) => (
+    options?: Omit<UseQueryOptions<DashBoardResponse>, 'queryKey' | 'queryFun'>,
+) =>
     useQuery<DashBoardResponse>({
-        queryKey: ["dashboard", VendorID, UserID],
+        queryKey: ['dashboard', VendorID, UserID],
         queryFn: async () => {
-            const res = await axiosPrivate.get(urls.getVendorDashboard, {
-                params: { VendorID, UserID }
-            });
+            try {
+                const res = await axiosPrivate.get(urls.getVendorDashboard, {
+                    params: { VendorID, UserID },
+                });
 
-            return res.data
+                return res.data;
+            } catch (error: any) {
+                snackbarToast.error(error.message);
+            }
         },
-        ...options
-    })
-)
+        ...options,
+    });

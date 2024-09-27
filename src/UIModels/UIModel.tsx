@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, isValidElement } from 'react';
-import { urls, useMutate, useFetch } from '@/api';
+import { useMutate, useFetch } from '@/api';
 import { GridColDef } from '@mui/x-data-grid';
 import { getInitialDates, mutateOptions, getFormikFieldProps } from '@/utils';
 import { DataGrid, DataGridActions } from '@/components/DataGrids';
@@ -12,71 +12,9 @@ import { Stack, MenuItem } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
 import { useResponsiveness } from '@/hooks';
+import { UIProps, APIResponse, Input } from './types';
 
-export interface FormModelInterface<V> {
-    title: string;
-    submitKey: keyof typeof urls;
-    initialValues: any;
-    modifyData?: (arg: V) => any;
-    inputs: Array<Input>;
-}
-
-export interface GridModelInterface<D, P> {
-    fetchUrl: keyof typeof urls;
-    columns: Column[];
-    deleteUrl?: keyof typeof urls;
-    initialDeleteParams?: D; // only passed if we are setting delete params from this side.
-    hasNew?: boolean;
-    showDates?: boolean;
-    pagination?: boolean;
-    actions?: Array<'edit' | 'delete' | 'options'>;
-    params?: P;
-    options?: Array<{
-        name: string;
-        onClick: (arg1?: any, arg2?: any, arg3?: any) => void;
-    }>;
-}
-
-type Column = GridColDef & { mobileWidth?: number };
-
-interface Response<R> {
-    Error: boolean;
-    Message: string;
-    Page: number;
-    PageSize: number;
-    StatusCode: number;
-    TotalCount: number;
-    Data: R[];
-}
-
-interface Props<V, D, P> {
-    gridModel: GridModelInterface<D, P>;
-    formModel?: FormModelInterface<V>;
-    validationSchema?: any;
-}
-
-interface Input {
-    label: string;
-    key: string;
-    type: 'text' | 'select' | 'multiple' | 'number' | 'boolean' | 'singleLocation' | 'mulipleLocation' | 'customInput';
-    validate: boolean;
-
-    lookups?: any[];
-
-    //for select
-    lookupDisplayName?: any;
-    lookupDisplayValue?: any;
-
-    //for multiple select
-    optionLabelKey?: any;
-    optionValueKey?: any;
-    optionKey?: string;
-
-    //render your own input;
-    renderInput?: (arg: any) => React.ReactNode;
-}
-
-const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V, D, P>) => {
+const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
     // V is the interface of the form data we are sending to API;
     // D is the interface of the delete object we are sending to API;
@@ -108,7 +46,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: Props<V
 
     const { isMobile, isMiniTablet } = useResponsiveness();
 
-    const { data, isLoading, isFetching, refetch } = useFetch<Response<R>, any>(fetchUrl, {
+    const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
         ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
         ...(showDates && { StartDate: dates.startDate, EndDate: dates.endDate }),
         ...(typeof params === 'object' && params),

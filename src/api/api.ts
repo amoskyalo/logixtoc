@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { urls } from '.';
-import { toast } from 'react-toastify';
+import { snackbarToast } from '@/components/Snackbar';
 export interface FetchParams {
     PageSize?: number;
     PageNO?: number;
@@ -67,7 +67,7 @@ export const useFetch = <T, U>(url: keyof typeof urls, params?: U & FetchParams)
                 const response = await axiosPrivate.get(urls[url], { params });
                 return response.data;
             } catch (error: any) {
-                toast.error(error?.message);
+                snackbarToast.error(error?.message);
             }
         },
     });
@@ -83,8 +83,8 @@ export const useMutate = <T>(url: keyof typeof urls | undefined | null) => {
                     const response = await axiosPrivate.post(urls[url], data);
                     return response;
                 }
-            } catch (error) {
-                console.log(`Failed to post data: ${error}`);
+            } catch (error: any) {
+                snackbarToast.error(error?.message);
             }
         },
     });

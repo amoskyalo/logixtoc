@@ -1,9 +1,9 @@
 import { statusColors } from '@/Constants';
 import { GridRowModel } from '@mui/x-data-grid';
 import { DatesInterface } from '@/components/DataGrids';
-import { toast } from 'react-toastify';
 import { mutateOptionsArgs } from './types';
 import { FormikProps } from 'formik';
+import { snackbarToast } from '@/components/Snackbar';
 import dayjs from 'dayjs';
 
 export const getStatusChipColor = (statusID: string | number) => {
@@ -35,13 +35,13 @@ export const mutateOptions = (args: mutateOptionsArgs) => {
 
    const options = {
       onSuccess: ({ data }: any) => {
-         toast.success(data.Message);
+         snackbarToast.success(data.Message);
          onClose();
          setLoading(false);
          refetch?.();
       },
       onError: (error: any) => {
-         toast.error(error.message);
+         snackbarToast.error(error.message);
          setLoading(false);
          onClose();
       },

@@ -1,6 +1,5 @@
-import { urls } from "@/api";
-import { GridColDef } from "@mui/x-data-grid";
-
+import { urls } from '@/api';
+import { GridColDef } from '@mui/x-data-grid';
 
 export type Column = GridColDef & { mobileWidth?: number };
 
@@ -33,9 +32,9 @@ export interface GridModelInterface<D, P> {
     columns: Column[];
     deleteUrl?: keyof typeof urls;
     initialDeleteParams?: D; // only passed if we are setting delete params from this side.
-    hasNew?: boolean;
     showDates?: boolean;
     pagination?: boolean;
+    showActions?: boolean;
     actions?: Array<'edit' | 'delete' | 'options'>;
     params?: P;
     options?: Array<{
@@ -44,23 +43,44 @@ export interface GridModelInterface<D, P> {
     }>;
 }
 
-export interface Input {
+export interface CommonInputTypes {
     label: string;
     key: string;
-    type: 'text' | 'select' | 'multiple' | 'number' | 'boolean' | 'singleLocation' | 'mulipleLocation' | 'customInput';
     validate: boolean;
-
-    lookups?: any[];
-
-    //for select
-    lookupDisplayName?: any;
-    lookupDisplayValue?: any;
-
-    //for multiple select
-    optionLabelKey?: any;
-    optionValueKey?: any;
-    optionKey?: string;
-
-    //render your own input;
-    renderInput?: (arg: any) => React.ReactNode;
 }
+
+export interface TextNNumber extends CommonInputTypes {
+    type: 'text' | 'number';
+}
+
+export interface CustomInput extends CommonInputTypes {
+    type: 'customInput';
+    renderInput: (arg: any) => React.ReactNode;
+}
+
+export interface BooleanInput extends CommonInputTypes {
+    type: 'boolean';
+}
+
+export interface MultiLocation extends CommonInputTypes {
+    type: 'mulipleLocation';
+}
+
+export interface SingleLocation extends CommonInputTypes {
+    type: 'singleLocation';
+}
+export interface Select extends CommonInputTypes {
+    type: 'select';
+    lookups: any[];
+    lookupDisplayName: any;
+    lookupDisplayValue: any;
+}
+export interface MultipleSelect extends CommonInputTypes {
+    type: 'multiple';
+    lookups: any[];
+    optionLabelKey: any;
+    optionValueKey: any;
+    optionKey: string;
+}
+
+export type Input = TextNNumber | CustomInput | BooleanInput | MultiLocation | SingleLocation | Select | MultipleSelect;

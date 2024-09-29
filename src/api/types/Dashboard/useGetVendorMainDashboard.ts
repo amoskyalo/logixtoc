@@ -101,7 +101,11 @@ export const useGetVendorMainDashboard = (
 
                 return res.data;
             } catch (error: any) {
-                snackbarToast.error(error.message);
+                if (error?.message === 'Network Error') {
+                    snackbarToast.error('Ooops! No internet connection.');
+                } else {
+                    snackbarToast.error(error?.message);
+                }
             }
         },
         ...options,

@@ -4,7 +4,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
 import './globals.css';
-import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
     title: 'Logixtoc Africa',

@@ -67,7 +67,11 @@ export const useFetch = <T, U>(url: keyof typeof urls, params?: U & FetchParams)
                 const response = await axiosPrivate.get(urls[url], { params });
                 return response.data;
             } catch (error: any) {
-                snackbarToast.error(error?.message);
+                if (error?.message === 'Network Error') {
+                    snackbarToast.error('Ooops! No internet connection.');
+                } else {
+                    snackbarToast.error(error?.message);
+                }
             }
         },
     });

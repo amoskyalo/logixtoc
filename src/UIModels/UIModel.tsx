@@ -6,13 +6,17 @@ import { GridColDef } from '@mui/x-data-grid';
 import { getInitialDates, mutateOptions, getFormikFieldProps } from '@/utils';
 import { DataGrid, DataGridActions } from '@/components/DataGrids';
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikProps } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
 import { Stack, MenuItem } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
 import { useResponsiveness } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
+
+type M<V> = V & {
+    vendorLocationID: number;
+};
 
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
@@ -29,7 +33,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         actions = ['delete', 'edit'],
         pagination = true,
         showDates = true,
-        hasNew = true,
+        showActions = true,
         options,
     } = gridModel;
 
@@ -61,6 +65,12 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         submitData(payload, mutateOptions({ refetch, onClose, setLoading: setFormLoading }));
     };
 
+    const handleDelete = () => {
+        setDeleteLoading(true);
+
+        deleteParams && deleteData(deleteParams, mutateOptions({ refetch, setLoading: setDeleteLoading, onClose }));
+    };
+
     const getIndexedRows = () => {
         return data?.Data?.map((row, index) => ({ id: index + 1, ...row }));
     };
@@ -71,12 +81,6 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         setDeleteParams(initialDeleteParams);
         setAnchorEl(null);
         setActiveRecord(null);
-    };
-
-    const handleDelete = () => {
-        setDeleteLoading(true);
-
-        deleteParams && deleteData(deleteParams, mutateOptions({ refetch, setLoading: setDeleteLoading, onClose }));
     };
 
     const v = (row: any) => {
@@ -93,6 +97,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     };
 
     const isOptionsOnly = actions.includes('options');
+    const hasNew = Boolean(formModel);
 
     const updatedColumns: GridColDef[] = [
         { field: 'id', headerName: 'No.', width: 50, sortable: false },
@@ -102,73 +107,75 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 ...(width ? { width } : (isMobile || isMiniTablet) && mobileWidth ? { width: mobileWidth } : { flex: 1 }),
             };
         }),
-        {
-            field: 'actions',
-            headerName: 'Actions',
-            type: 'actions',
-            getActions: ({ row }) => [
-                <DataGridActions
-                    key="actions"
-                    actions={actions}
-                    {...(!isOptionsOnly && {
-                        onDelete: () => {
-                            setDeleteOpen(true);
-                            setDeleteParams(v(row));
-                        },
-                    })}
-                    {...(isOptionsOnly && {
-                        onOptions: (el) => {
-                            setAnchorEl(el.currentTarget);
-                            setActiveRecord(row);
-                        },
-                    })}
-                />,
-            ],
-        },
+        ...(showActions
+            ? [
+                  {
+                      field: 'actions',
+                      headerName: 'Actions',
+                      type: 'actions' as const,
+                      getActions: (param: any) => [
+                          <DataGridActions
+                              key="actions"
+                              actions={actions}
+                              {...(!isOptionsOnly && {
+                                  onDelete: () => {
+                                      setDeleteOpen(true);
+                                      setDeleteParams(v(param.row));
+                                  },
+                              })}
+                              {...(isOptionsOnly && {
+                                  onOptions: (el) => {
+                                      setAnchorEl(el.currentTarget);
+                                      setActiveRecord(param.row);
+                                  },
+                              })}
+                          />,
+                      ],
+                  },
+              ]
+            : []),
     ];
 
-    const renderInput = (input: Input, formik: any) => {
-        const { key, type, label, lookups, lookupDisplayName, lookupDisplayValue, optionKey, optionLabelKey, optionValueKey, renderInput } = input;
+    const renderInput = (input: Input, formik: FormikProps<V>) => {
+        const { key, type, label } = input;
+
+        const inputKey = key as keyof V;
 
         switch (input.type) {
             case 'text':
             case 'number':
-                return <TextFieldInput label={label} {...getFormikFieldProps(formik, key as keyof V)} type={type} />;
+                return <TextFieldInput label={label} {...getFormikFieldProps(formik, inputKey)} type={type} />;
 
             case 'select':
-                if (!lookups || !lookupDisplayValue || !lookupDisplayName) {
-                    throw new Error('Missing props');
-                }
                 return (
-                    <SelectField label="Product Class" key={key} {...getFormikFieldProps(formik, key as keyof V)}>
-                        {lookups?.map((lookup) => (
-                            <MenuItem value={lookup[lookupDisplayValue] as string | number} key={lookup[lookupDisplayValue] as string | number}>
-                                {lookup[lookupDisplayName] as string | number}
+                    <SelectField label="Product Class" key={key} {...getFormikFieldProps(formik, inputKey)}>
+                        {input.lookups.map((lookup) => (
+                            <MenuItem
+                                value={lookup[input.lookupDisplayValue] as string | number}
+                                key={lookup[input.lookupDisplayValue] as string | number}
+                            >
+                                {lookup[input.lookupDisplayName] as string | number}
                             </MenuItem>
                         ))}
                     </SelectField>
                 );
 
             case 'multiple':
-                if (!lookups || !optionKey || !optionLabelKey || !optionValueKey) {
-                    throw new Error('Missing props');
-                }
-
                 return (
                     <AutoCompleteField
-                        options={lookups.map((lookup) => ({
-                            [optionKey]: lookup[optionValueKey],
-                            label: lookup[optionLabelKey],
+                        options={input.lookups.map((lookup) => ({
+                            [input.optionKey]: lookup[input.optionValueKey],
+                            label: lookup[input.optionLabelKey],
                         }))}
                         getOptionLabel={(option: any) => option.label}
                         label={label}
-                        {...getFormikFieldProps(formik, key, true)}
+                        {...getFormikFieldProps(formik, inputKey, true)}
                     />
                 );
 
             case 'boolean':
                 return (
-                    <SelectField label={label} {...getFormikFieldProps(formik, key)}>
+                    <SelectField label={label} {...getFormikFieldProps(formik, inputKey)}>
                         {[
                             { label: 'Yes', value: 1 },
                             { label: 'No', value: 0 },
@@ -181,17 +188,17 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 );
 
             case 'mulipleLocation':
-                return <SelectMultipleLocations {...formik} label={label}/>;
+                return <SelectMultipleLocations<any> {...formik} label={label} />;
 
             case 'singleLocation':
-                return <SelectSingleLocation {...formik} />;
+                return <SelectSingleLocation<any> {...formik} />;
 
             case 'customInput':
-                if (!isValidElement(renderInput!(formik))) {
+                if (!isValidElement(input.renderInput(formik))) {
                     throw new Error('Invalid element');
                 }
 
-                return renderInput!(formik);
+                return input.renderInput(formik);
 
             default:
                 throw new Error('Invalid input type');
@@ -210,10 +217,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}
             />
 
-            {formModel && (
-                <FormDialog open={formOpen} title={formModel?.title} onClose={onClose}>
+            {hasNew && (
+                <FormDialog open={formOpen} title={formModel!.title} onClose={onClose}>
                     <Formik
-                        initialValues={formModel?.initialValues}
+                        initialValues={formModel!.initialValues}
                         onSubmit={handleSubmit}
                         validationSchema={validationSchema()}
                         validateOnBlur={false}
@@ -222,7 +229,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                             return (
                                 <Form>
                                     <Stack spacing={3}>
-                                        {formModel?.inputs.map((input) => renderInput(input, formik))}
+                                        {formModel!.inputs.map((input) => renderInput(input, formik))}
                                         <SubmitButton loading={formLoading} />
                                     </Stack>
                                 </Form>
@@ -232,21 +239,23 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 </FormDialog>
             )}
 
-            <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={onClose}>
-                {options?.map(({ name, onClick }) => (
-                    <MenuItem
-                        key={name}
-                        sx={{ pr: 6 }}
-                        dense={isMobile}
-                        onClick={() => {
-                            setAnchorEl(null);
-                            onClick(activeRecord, setDeleteParams, setDeleteOpen);
-                        }}
-                    >
-                        {name}
-                    </MenuItem>
-                ))}
-            </Popover>
+            {isOptionsOnly && (
+                <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={onClose}>
+                    {options!.map(({ name, onClick }) => (
+                        <MenuItem
+                            key={name}
+                            sx={{ pr: 6 }}
+                            dense={isMobile}
+                            onClick={() => {
+                                setAnchorEl(null);
+                                onClick(activeRecord, setDeleteParams, setDeleteOpen);
+                            }}
+                        >
+                            {name}
+                        </MenuItem>
+                    ))}
+                </Popover>
+            )}
 
             <DeleteDialog loading={deleteLoading} open={deleteOpen} onCancel={onClose} onOkay={handleDelete} />
         </>

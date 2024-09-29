@@ -65,7 +65,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                 paddingX: '8px',
             }}
         >
-            <Stack direction={isMobile ? 'column' : 'row'} spacing={1}  justifyContent="flex-end" width={"100%"}>
+            <Stack direction={isMobile ? 'column' : 'row'} spacing={1}  justifyContent="space-between" width={"100%"}>
                 <Stack direction={'row'} spacing={1}>
                     {dates && (
                         <StyledCalendar isMobile={isMobile} searching={searching}>

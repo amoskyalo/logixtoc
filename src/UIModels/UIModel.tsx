@@ -14,10 +14,6 @@ import { Popover } from '@/components/Popover';
 import { useResponsiveness } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
 
-type M<V> = V & {
-    vendorLocationID: number;
-};
-
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
     // V is the interface of the form data we are sending to API;
@@ -46,7 +42,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [formOpen, setFormOpen] = useState(false);
     const [deleteParams, setDeleteParams] = useState<D | undefined>(initialDeleteParams);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [activeRecord, setActiveRecord] = useState<any>(null);
+    const [activeRecord, setActiveRecord] = useState<R | null>(null);
 
     const { isMobile, isMiniTablet } = useResponsiveness();
 
@@ -136,19 +132,17 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             : []),
     ];
 
-    const renderInput = (input: Input, formik: FormikProps<V>) => {
+    const renderInput = (input: Input<V>, formik: FormikProps<V>) => {
         const { key, type, label } = input;
-
-        const inputKey = key as keyof V;
 
         switch (input.type) {
             case 'text':
             case 'number':
-                return <TextFieldInput label={label} {...getFormikFieldProps(formik, inputKey)} type={type} />;
+                return <TextFieldInput label={label} {...getFormikFieldProps(formik, key)} type={type} />;
 
             case 'select':
                 return (
-                    <SelectField label="Product Class" key={key} {...getFormikFieldProps(formik, inputKey)}>
+                    <SelectField label={label} key={key as string | number} {...getFormikFieldProps(formik, key)}>
                         {input.lookups.map((lookup) => (
                             <MenuItem
                                 value={lookup[input.lookupDisplayValue] as string | number}
@@ -169,13 +163,13 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                         }))}
                         getOptionLabel={(option: any) => option.label}
                         label={label}
-                        {...getFormikFieldProps(formik, inputKey, true)}
+                        {...getFormikFieldProps(formik, key, true)}
                     />
                 );
 
             case 'boolean':
                 return (
-                    <SelectField label={label} {...getFormikFieldProps(formik, inputKey)}>
+                    <SelectField label={label} {...getFormikFieldProps(formik, key)}>
                         {[
                             { label: 'Yes', value: 1 },
                             { label: 'No', value: 0 },

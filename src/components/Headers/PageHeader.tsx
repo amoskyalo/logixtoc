@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useResponsiveness } from '@/hooks';
 import { IoReturnUpBack } from 'react-icons/io5';
@@ -23,17 +23,18 @@ const PageHeader = ({ headerName, subTitle, backURL }: PropsInterface) => {
     return (
         <Box>
             <Stack alignItems={'center'} direction={'row'} rowGap={8}>
-                <HeaderTypography variant={isMobile ? 'h5' : 'h4'}>{headerName}</HeaderTypography>
+                <HeaderTypography variant={'h5'}>{headerName}</HeaderTypography>
                 {backURL && (
-                    <Button
+                    <Chip
                         onClick={() => router.push(backURL)}
-                        endIcon={<IoReturnUpBack />}
-                        sx={{ maxHeight: 30, textTransform: 'capitalize', ml: 3 }}
+                        sx={{ maxHeight: 30, textTransform: 'capitalize', ml: 2 }}
                         size="small"
                         variant="outlined"
-                    >
-                        Back
-                    </Button>
+                        color="primary"
+                        label="Back"
+                        onDelete={() => router.push(backURL)}
+                        deleteIcon={<IoReturnUpBack />}
+                    />
                 )}
             </Stack>
             {subTitle && (

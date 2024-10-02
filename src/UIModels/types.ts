@@ -1,5 +1,6 @@
 import { urls } from '@/api';
 import { GridColDef } from '@mui/x-data-grid';
+import { FormikProps } from 'formik';
 
 export type Column = GridColDef & { mobileWidth?: number };
 
@@ -14,7 +15,7 @@ export interface FormModelInterface<V> {
     submitKey: keyof typeof urls;
     initialValues: any;
     modifyData?: (arg: V) => any;
-    inputs: Array<Input>;
+    inputs: Array<Input<V>>;
 }
 
 export interface APIResponse<R> {
@@ -43,39 +44,40 @@ export interface GridModelInterface<D, P> {
     }>;
 }
 
-export interface CommonInputTypes {
+export interface CommonInputTypes<V> {
     label: string;
-    key: string;
+    key: keyof V;
     validate: boolean;
 }
 
-export interface TextNNumber extends CommonInputTypes {
+export interface TextNNumber {
     type: 'text' | 'number';
 }
 
-export interface CustomInput extends CommonInputTypes {
+export interface CustomInput<V> {
     type: 'customInput';
-    renderInput: (arg: any) => React.ReactNode;
+    dataType: 'object' | 'string' | 'array' | 'number';
+    renderInput: (arg: FormikProps<V>) => React.ReactNode;
 }
 
-export interface BooleanInput extends CommonInputTypes {
+export interface BooleanInput {
     type: 'boolean';
 }
 
-export interface MultiLocation extends CommonInputTypes {
+export interface MultiLocation {
     type: 'mulipleLocation';
 }
 
-export interface SingleLocation extends CommonInputTypes {
+export interface SingleLocation {
     type: 'singleLocation';
 }
-export interface Select extends CommonInputTypes {
+export interface Select {
     type: 'select';
     lookups: any[];
     lookupDisplayName: any;
     lookupDisplayValue: any;
 }
-export interface MultipleSelect extends CommonInputTypes {
+export interface MultipleSelect {
     type: 'multiple';
     lookups: any[];
     optionLabelKey: any;
@@ -83,4 +85,4 @@ export interface MultipleSelect extends CommonInputTypes {
     optionKey: string;
 }
 
-export type Input = TextNNumber | CustomInput | BooleanInput | MultiLocation | SingleLocation | Select | MultipleSelect;
+export type Input<V> = CommonInputTypes<V> & (TextNNumber | CustomInput<V> | BooleanInput | MultiLocation | SingleLocation | Select | MultipleSelect);

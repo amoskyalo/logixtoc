@@ -78,13 +78,32 @@ export const urls = {
 
     //regions
     getVendorRegions: 'Region/GetVendorRegion',
+    removeVendorRegion: 'Region/RemoveVendorRegion',
+    getVendorRegionBranch: 'Region/GetVendorRegionBranch',
+    addVendorRegionBranch: 'Region/AddVendorRegionBranch',
+    removeVendorRegionBranch: 'Region/RemoveVendorRegionBranch',
 
     //accounts
     getVendorAccounts: 'Finance/GetVendorAccount',
-
-    //account types
     getVendorAccountTypes: 'Finance/GetVendorAccountType',
     getAccountType: 'Finance/GetAccountType',
     postVendorAccountType: '/Finance/PostVendorAccountType',
     deleteVendorAccountType: 'Finance/RemoveVendorAccountType',
+
+    //customers
+    getVendorCustomer: 'Customer/GetVendorCustomer',
+    getVendorCustomerLocation: 'Customer/GetVendorCustomerLocation',
+    addVendorCustomerLocation: 'Customer/AddVendorCustomerLocation',
+    getVendorCustomerPayment: 'Customer/GetVendorCustomerPayment',
+    removeVendorCustomerPayment: 'Customer/RemoveVendorCustomerPayment',
+    addVendorCustomerPayment: 'Customer/AddVendorCustomerPayment',
+    getVendorCustomerNote: 'Customer/GetVendorCustomerNote',
+    addVendorCustomerNote: 'Customer/AddVendorCustomerNote',
+    removeVendorCustomerNote: 'Customer/RemoveVendorCustomerNote',
+    getVendorCustomerStatement: 'Customer/GetVendorCustomerStatement',
+    getVendorCustomerProductSummary: 'Customer/GetVendorCustomerProductSummary',
+    getVendorCustomerProductStatement: 'Customer/GetVendorCustomerProductStatement',
+    getVendorCustomerCategory: 'Customer/GetVendorCustomerCategory',
+    postVendorCustomerCategory: 'Customer/PostVendorCustomerCategory',
+    removeVendorCustomerCategory: 'Customer/RemoveVendorCustomerCategory',
 };

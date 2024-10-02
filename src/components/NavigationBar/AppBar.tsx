@@ -15,6 +15,9 @@ import {
     IconButton,
     Badge,
     BoxProps,
+    Stack,
+    Divider,
+    Chip,
 } from '@mui/material';
 import { Popover } from '../Popover';
 import { countries, profileOptions } from '@/Constants';
@@ -39,7 +42,6 @@ const Bar = styled(Box)<BoxProps & { isSmallScreen: boolean }>(({ theme, isSmall
     position: 'sticky',
     top: 0,
     width: '100%',
-    // boxShadow: theme.palette.mode === 'dark' && isSmallScreen ? '0px 0px 24px rgba(0, 0, 0, 1)' : '0px 0px 4px rgba(0, 0, 0, 0.3)',
     boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.3)',
     backdropFilter: 'blur(24px)',
     WebkitBackdropFilter: 'blur(24px)',
@@ -162,30 +164,70 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
 
             <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} handleClose={() => setAnchorEl(null)}>
                 <MenuList>
-                    {menuType === 'profile'
-                        ? profileOptions.map(({ Icon, name }) => (
-                              <MenuItem
-                                  key={name}
-                                  dense={isMobile}
-                                  onClick={() => {
-                                      setAnchorEl(null);
-                                      setActiveProfileOption(name);
-                                  }}
-                              >
-                                  <ListItemIcon>
-                                      <Icon />
-                                  </ListItemIcon>
-                                  <ListItemText>{name}</ListItemText>
-                              </MenuItem>
-                          ))
-                        : countries.map(({ name, flag }) => (
-                              <MenuItem key={name} dense={isMobile}>
-                                  <ListItemIcon>
-                                      <Image src={flag} height={16} width={24} alt={user?.CountryFlag} />
-                                  </ListItemIcon>
-                                  <ListItemText>{name}</ListItemText>
-                              </MenuItem>
-                          ))}
+                    {menuType === 'profile' ? (
+                        <>
+                            <Box sx={{ width: '100%', paddingX: 2 }}>
+                                <Stack direction={'row'} spacing={1} alignItems={'center'}>
+                                    <Avatar sx={{ width: 32, height: 32 }} src={user?.ImageURL} className="profile" />
+                                    <Stack>
+                                        <Stack direction="row" spacing={1}>
+                                            <Typography variant="body2">{`${user?.FirstName} ${user?.LastName}`}</Typography>
+                                            <Chip label="Admin" variant="outlined" color='primary' size="small" sx={{ fontSize: '10px' }} />
+                                        </Stack>
+                                        <Typography variant="caption">{user?.Email}</Typography>
+                                    </Stack>
+                                </Stack>
+
+                                <Divider sx={{ mt: 2, mb: 1 }} />
+                            </Box>
+                            {profileOptions.slice(0, 2).map(({ Icon, name }) => (
+                                <MenuItem
+                                    key={name}
+                                    dense={isMobile}
+                                    onClick={() => {
+                                        setAnchorEl(null);
+                                        setActiveProfileOption(name);
+                                    }}
+                                    sx={{ py: 1 }}
+                                >
+                                    <ListItemIcon>
+                                        <Icon />
+                                    </ListItemIcon>
+                                    <ListItemText>{name}</ListItemText>
+                                </MenuItem>
+                            ))}
+
+                            <Box sx={{ px: 2, py: 1 }}>
+                                <Divider />
+                            </Box>
+
+                            {profileOptions.slice(-1).map(({ Icon, name }) => (
+                                <MenuItem
+                                    key={name}
+                                    dense={isMobile}
+                                    onClick={() => {
+                                        setAnchorEl(null);
+                                        setActiveProfileOption(name);
+                                    }}
+                                    sx={{ color: 'red !important', py: 1 }}
+                                >
+                                    <ListItemIcon>
+                                        <Icon sx={{ color: 'red !important' }} />
+                                    </ListItemIcon>
+                                    <ListItemText>{name}</ListItemText>
+                                </MenuItem>
+                            ))}
+                        </>
+                    ) : (
+                        countries.map(({ name, flag }) => (
+                            <MenuItem key={name} dense={isMobile}>
+                                <ListItemIcon>
+                                    <Image src={flag} height={16} width={24} alt={user?.CountryFlag} />
+                                </ListItemIcon>
+                                <ListItemText>{name}</ListItemText>
+                            </MenuItem>
+                        ))
+                    )}
                 </MenuList>
             </Popover>
 

@@ -11,7 +11,7 @@ type Props = {
 
 const TablessContainer = ({ headerName, subTitle, backURL, children }: Props) => {
     return (
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{mt: 2}}>
             <PageHeader headerName={headerName} subTitle={subTitle} backURL={backURL} />
             {children}
         </Stack>

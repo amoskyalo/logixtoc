@@ -1,9 +1,8 @@
 'use client';
 
 import { DeliveryPlan, APPCRUD } from '@/api';
-import { Stack } from '@mui/material';
-import { PageHeader } from '@/components/Headers';
 import { StatusChips } from '@/components/Chips';
+import { TablessContainer } from '@/components/Containers';
 
 type Params = {
     VendorLocationID: number;
@@ -42,10 +41,9 @@ const Planning = () => {
     });
 
     return (
-        <Stack spacing={3}>
-            <PageHeader headerName="Planning" subTitle="Manage your delivery plans, view, add and delete." />
+        <TablessContainer headerName="Planning" subTitle="Manage your delivery plans, view, add and delete.">
             {UI.render()}
-        </Stack>
+        </TablessContainer>
     );
 };
 

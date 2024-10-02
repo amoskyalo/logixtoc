@@ -91,32 +91,32 @@ export const routes = [
     {
         name: "Customers",
         Icon: Groups2,
-        path: "/customers",
+        path: "/dashboard/customers",
         subTabs: [
             {
                 name: "Customers",
-                path: "/customers"
+                path: "/dashboard/customers"
             },
             {
                 name: "Regions",
-                path: "/customers/regions"
+                path: "/dashboard/customers/regions"
             }
         ]
     },
     {
         name: "Suppliers",
         Icon: FilterCenterFocus,
-        path: "/suppliers",
+        path: "/dashboard/suppliers",
         subTabs: [
             {
                 name: "Suppliers",
                 Icon: Category,
-                path: "/suppliers/suppliers",
+                path: "/dashboard/suppliers",
             },
             {
                 name: "Purchases",
                 Icon: EmojiTransportation,
-                path: "/suppliers/purchases/purchases",
+                path: "/dashboard/suppliers/purchases",
             }
         ]
     },
@@ -128,12 +128,12 @@ export const routes = [
             {
                 name: "Sales",
                 Icon: Loyalty,
-                path: "/reconciliation/sales/summary",
+                path: "/dashboard/reconciliation/sales/summary",
             },
             {
                 name: "Stocks",
                 Icon: ShowChart,
-                path: "/reconciliation/stocks/stock summary",
+                path: "/dashboard/reconciliation/stocks/stock-summary",
             }
         ]
     },
@@ -144,7 +144,7 @@ export const routes = [
         subTabs: [
             {
                 name: "Commission",
-                path: "/commission/commission/commission range",
+                path: "/dashboard/commission/commission-range",
             },
             {
                 name: "Allowance",
@@ -155,15 +155,19 @@ export const routes = [
     {
         name: "Human Resource",
         Icon: Badge,
-        path: "/employees",
+        path: "/dashboard/employees",
         subTabs: [
             {
                 name: "Employees",
-                path: "/employees",
+                path: "/dashboard/human-resource/employees",
             },
             {
                 name: "User Wallet",
-                path: "/employees/wallets",
+                path: "/dashboard/human-resource/user-wallet",
+            },
+            {
+                name: "Leave Request",
+                path: "/dashboard/human-resource/leave-request",
             }
         ]
     },
@@ -176,18 +180,23 @@ export const routes = [
             {
                 name: "Fuel Request",
                 icon: EvStation,
-                path: "/maintenance/fuel request/fuel request",
+                path: "/dashboard/maintenance/fuel-request",
+            },
+            {
+                name: "Consumption",
+                path: "/dashboard/maintenance/consumption/fuel-consumption",
+                icon: EvStation,
             },
             {
                 name: "Asset maintainance",
                 icon: WebAsset,
-                path: "/maintenance/asset maintainance/maintenance request",
+                path: "/dashboard/maintenance/asset-maintenance/maintenance-request",
             }
         ]
     },
 
     {
-        name: "Insights",
+        name: "Analytics",
         Icon: Insights,
         path: "/insights",
         subTabs: [
@@ -195,7 +204,7 @@ export const routes = [
             {
                 name: "Notification",
                 icon: NotificationAddRounded,
-                path: "/insights/notification/notification users",
+                path: "/dashboard/analytics/notifications/notifications-users",
             },
             {
                 name: "Tracking",
@@ -213,11 +222,11 @@ export const routes = [
     {
         name: "Help Center",
         Icon: Help,
-        path: "/helper-center"
+        path: "/dashboard/help-center"
     },
     {
         name: "Settings",
         Icon: Settings,
-        path: "/settings"
+        path: "/dashboard/settings"
     },
 ];

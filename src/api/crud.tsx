@@ -13,16 +13,26 @@ export const APPCRUD = class<R, V, D, P> {
 
     render() {
         const validationSchema = () => {
-            const v = this.config.form?.inputs.reduce((acc, { key, type, validate }) => {
+            const v = this.config.form?.inputs.reduce((acc, input) => {
+                const { key, type, validate } = input;
+
+                const string_v = string().required('This field is required');
+                const num_v = number().required('This field is required');
+                const arr_v = array().min(0, 'At least one item must be selected');
+
                 acc[key] =
                     validate &&
-                    (type === 'text'
-                        ? string().required('This field is required')
-                        : type === 'select' || type === 'singleLocation'
-                          ? string().required('This field is required')
-                          : type === 'number'
-                            ? number().required('This field is required')
-                            : array().min(0, 'At least one item must be selected'));
+                    (type === 'text' || type === 'select' || type === 'singleLocation'
+                        ? string_v
+                        : type === 'number'
+                          ? num_v
+                          : type === 'customInput'
+                            ? input.dataType === 'array'
+                                ? arr_v
+                                : input.dataType === 'number'
+                                  ? num_v
+                                  : string_v
+                            : null);
                 return acc;
             }, {} as any);
 

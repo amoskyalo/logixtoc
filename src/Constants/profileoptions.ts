@@ -2,11 +2,11 @@ import { Settings, Logout, Help } from '@mui/icons-material';
 
 export const profileOptions = [
     {
-        name: 'Settings',
+        name: 'Account Settings',
         Icon: Settings,
     },
     {
-        name: 'Help',
+        name: 'Help & Support',
         Icon: Help,
     },
     {

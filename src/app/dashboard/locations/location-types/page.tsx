@@ -1,9 +1,8 @@
 'use client';
 
 import { SystemLocationType, VendorLocationType, useFetch, APPCRUD } from '@/api';
-import { PageHeader } from '@/components/Headers';
-import { Stack } from '@mui/material';
 import { StatusChips } from '@/components/Chips';
+import { TablessContainer } from '@/components/Containers';
 
 type Values = {
     ocationTypeID: number;
@@ -63,10 +62,9 @@ const LocationTypes = () => {
     });
 
     return (
-        <Stack spacing={3}>
-            <PageHeader headerName="Location Types" subTitle="Manage vendor locations, and location assignments." />
+        <TablessContainer headerName="Location Types" subTitle="Manage vendor locations, and location assignments.">
             {UI.render()}
-        </Stack>
+        </TablessContainer>
     );
 };
 

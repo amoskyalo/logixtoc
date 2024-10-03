@@ -1,46 +1,39 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Breadcrumbs, Link, Typography, Stack } from '@mui/material';
-import { StyledBreadcrumb } from '@/components/Breadcrumbs';
-import { useResponsiveness } from '@/hooks';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import { TablessContainer } from '@/components/Containers';
+import { APPCRUD, VendorProductCategoryTypeDetail } from '@/api';
 
 const CategoryTypeDetail = () => {
-   const VendorProductCategoryTypeID = useSearchParams().get('VendorProductCategoryTypeID');
-   const VendorProductCategoryID = useSearchParams().get('VendorProductCategoryID');
-   const { isMobile } = useResponsiveness();
+    const VendorProductCategoryTypeID = useSearchParams().get('VendorProductCategoryTypeID') as unknown as number;
+    const VendorProductCategoryID = useSearchParams().get('VendorProductCategoryID');
 
-   return (
-      <div>
-         <Breadcrumbs aria-label="breadcrumb" maxItems={isMobile ? 2 : 10}>
-            {/* <Link underline="hover" color="inherit">
-               <NextLink href="/dashboard/inventory/products/product-category">
-                  Product Category
-               </NextLink>
-            </Link>
-            <Link underline="hover" color="inherit">
-               <NextLink
-                  href={{
-                     query: { VendorProductCategoryID },
-                     pathname: '/dashboard/inventory/products/product-category/sale-category-type',
-                  }}
-               >
-                  Sale Category Type
-               </NextLink>
-            </Link>
-            <Typography color="#10333f">Category Type Detail</Typography> */}
+    const UI = new APPCRUD<VendorProductCategoryTypeDetail, void, void, { VendorProductCategoryTypeID: number }>({
+        grid: {
+            showDates: false,
+            fetchUrl: 'getVendorProductCategoryTypeDetail',
+            params: { VendorProductCategoryTypeID },
+            columns: [
+                { field: 'VendorProductCategoryTypeName', headerName: 'Category Type', width: 150 },
+                { field: 'VendorProductCategoryName', headerName: 'Category Name', width: 150 },
+                { field: 'VendorProductTypeName', headerName: 'Product Type Name', width: 180 },
+                { field: 'VendorProductUOMName', headerName: 'Product UOM Name', width: 180 },
+                { field: 'UOMTypeName', headerName: 'UOM Type Name', width: 180 },
+                { field: 'UOMSize', headerName: 'UOM Size', width: 150 },
+                { field: 'VendorProductTypeCount', headerName: 'Product Type Count', width: 180 },
+                { field: 'IsReturn', headerName: 'Is Return', type: 'boolean', width: 150, valueGetter: (__, row) => row.IsReturn === 1 },
+            ],
+        },
+    });
 
-            <StyledBreadcrumb
-               component="a"
-               label="Products Category"
-               icon={<ProductionQuantityLimitsIcon fontSize="small" />}
-            />
-            <StyledBreadcrumb component="a" label="Sale Category Type" />
-            <StyledBreadcrumb label="Category Type Detail" />
-         </Breadcrumbs>
-      </div>
-   );
+    return (
+        <TablessContainer
+            headerName="Category Type Details"
+            backURL={`/dashboard/inventory/products/product-category/sale-category-type?VendorProductCategoryID=${VendorProductCategoryID}`}
+        >
+            {UI.render()}
+        </TablessContainer>
+    );
 };
 
 export default CategoryTypeDetail;

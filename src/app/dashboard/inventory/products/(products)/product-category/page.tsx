@@ -9,11 +9,16 @@ const ProductCategory = () => {
     const UI = new APPCRUD({
         grid: {
             showDates: false,
-            hasNew: false,
             fetchUrl: 'getVendorProductCategory',
             actions: ['options'],
             options: [
-                { name: 'Sale Category Type', onClick: () => router.push('/dashboard/inventory/products/product-category/sale-category-type') },
+                {
+                    name: 'Sale Category Type',
+                    onClick: (activeRecord) =>
+                        router.push(
+                            `/dashboard/inventory/products/product-category/sale-category-type?VendorProductCategoryID=${activeRecord.VendorProductCategoryID}`,
+                        ),
+                },
                 { name: 'Edit', onClick: () => null },
                 { name: 'Delete', onClick: () => null },
             ],

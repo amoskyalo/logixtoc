@@ -1,10 +1,8 @@
 'use client';
 
-import { Breadcrumbs, Link, Typography, Stack } from '@mui/material';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useFetch, ProductUOM, VendorProductCategoryType, APPCRUD } from '@/api';
-import { StyledBreadcrumb } from '@/components/Breadcrumbs';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import { TablessContainer } from '@/components/Containers';
 
 type Values = {
     isAdminSaleOnly: number;
@@ -39,24 +37,24 @@ const SaleCategoryType = () => {
                 { name: 'Delete', onClick: () => null },
             ],
             columns: [
-                { field: 'VendorProductCategoryTypeName', headerName: 'Category Type Name', mobileWidth: 200 },
-                { field: 'VendorProductCategoryName', headerName: 'Category Name', mobileWidth: 170 },
-                { field: 'VendorProductUOMName', headerName: 'Product UOM Name', mobileWidth: 200 },
-                { field: 'UOMTypeName', headerName: 'UOM Type Name', mobileWidth: 170 },
-                { field: 'UOMSize', headerName: 'UOM Size', type: 'number', mobileWidth: 170 },
+                { field: 'VendorProductCategoryTypeName', headerName: 'Category Type Name', width: 200 },
+                { field: 'VendorProductCategoryName', headerName: 'Category Name', width: 170 },
+                { field: 'VendorProductUOMName', headerName: 'Product UOM Name', width: 200 },
+                { field: 'UOMTypeName', headerName: 'UOM Type Name', width: 170 },
+                { field: 'UOMSize', headerName: 'UOM Size', type: 'number', width: 170 },
                 {
                     field: 'isAdminSaleOnly',
                     headerName: 'Admin Sale Only',
                     type: 'boolean',
                     valueGetter: (__, row) => row.isAdminSaleOnly === 1,
-                    mobileWidth: 170,
+                    width: 170,
                 },
                 {
                     field: 'VendorProductCategoryTypeDetailArray',
                     headerName: 'Detail Count',
                     type: 'number',
                     valueGetter: (__, row) => row.VendorProductCategoryTypeDetailArray.length,
-                    mobileWidth: 140,
+                    width: 140,
                 },
             ],
         },
@@ -91,21 +89,9 @@ const SaleCategoryType = () => {
     });
 
     return (
-        <Stack spacing={3} sx={{ mt: 1 }}>
-            <Breadcrumbs aria-label="breadcrumb">
-                {/* <Link underline="hover" color="inherit">
-                  <NextLink href="/dashboard/inventory/products/product-category">
-                     Product Category
-                  </NextLink>
-               </Link>
-               <Typography color="#10333f">Sale Category Type</Typography> */}
-
-                <StyledBreadcrumb component="a" label="Products Category" icon={<ProductionQuantityLimitsIcon fontSize="small" />} />
-                <StyledBreadcrumb component="a" label="Sale Category Type" />
-            </Breadcrumbs>
-
+        <TablessContainer headerName="Sale Category Type" backURL="/dashboard/inventory/products/product-category">
             {UI.render()}
-        </Stack>
+        </TablessContainer>
     );
 };
 

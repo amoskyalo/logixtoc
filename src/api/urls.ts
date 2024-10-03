@@ -75,6 +75,7 @@ export const urls = {
     getVendorProductCategory: 'Product/GetVendorProductCategory',
     getVendorProductCategoryType: 'Product/GetVendorProductCategoryType',
     addVendorProductCategoryType: 'Product/AddVendorProductCategoryType',
+    getVendorProductCategoryTypeDetail: 'Product/GetVendorProductCategoryTypeDetail',
 
     //regions
     getVendorRegions: 'Region/GetVendorRegion',
@@ -106,4 +107,10 @@ export const urls = {
     getVendorCustomerCategory: 'Customer/GetVendorCustomerCategory',
     postVendorCustomerCategory: 'Customer/PostVendorCustomerCategory',
     removeVendorCustomerCategory: 'Customer/RemoveVendorCustomerCategory',
+
+    //suppliers
+    getVendorSupplier: 'Supplier/GetVendorSupplier',
+    postVendorSupplierTx: 'Supplier/PostVendorSupplierTx',
+    removeVendorSupplier: 'Supplier/RemoveVendorSupplier',
+    getVendorSupplierStatement: 'Supplier/GetVendorSupplierStatement',
 };

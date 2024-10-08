@@ -56,24 +56,17 @@ export const urls = {
     //products
     getProductClass: 'Product/GetProductClass',
     getProductUOMType: 'Product/GetProductUOMType',
-
-    // 1. Brand
     getProductBrands: 'Product/GetVendorProductBrand',
     postProductsBrand: 'Product/AddVendorProductBrand',
     deleteProductsBrand: 'Product/RemoveVendorProductBrand',
-
-    // 2. UOM
     getProductUOM: 'Product/GetVendorProductUOM',
     postProductUOM: 'Product/AddVendorProductUOM',
     deleteProductUOM: 'Product/RemoveVendorProductUOM',
-
-    // 3. Product Types
     getVendorProductTypes: 'Product/GetVendorProductType',
     addVendorProductTypes: 'Product/AddVendorProductType',
     deleteVendorProductTypes: 'Product/RemoveVendorProductType',
-
-    // 4. Product Category
     getVendorProductCategory: 'Product/GetVendorProductCategory',
+    addVendorProductCategory: 'Product/AddVendorProductCategory',
     getVendorProductCategoryType: 'Product/GetVendorProductCategoryType',
     addVendorProductCategoryType: 'Product/AddVendorProductCategoryType',
     getVendorProductCategoryTypeDetail: 'Product/GetVendorProductCategoryTypeDetail',

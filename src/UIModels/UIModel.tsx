@@ -157,7 +157,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     });
 
     const updatedFormColumns: GridColDef[] = [
-        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true })),
+        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true, sortable: false })),
         {
             field: 'actions',
             type: 'actions',

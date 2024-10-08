@@ -35,6 +35,7 @@ const AssignedProducts = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postAssignedProducts',
             title: 'Add New Location Product Type',
             initialValues: { vendorLocationID: '' as unknown as number, productTypeArray: [] },

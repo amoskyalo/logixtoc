@@ -54,6 +54,7 @@ const AccountTypes = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postVendorAccountType',
             title: 'Add Account Type',
             initialValues: { accountTypeID: '', vendorAccountTypeName: '' },

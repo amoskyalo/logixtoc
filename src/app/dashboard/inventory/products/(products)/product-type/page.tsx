@@ -84,6 +84,7 @@ const ProductType = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add Product Type',
             submitKey: 'addVendorProductTypes',
             initialValues: {

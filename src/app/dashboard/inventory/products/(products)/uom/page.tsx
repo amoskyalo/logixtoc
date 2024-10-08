@@ -29,6 +29,7 @@ const UOM = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add Product UOM',
             submitKey: 'postProductUOM',
             initialValues: { uomSize: '' as unknown as number, vendorProductUOMName: '', productUOMTypeID: '' as unknown as number },

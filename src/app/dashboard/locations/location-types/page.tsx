@@ -5,7 +5,7 @@ import { StatusChips } from '@/components/Chips';
 import { TablessContainer } from '@/components/Containers';
 
 type Values = {
-    ocationTypeID: number;
+    locationTypeID: number;
     vendorLocationTypeName: string;
 };
 
@@ -43,6 +43,7 @@ const LocationTypes = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postVendorLocationType',
             title: 'Add new location type',
             initialValues: { locationTypeID: '' as unknown as number, vendorLocationTypeName: '' },

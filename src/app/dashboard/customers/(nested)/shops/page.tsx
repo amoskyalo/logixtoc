@@ -35,6 +35,7 @@ const CustomerShops = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'addVendorCustomerLocation',
             title: 'Add Customer Shops',
             modifyData(data) {

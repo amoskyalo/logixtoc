@@ -59,6 +59,7 @@ const SaleCategoryType = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add New Product Category Type',
             submitKey: 'addVendorProductCategoryType',
             initialValues: {

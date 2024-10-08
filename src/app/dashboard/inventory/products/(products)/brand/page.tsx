@@ -31,6 +31,7 @@ const Brand = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add Product Brand',
             modifyData: (data: any) => ({ ...data, AddedBy }),
             initialValues: { productClassID: '' as unknown as number, vendorProductBrandName: '' },

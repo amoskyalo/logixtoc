@@ -35,6 +35,7 @@ const AssignedLocations = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add New Assigned Location',
             submitKey: 'postAssignedLocations',
             initialValues: { locationsArray: [], vendorLocationID: '' as unknown as number },

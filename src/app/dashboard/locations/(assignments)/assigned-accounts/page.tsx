@@ -44,6 +44,7 @@ const AssignedAccounts = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add New Assigned Accounts',
             submitKey: 'postAssignedAccount',
             initialValues: { vendorAccountArray: [], vendorLocationID: '' as unknown as number },

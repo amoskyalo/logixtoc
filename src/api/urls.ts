@@ -87,6 +87,8 @@ export const urls = {
 
     //accounts
     getVendorAccounts: 'Finance/GetVendorAccount',
+    postVendorAccount: 'Finance/PostVendorAccount',
+    removeVendorAccount: 'Finance/RemoveVendorAccount',
     getVendorAccountTypes: 'Finance/GetVendorAccountType',
     getAccountType: 'Finance/GetAccountType',
     postVendorAccountType: '/Finance/PostVendorAccountType',

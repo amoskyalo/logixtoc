@@ -29,10 +29,9 @@ export interface GridModelInterface<D, P> {
     params?: P;
     options?: Array<{
         name: string;
-        onClick: (arg1?: any, arg2?: any, arg3?: any) => void;
+        onClick?: (arg1?: any, arg2?: any, arg3?: any) => void;
     }>;
 }
-
 export interface Form<V> {
     dialogSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     title: string;
@@ -56,6 +55,7 @@ export interface StepperForm<V> {
     type: 'stepperForm';
     steps: Array<NormalForm<V> | GridForm>;
     stepsLabels: string[];
+    stepBasedDialogSize?: (arg: number) => 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export type FormModelInterface<V> = Form<V> & (NormalForm<V> | StepperForm<V> | GridForm);

@@ -63,6 +63,12 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const hasNew = Boolean(formModel);
     const formType = formModel?.type;
     const toolbar = () => <EditToolbar handleClick={handleAddRecord} />;
+    const dialogSize =
+        formType === 'stepperForm' && typeof formModel?.stepBasedDialogSize === 'function'
+            ? formModel.stepBasedDialogSize(activeStep)
+            : formModel?.dialogSize
+              ? formModel.dialogSize
+              : 'xs';
 
     const handleSubmit = (data: V) => {
         setFormLoading(true);
@@ -88,6 +94,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         setActiveRecord(null);
         setActiveStep(0);
         setFormRows([]);
+        setRowModels({});
     };
 
     const v = (row: any) => {
@@ -150,7 +157,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     });
 
     const updatedFormColumns: GridColDef[] = [
-        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true, sortable: false })),
+        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true })),
         {
             field: 'actions',
             type: 'actions',
@@ -277,6 +284,25 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }
     };
 
+    const renderGridForm = () => (
+        <DataGrid
+            columns={updatedFormColumns}
+            rows={formRows}
+            slots={{ toolbar }}
+            slotProps={{
+                toolbar: { setRows: setFormRows, setRowModesModel: setRowModels },
+            }}
+            rowModesModel={rowModels}
+            onRowModesModelChange={handleRowModesModelChange}
+            processRowUpdate={processRowUpdate}
+            onRowEditStop={handleRowEditStop}
+            checkboxSelection={false}
+            hideFooter
+            editMode="row"
+            autoHeight
+        />
+    );
+
     const renderFormUI = () => {
         switch (formModel?.type) {
             case 'normal':
@@ -303,20 +329,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             case 'gridForm':
                 return (
                     <Stack direction="column" spacing={3}>
-                        <DataGrid
-                            columns={updatedFormColumns}
-                            rows={formRows}
-                            slots={{ toolbar }}
-                            rowModesModel={rowModels}
-                            onRowModesModelChange={handleRowModesModelChange}
-                            processRowUpdate={processRowUpdate}
-                            onRowEditStop={handleRowEditStop}
-                            checkboxSelection={false}
-                            density="compact"
-                            hideFooter
-                            autoHeight
-                        />
-
+                        {renderGridForm()}
                         <Stack justifyContent={'flex-end'} direction={'row'}>
                             <Box sx={{ width: 150 }}>
                                 <SubmitButton
@@ -336,23 +349,6 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 const normalForm = formModel.steps.find((step) => step.type === 'normal');
                 const formIndex = formModel.steps.findIndex((step) => step.type === 'normal');
                 const gridFormIndex = formModel.steps.findIndex((step) => step.type === 'gridForm');
-
-                const renderGridForm = () => (
-                    <Stack direction="column" spacing={3}>
-                        <DataGrid
-                            columns={updatedFormColumns}
-                            rows={formRows}
-                            slots={{ toolbar }}
-                            rowModesModel={rowModels}
-                            onRowModesModelChange={handleRowModesModelChange}
-                            processRowUpdate={processRowUpdate}
-                            onRowEditStop={handleRowEditStop}
-                            checkboxSelection={false}
-                            hideFooter
-                            autoHeight
-                        />
-                    </Stack>
-                );
 
                 if (normalForm) {
                     return (
@@ -386,7 +382,11 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                                         <Form>
                                             <Stack spacing={3} sx={{ mt: getMarginTop(formIndex, gridFormIndex) }}>
                                                 {activeStep === formIndex && normalForm.inputs.map((input) => renderInputUI(input, formik))}
-                                                {activeStep === gridFormIndex && renderGridForm()}
+                                                {activeStep === gridFormIndex && (
+                                                    <Stack direction="column" spacing={3}>
+                                                        {renderGridForm()}
+                                                    </Stack>
+                                                )}
                                             </Stack>
                                         </Form>
                                     </HorizontalLinearStepper>
@@ -416,26 +416,41 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             />
 
             {hasNew && (
-                <FormDialog open={formOpen} title={formModel!.title} onClose={onClose} maxWidth={formModel?.dialogSize ?? 'xs'}>
+                <FormDialog open={formOpen} title={formModel!.title} onClose={onClose} maxWidth={dialogSize}>
                     {renderFormUI()}
                 </FormDialog>
             )}
 
             {isOptionsOnly && (
                 <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={onClose}>
-                    {options!.map(({ name, onClick }) => (
-                        <MenuItem
-                            key={name}
-                            sx={{ pr: 6 }}
-                            dense={isMobile}
-                            onClick={() => {
-                                setAnchorEl(null);
-                                onClick(activeRecord, setDeleteParams, setDeleteOpen);
-                            }}
-                        >
-                            {name}
-                        </MenuItem>
-                    ))}
+                    {options!.map(({ name, onClick }) =>
+                        name.toLowerCase() !== 'delete' ? (
+                            <MenuItem
+                                key={name}
+                                sx={{ pr: 6 }}
+                                dense={isMobile}
+                                onClick={() => {
+                                    setAnchorEl(null);
+                                    onClick!(activeRecord, setDeleteParams, setDeleteOpen);
+                                }}
+                            >
+                                {name}
+                            </MenuItem>
+                        ) : (
+                            <MenuItem
+                                key={name}
+                                sx={{ pr: 6, color: 'red !important' }}
+                                dense={isMobile}
+                                onClick={() => {
+                                    setAnchorEl(null);
+                                    setDeleteOpen(true);
+                                    setDeleteParams(v(activeRecord));
+                                }}
+                            >
+                                Delete
+                            </MenuItem>
+                        ),
+                    )}
                 </Popover>
             )}
 

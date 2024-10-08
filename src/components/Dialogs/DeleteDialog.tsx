@@ -35,8 +35,16 @@ const DeleteDialog = ({
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onCancel}>{onCancelButtonText ?? 'Cancel'}</Button>
-                <Button onClick={onOkay} autoFocus startIcon={loading ? <CircularProgress size={14} color="inherit" /> : ''} color="error">
+                <Button disabled={loading} onClick={onCancel}>
+                    {onCancelButtonText ?? 'Cancel'}
+                </Button>
+                <Button
+                    onClick={onOkay}
+                    autoFocus
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={14} color="inherit" /> : ''}
+                    color="error"
+                >
                     {onOkayButtonText ?? 'Delete'}
                 </Button>
             </DialogActions>

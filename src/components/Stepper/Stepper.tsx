@@ -15,7 +15,7 @@ type Props = {
 };
 
 const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButton, children, disableNext }: Readonly<Props>) => {
-    const {isMobile} = useResponsiveness();
+    const { isMobile } = useResponsiveness();
 
     const orientation = isMobile ? 'vertical' : 'horizontal';
 
@@ -28,8 +28,8 @@ const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButto
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep} orientation={orientation}>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Stepper activeStep={activeStep} orientation={orientation} sx={{ width: steps.length < 3 && !isMobile ? 400 : '100%' }}>
                 {steps.map((label) => {
                     const stepProps: { completed?: boolean } = {};
                     return (
@@ -40,9 +40,9 @@ const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButto
                 })}
             </Stepper>
 
-            <Box sx={{ mb: 3 }}>{children}</Box>
+            <Box sx={{ mb: 3, width: "100%" }}>{children}</Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 {activeStep !== 0 && (
                     <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
                         Back

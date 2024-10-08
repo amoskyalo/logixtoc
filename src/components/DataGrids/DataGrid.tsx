@@ -59,7 +59,6 @@ const Grid = (props: AllDataGridProps) => {
                '&>.MuiDataGrid-main': {
                   '& .MuiDataGrid-columnHeaderTitle': {
                      fontWeight: '900',
-                     fontSize: 15,
                   },
                   '& .MuiDataGrid-columnHeader': {
                      backgroundColor: isDarkMode ? '#1c252e' : 'white',

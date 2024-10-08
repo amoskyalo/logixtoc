@@ -3,21 +3,6 @@ import { GridColDef } from '@mui/x-data-grid';
 import { FormikProps } from 'formik';
 
 export type Column = GridColDef & { mobileWidth?: number };
-
-export interface UIProps<V, D, P> {
-    gridModel: GridModelInterface<D, P>;
-    formModel?: FormModelInterface<V>;
-    validationSchema?: any;
-}
-
-export interface FormModelInterface<V> {
-    title: string;
-    submitKey: keyof typeof urls;
-    initialValues: any;
-    modifyData?: (arg: V) => any;
-    inputs: Array<Input<V>>;
-}
-
 export interface APIResponse<R> {
     Error: boolean;
     Message: string;
@@ -27,7 +12,11 @@ export interface APIResponse<R> {
     TotalCount: number;
     Data: R[];
 }
-
+export interface UIProps<V, D, P> {
+    gridModel: GridModelInterface<D, P>;
+    formModel?: FormModelInterface<V>;
+    validationSchema?: any;
+}
 export interface GridModelInterface<D, P> {
     fetchUrl: keyof typeof urls;
     columns: Column[];
@@ -44,30 +33,51 @@ export interface GridModelInterface<D, P> {
     }>;
 }
 
+export interface Form<V> {
+    dialogSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    title: string;
+    submitKey: keyof typeof urls;
+    modifyData?: (arg: V) => any;
+}
+export interface NormalForm<V> {
+    type: 'normal';
+    initialValues: any;
+    inputs: Array<Input<V>>;
+}
+
+export interface GridForm {
+    type: 'gridForm';
+    focusField: string;
+    newRow: any;
+    columns: GridColDef[];
+}
+
+export interface StepperForm<V> {
+    type: 'stepperForm';
+    steps: Array<NormalForm<V> | GridForm>;
+    stepsLabels: string[];
+}
+
+export type FormModelInterface<V> = Form<V> & (NormalForm<V> | StepperForm<V> | GridForm);
 export interface CommonInputTypes<V> {
     label: string;
     key: keyof V;
     validate: boolean;
 }
-
 export interface TextNNumber {
     type: 'text' | 'number';
 }
-
 export interface CustomInput<V> {
     type: 'customInput';
     dataType: 'object' | 'string' | 'array' | 'number';
     renderInput: (arg: FormikProps<V>) => React.ReactNode;
 }
-
 export interface BooleanInput {
     type: 'boolean';
 }
-
 export interface MultiLocation {
     type: 'mulipleLocation';
 }
-
 export interface SingleLocation {
     type: 'singleLocation';
 }

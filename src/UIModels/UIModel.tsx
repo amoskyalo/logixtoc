@@ -2,17 +2,18 @@
 
 import { useState, isValidElement } from 'react';
 import { useMutate, useFetch } from '@/api';
-import { GridColDef } from '@mui/x-data-grid';
-import { getInitialDates, mutateOptions, getFormikFieldProps } from '@/utils';
-import { DataGrid, DataGridActions } from '@/components/DataGrids';
+import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
+import { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } from '@/utils';
+import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '@/components/DataGrids';
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
 import { Formik, Form, FormikProps } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
-import { Stack, MenuItem } from '@mui/material';
+import { Stack, MenuItem, Box } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
-import { useResponsiveness } from '@/hooks';
+import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
+import { HorizontalLinearStepper } from '@/components/Stepper';
 
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
@@ -43,6 +44,9 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [deleteParams, setDeleteParams] = useState<D | undefined>(initialDeleteParams);
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRecord, setActiveRecord] = useState<R | null>(null);
+    const [formRows, setFormRows] = useState<GridRowsProp>([]);
+    const [rowModels, setRowModels] = useState<GridRowModesModel>({});
+    const [activeStep, setActiveStep] = useState<number>(0);
 
     const { isMobile, isMiniTablet } = useResponsiveness();
 
@@ -54,6 +58,11 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
 
     const { mutate: deleteData } = useMutate<D>(deleteUrl);
     const { mutate: submitData } = useMutate<V>(formModel?.submitKey);
+
+    const isOptionsOnly = actions.includes('options');
+    const hasNew = Boolean(formModel);
+    const formType = formModel?.type;
+    const toolbar = () => <EditToolbar handleClick={handleAddRecord} />;
 
     const handleSubmit = (data: V) => {
         setFormLoading(true);
@@ -77,6 +86,8 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         setDeleteParams(initialDeleteParams);
         setAnchorEl(null);
         setActiveRecord(null);
+        setActiveStep(0);
+        setFormRows([]);
     };
 
     const v = (row: any) => {
@@ -92,10 +103,61 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }, {} as D);
     };
 
-    const isOptionsOnly = actions.includes('options');
-    const hasNew = Boolean(formModel);
+    const getGridFormProps = () => {
+        if (formType === 'gridForm') {
+            return { newRow: { ...formModel?.newRow, id: formRows.length + 1 }, focusField: formModel!.focusField, columns: formModel!.columns };
+        } else if (formType === 'stepperForm') {
+            const gridForm = formModel?.steps.find((step) => step.type === 'gridForm');
 
-    const updatedColumns: GridColDef[] = [
+            return { newRow: { ...gridForm?.newRow, id: formRows.length + 1 }, focusField: gridForm!.focusField, columns: gridForm!.columns };
+        } else {
+            return { newRow: {}, focusField: '', columns: [] };
+        }
+    };
+
+    const {
+        handleAddRecord,
+        handleCancelClick,
+        handleSaveClick,
+        handleEditClick,
+        handleDeleteClick,
+        handleRowModesModelChange,
+        processRowUpdate,
+        handleRowEditStop,
+    } = useGridRowEditFunctions({
+        rowId: formRows.length + 1,
+        focusField: getGridFormProps()?.focusField,
+        setRowModesModels: setRowModels,
+        setRows: setFormRows,
+        newRow: getGridFormProps()?.newRow,
+        rows: formRows,
+    });
+
+    const updatedFormColumns: GridColDef[] = [
+        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true, sortable: false })),
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            getActions: ({ id }) => {
+                const isEditMode = rowModels[id]?.mode === GridRowModes.Edit;
+
+                return [
+                    <DataGridRowEditActions
+                        id={id}
+                        key="actions"
+                        isEditMode={isEditMode}
+                        handleCancelClick={handleCancelClick}
+                        handleDeleteClick={handleDeleteClick}
+                        handleEditClick={handleEditClick}
+                        handleSaveClick={handleSaveClick}
+                    />,
+                ];
+            },
+        },
+    ];
+
+    const updatedGridColumns: GridColDef[] = [
         { field: 'id', headerName: 'No.', width: 50, sortable: false },
         ...columns.map(({ mobileWidth, width, ...rest }) => {
             return {
@@ -132,7 +194,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             : []),
     ];
 
-    const renderInput = (input: Input<V>, formik: FormikProps<V>) => {
+    const renderInputUI = (input: Input<V>, formik: FormikProps<V>) => {
         const { key, type, label } = input;
 
         switch (input.type) {
@@ -199,10 +261,136 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }
     };
 
+    const renderFormUI = () => {
+        switch (formModel?.type) {
+            case 'normal':
+                return (
+                    <Formik
+                        initialValues={formModel.initialValues}
+                        onSubmit={handleSubmit}
+                        validationSchema={validationSchema()}
+                        validateOnBlur={false}
+                    >
+                        {(formik) => {
+                            return (
+                                <Form>
+                                    <Stack spacing={3}>
+                                        {formModel.inputs.map((input) => renderInputUI(input, formik))}
+                                        <SubmitButton loading={formLoading} />
+                                    </Stack>
+                                </Form>
+                            );
+                        }}
+                    </Formik>
+                );
+
+            case 'gridForm':
+                return (
+                    <Stack direction="column" spacing={3}>
+                        <DataGrid
+                            columns={updatedFormColumns}
+                            rows={formRows}
+                            slots={{ toolbar }}
+                            rowModesModel={rowModels}
+                            onRowModesModelChange={handleRowModesModelChange}
+                            processRowUpdate={processRowUpdate}
+                            onRowEditStop={handleRowEditStop}
+                            checkboxSelection={false}
+                            density="compact"
+                            hideFooter
+                            autoHeight
+                        />
+
+                        <Stack justifyContent={'flex-end'} direction={'row'}>
+                            <Box sx={{ width: 150 }}>
+                                <SubmitButton
+                                    loading={formLoading}
+                                    onClick={() => {
+                                        const payload = formRows.map(({ id, isNew, ...rest }) => rest);
+                                        console.log(payload);
+                                    }}
+                                    disabled={formRows.length === 0}
+                                />
+                            </Box>
+                        </Stack>
+                    </Stack>
+                );
+
+            case 'stepperForm': {
+                const normalForm = formModel.steps.find((step) => step.type === 'normal');
+                const formIndex = formModel.steps.findIndex((step) => step.type === 'normal');
+                const gridFormIndex = formModel.steps.findIndex((step) => step.type === 'gridForm');
+
+                const renderGridForm = () => (
+                    <Stack direction="column" spacing={3}>
+                        <DataGrid
+                            columns={updatedFormColumns}
+                            rows={formRows}
+                            slots={{ toolbar }}
+                            rowModesModel={rowModels}
+                            onRowModesModelChange={handleRowModesModelChange}
+                            processRowUpdate={processRowUpdate}
+                            onRowEditStop={handleRowEditStop}
+                            checkboxSelection={false}
+                            hideFooter
+                            autoHeight
+                        />
+                    </Stack>
+                );
+
+                if (normalForm) {
+                    return (
+                        <Formik
+                            initialValues={normalForm.initialValues}
+                            onSubmit={(val) => console.log(val)}
+                            validationSchema={validationSchema()}
+                            validateOnBlur={false}
+                        >
+                            {(formik) => {
+                                return (
+                                    <HorizontalLinearStepper
+                                        steps={formModel.stepsLabels}
+                                        activeStep={activeStep}
+                                        setActiveStep={setActiveStep}
+                                        disableNext={validateObjectFields([formik.values])}
+                                        submitButton={() => (
+                                            <Box sx={{ width: 150 }}>
+                                                <SubmitButton
+                                                    loading={formLoading}
+                                                    onClick={() => {
+                                                        const gridValues = formRows.map(({ id, isNew, ...rest }) => rest);
+                                                        const payload = { gridValues, ...formik.values };
+                                                        handleSubmit(payload);
+                                                    }}
+                                                    disabled={formRows.length === 0 || validateObjectFields([...formRows])}
+                                                />
+                                            </Box>
+                                        )}
+                                    >
+                                        <Form>
+                                            <Stack spacing={3} sx={{ mt: activeStep === formIndex ? 6 : 4 }}>
+                                                {activeStep === formIndex && normalForm.inputs.map((input) => renderInputUI(input, formik))}
+                                                {activeStep === gridFormIndex && renderGridForm()}
+                                            </Stack>
+                                        </Form>
+                                    </HorizontalLinearStepper>
+                                );
+                            }}
+                        </Formik>
+                    );
+                }
+
+                return null;
+            }
+            default:
+                throw new Error('Inavlid form type');
+        }
+    };
+
     return (
         <>
             <DataGrid
-                columns={updatedColumns}
+                columns={updatedGridColumns}
                 rows={getIndexedRows() || []}
                 count={data?.TotalCount}
                 loading={isLoading || isFetching}
@@ -212,24 +400,8 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             />
 
             {hasNew && (
-                <FormDialog open={formOpen} title={formModel!.title} onClose={onClose}>
-                    <Formik
-                        initialValues={formModel!.initialValues}
-                        onSubmit={handleSubmit}
-                        validationSchema={validationSchema()}
-                        validateOnBlur={false}
-                    >
-                        {(formik) => {
-                            return (
-                                <Form>
-                                    <Stack spacing={3}>
-                                        {formModel!.inputs.map((input) => renderInput(input, formik))}
-                                        <SubmitButton loading={formLoading} />
-                                    </Stack>
-                                </Form>
-                            );
-                        }}
-                    </Formik>
+                <FormDialog open={formOpen} title={formModel!.title} onClose={onClose} maxWidth={formModel?.dialogSize ?? 'xs'}>
+                    {renderFormUI()}
                 </FormDialog>
             )}
 

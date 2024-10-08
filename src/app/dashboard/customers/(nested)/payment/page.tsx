@@ -30,6 +30,7 @@ const CustomerPament = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'addVendorCustomerPayment',
             title: 'Add Customer Payment',
             initialValues: {

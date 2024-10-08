@@ -36,6 +36,7 @@ const AssignedUsers = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add New User',
             submitKey: 'postVendorLocationUserAssignmentTx',
             initialValues: {
@@ -52,6 +53,7 @@ const AssignedUsers = () => {
                     label: 'Users',
                     key: 'usersArray',
                     type: 'customInput',
+                    dataType: 'array',
                     validate: true,
                     renderInput: (formik) => (
                         <AutoCompleteField

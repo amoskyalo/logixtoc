@@ -19,6 +19,7 @@ const CustomerCategory = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postVendorCustomerCategory',
             title: 'Add Customer Category',
             initialValues: { vendorCustomerCategoryName: '' },

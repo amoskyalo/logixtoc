@@ -30,6 +30,7 @@ const CustomerNote = ({ params }: { params: { note: string } }) => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add New Customer debit Note',
             submitKey: 'addVendorCustomerNote',
             initialValues: { noteAmount: '', noteDescription: '' },

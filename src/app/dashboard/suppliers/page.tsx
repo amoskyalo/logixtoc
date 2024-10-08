@@ -57,6 +57,7 @@ const Suppliers = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postVendorSupplierTx',
             title: 'Add Supplier Payment',
             initialValues: { SupplierMail: '', openingBalance: '', supplierName: '', supplierPhone: '' },

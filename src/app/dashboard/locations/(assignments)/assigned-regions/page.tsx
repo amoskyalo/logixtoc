@@ -35,12 +35,13 @@ const AssignedRegions = () => {
             ],
         },
         form: {
+            type: "normal",
             submitKey: 'postAssignedRegions',
             title: 'Add Assigned Regions',
-            initialValues: { vendorRegionID: '' as unknown as number, locationsArray: [] },
+            initialValues: { vendorRegionID: '' as unknown as number, vendorLocationArrays: [] },
             modifyData: (data: any) => ({
                 vendorRegionID: data.vendorRegionID,
-                vendorLocationArrays: data.locationsArray.map((v: any) => ({
+                vendorLocationArrays: data.vendorLocationArrays.map((v: any) => ({
                     vendorLocationID: v.vendorLocationID,
                 })),
             }),
@@ -54,7 +55,7 @@ const AssignedRegions = () => {
                     lookupDisplayName: 'VendorRegionName',
                     lookupDisplayValue: 'VendorRegionID',
                 },
-                { label: 'Locations', key: 'locationsArray', type: 'mulipleLocation', validate: true },
+                { label: 'Locations', key: 'vendorLocationArrays', type: 'mulipleLocation', validate: true },
             ],
         },
     });

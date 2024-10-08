@@ -33,6 +33,7 @@ const Branches = () => {
             ],
         },
         form: {
+            type: "normal",
             title: 'Add new Region Branch',
             submitKey: 'addVendorRegionBranch',
             initialValues: { vendorRegionBranchName: '' },

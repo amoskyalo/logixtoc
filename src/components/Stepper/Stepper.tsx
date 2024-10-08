@@ -3,6 +3,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import { useResponsiveness } from '@/hooks';
 
 type Props = {
     steps: string[];
@@ -14,6 +15,10 @@ type Props = {
 };
 
 const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButton, children, disableNext }: Readonly<Props>) => {
+    const {isMobile} = useResponsiveness();
+
+    const orientation = isMobile ? 'vertical' : 'horizontal';
+
     const handleNext = () => {
         setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
     };
@@ -24,7 +29,7 @@ const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButto
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}>
+            <Stepper activeStep={activeStep} orientation={orientation}>
                 {steps.map((label) => {
                     const stepProps: { completed?: boolean } = {};
                     return (

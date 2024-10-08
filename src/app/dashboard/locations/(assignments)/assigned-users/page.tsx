@@ -63,7 +63,7 @@ const AssignedUsers = () => {
                                 title: `${FirstName} ${LastName}`,
                             }))}
                             getOptionLabel={(option: any) => option.title}
-                            {...getFormikFieldProps(formik, 'usersArray')}
+                            {...getFormikFieldProps(formik, 'usersArray', true)}
                         />
                     ),
                 },

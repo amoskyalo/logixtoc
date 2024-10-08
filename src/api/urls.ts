@@ -5,6 +5,7 @@ export const urls = {
     //locations
     getVendorLocation: 'Location/GetVendorLocation',
     deleteVendorLocation: 'Location/RemoveVendorLocation',
+    postVendorLocationTx: 'Location/PostVendorLocationTx',
 
     //assigned users
     getVendorLocationUserAssignment: 'Location/GetVendorLocationUserAssignment',

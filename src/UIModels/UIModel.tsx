@@ -104,15 +104,31 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     };
 
     const getGridFormProps = () => {
+        let newRow = {};
+        let focusField = '';
+        let columns: GridColDef[] = [];
+
         if (formType === 'gridForm') {
-            return { newRow: { ...formModel?.newRow, id: formRows.length + 1 }, focusField: formModel!.focusField, columns: formModel!.columns };
+            newRow = { ...formModel?.newRow, id: formRows.length + 1 };
+            focusField = formModel!.focusField;
+            columns = formModel!.columns;
         } else if (formType === 'stepperForm') {
             const gridForm = formModel?.steps.find((step) => step.type === 'gridForm');
-
-            return { newRow: { ...gridForm?.newRow, id: formRows.length + 1 }, focusField: gridForm!.focusField, columns: gridForm!.columns };
-        } else {
-            return { newRow: {}, focusField: '', columns: [] };
+            newRow = { ...gridForm?.newRow, id: formRows.length + 1 };
+            focusField = gridForm?.focusField ?? '';
+            columns = gridForm?.columns || [];
         }
+
+        return { newRow, focusField, columns };
+    };
+
+    const getMarginTop = (formIndex: number, gridFormIndex: number) => {
+        if (activeStep === formIndex) {
+            return isMobile ? 3 : 5;
+        } else if (activeStep === gridFormIndex) {
+            return isMobile ? 0 : 4;
+        }
+        return 0;
     };
 
     const {
@@ -368,7 +384,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                                         )}
                                     >
                                         <Form>
-                                            <Stack spacing={3} sx={{ mt: activeStep === formIndex ? 6 : 4 }}>
+                                            <Stack spacing={3} sx={{ mt: getMarginTop(formIndex, gridFormIndex) }}>
                                                 {activeStep === formIndex && normalForm.inputs.map((input) => renderInputUI(input, formik))}
                                                 {activeStep === gridFormIndex && renderGridForm()}
                                             </Stack>

@@ -41,6 +41,7 @@ const ProductCategory = () => {
             title: 'Add Sale Product',
             submitKey: 'addVendorProductCategory',
             stepsLabels: ['Add Product', 'Add Product Category Type'],
+            initialValues: { vendorProductCategoryName: '', hasReturn: '' },
             stepBasedDialogSize: (step) => (step === 0 ? 'xs' : 'sm'),
             modifyData: ({ gridValues, ...rest }) => ({
                 vendorProductCategoryTypeArray: gridValues,
@@ -49,7 +50,6 @@ const ProductCategory = () => {
             steps: [
                 {
                     type: 'normal',
-                    initialValues: { vendorProductCategoryName: '', hasReturn: '' },
                     inputs: [
                         { label: 'Product Category Name', key: 'vendorProductCategoryName', type: 'text', validate: true },
                         { label: 'Has Return', key: 'hasReturn', type: 'boolean', validate: true },

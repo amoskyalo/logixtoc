@@ -56,7 +56,7 @@ export const getMappedObjectArray = <Type>(key: keyof Type, arr: Type[]) => {
     });
 };
 
-export const getFormikFieldProps = <Type>(formik: FormikProps<Type>, field: keyof Type, errorNText?: boolean) => {
+export const getFormikFieldProps = <Type>(formik: FormikProps<Type>, field: keyof Type, autoCompleteField?: boolean) => {
     const { values, errors, touched, getFieldProps, setFieldValue } = formik;
 
     const error = touched[field] && Boolean(errors[field]);
@@ -69,7 +69,7 @@ export const getFormikFieldProps = <Type>(formik: FormikProps<Type>, field: keyo
     const fieldProps = {
         error,
         helperText,
-        ...(errorNText ? { onChange, multiple: true, value: values[field] } : getFieldProps(field as string)),
+        ...(autoCompleteField ? { onChange, multiple: true, value: values[field] } : getFieldProps(field as string)),
     };
 
     return fieldProps;

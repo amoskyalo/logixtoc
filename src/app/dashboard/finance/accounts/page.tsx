@@ -3,6 +3,7 @@
 import { VendorAccount, GetUserAccountsParams, APPCRUD, useFetch, VendorAccountType } from '@/api';
 import { useResponsiveness } from '@/hooks';
 import { GridColDef } from '@mui/x-data-grid';
+import { useRouter } from 'next/navigation';
 
 type Columns = GridColDef & { mobileWidth: number };
 type Delete = { vendorAccountID: number };
@@ -40,6 +41,7 @@ const singleSelect = {
 const Accounts = () => {
     const { data: vendorAccountTypes } = useFetch<VendorAccountType, void>('getVendorAccountTypes');
     const { isMobile } = useResponsiveness();
+    const router = useRouter();
 
     const UI = new APPCRUD<VendorAccount, any, Delete, GetUserAccountsParams>({
         grid: {
@@ -48,7 +50,14 @@ const Accounts = () => {
             actions: ['options'],
             params: { VendorAccountTypeID: 0 },
             initialDeleteParams: { vendorAccountID: '' as unknown as number },
-            options: [{ name: 'Statements', onClick: () => null }, { name: 'Edit', onClick: () => null }, { name: 'Delete' }],
+            options: [
+                {
+                    name: 'Statements',
+                    onClick: (activeRecord) => router.push(`/dashboard/finance/accounts/statement?VendorAccountID=${activeRecord.VendorAccountID}`),
+                },
+                { name: 'Edit', onClick: () => null },
+                { name: 'Delete' },
+            ],
             columns: AccountsColumns,
         },
         form: {
@@ -56,6 +65,7 @@ const Accounts = () => {
             type: 'stepperForm',
             submitKey: 'postVendorAccount',
             stepsLabels: ['Select Account Type', 'Add Accounts'],
+            initialValues: { vendorAccountTypeID: '' },
             stepBasedDialogSize: (step) => (step === 0 ? 'xs' : 'md'),
             modifyData: ({ gridValues, ...rest }: any) => ({
                 accountsArray: [...gridValues],
@@ -64,7 +74,6 @@ const Accounts = () => {
             steps: [
                 {
                     type: 'normal',
-                    initialValues: { vendorAccountTypeID: '' },
                     inputs: [
                         {
                             type: 'select',

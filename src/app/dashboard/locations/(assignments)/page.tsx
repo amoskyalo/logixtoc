@@ -29,13 +29,13 @@ const Locations = () => {
             title: 'Add New Location',
             submitKey: 'postVendorLocationTx',
             stepsLabels: ['Select Location Type', 'Add Locations'],
+            initialValues: { vendorLocationTypeID: '' },
             modifyData(arg) {
                 return { locationsArray: arg.gridValues, vendorLocationTypeID: arg.vendorLocationTypeID, vendorID: VendorID };
             },
             steps: [
                 {
                     type: 'normal',
-                    initialValues: { vendorLocationTypeID: '' },
                     inputs: [
                         {
                             label: 'Location Type',

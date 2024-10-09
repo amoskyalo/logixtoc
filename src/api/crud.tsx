@@ -27,7 +27,7 @@ export const APPCRUD = class<R, V, D, P> {
 
                 acc[key] =
                     validate &&
-                    (type === 'text' || type === 'select' || type === 'singleLocation'
+                    (type === 'text' || type === 'select' || type === 'singleLocation' || type === 'checkbox'
                         ? string_v
                         : type === 'number'
                           ? num_v

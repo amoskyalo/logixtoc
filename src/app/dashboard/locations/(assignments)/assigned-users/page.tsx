@@ -4,19 +4,13 @@ import { useFetch, VendorLocationUserAssignmentRow, VendorUserObjectInterface, A
 import { AutoCompleteField } from '@/components/Inputs';
 import { getFormikFieldProps } from '@/utils';
 
-type Params = {
-    VendorLocationID: number;
-};
-
+type Params = { VendorLocationID: number };
+type Delete = { vendorLocationUserAssignmentID: string | number };
 type FormiValues = {
     vendorLocationID: number;
     usersArray: Array<{
         userID: number;
     }>;
-};
-
-type Delete = {
-    vendorLocationUserAssignmentID: string | number;
 };
 
 const AssignedUsers = () => {
@@ -36,7 +30,7 @@ const AssignedUsers = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add New User',
             submitKey: 'postVendorLocationUserAssignmentTx',
             initialValues: {

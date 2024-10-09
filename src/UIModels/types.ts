@@ -53,9 +53,10 @@ export interface GridForm {
 
 export interface StepperForm<V> {
     type: 'stepperForm';
-    steps: Array<NormalForm<V> | GridForm>;
+    steps: Array<Omit<NormalForm<V>, 'initialValues'> | GridForm>;
     stepsLabels: string[];
     stepBasedDialogSize?: (arg: number) => 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    initialValues?: any;
 }
 
 export type FormModelInterface<V> = Form<V> & (NormalForm<V> | StepperForm<V> | GridForm);
@@ -95,4 +96,10 @@ export interface MultipleSelect {
     optionKey: string;
 }
 
-export type Input<V> = CommonInputTypes<V> & (TextNNumber | CustomInput<V> | BooleanInput | MultiLocation | SingleLocation | Select | MultipleSelect);
+export interface Checkbox {
+    type: 'checkbox';
+    options: Array<{ name: string; value: string }>;
+}
+
+export type Input<V> = CommonInputTypes<V> &
+    (TextNNumber | CustomInput<V> | BooleanInput | MultiLocation | SingleLocation | Select | MultipleSelect | Checkbox);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, isValidElement } from 'react';
+import { useState, isValidElement, useCallback, useMemo } from 'react';
 import { useMutate, useFetch } from '@/api';
 import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
 import { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } from '@/utils';
@@ -8,8 +8,8 @@ import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
 import { Formik, Form, FormikProps } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
-import { Stack, MenuItem, Box } from '@mui/material';
-import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation } from '@/components/Inputs';
+import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel } from '@mui/material';
+import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation, CheckboxInput } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
 import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
@@ -62,7 +62,6 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const isOptionsOnly = actions.includes('options');
     const hasNew = Boolean(formModel);
     const formType = formModel?.type;
-    const toolbar = () => <EditToolbar handleClick={handleAddRecord} />;
     const dialogSize =
         formType === 'stepperForm' && typeof formModel?.stepBasedDialogSize === 'function'
             ? formModel.stepBasedDialogSize(activeStep)
@@ -86,7 +85,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         return data?.Data?.map((row, index) => ({ id: index + 1, ...row }));
     };
 
-    const onClose = () => {
+    const onClose: () => void = () => {
         setDeleteOpen(false);
         setFormOpen(false);
         setDeleteParams(initialDeleteParams);
@@ -110,7 +109,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }, {} as D);
     };
 
-    const getGridFormProps = () => {
+    const getGridFormProps = useCallback(() => {
         let newRow = {};
         let focusField = '';
         let columns: GridColDef[] = [];
@@ -127,7 +126,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }
 
         return { newRow, focusField, columns };
-    };
+    }, [formModel, formRows.length, formType]);
 
     const getMarginTop = (formIndex: number, gridFormIndex: number) => {
         if (activeStep === formIndex) {
@@ -156,29 +155,34 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         rows: formRows,
     });
 
-    const updatedFormColumns: GridColDef[] = [
-        ...getGridFormProps().columns.map((column) => ({ ...column, editable: true, sortable: false })),
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
-            getActions: ({ id }) => {
-                const isEditMode = rowModels[id]?.mode === GridRowModes.Edit;
+    const toolbar = useCallback(() => <EditToolbar handleClick={handleAddRecord} />, [handleAddRecord]);
 
-                return [
-                    <DataGridRowEditActions
-                        id={id}
-                        key="actions"
-                        isEditMode={isEditMode}
-                        handleCancelClick={handleCancelClick}
-                        handleDeleteClick={handleDeleteClick}
-                        handleEditClick={handleEditClick}
-                        handleSaveClick={handleSaveClick}
-                    />,
-                ];
+    const updatedFormColumns: GridColDef[] = useMemo(
+        () => [
+            ...getGridFormProps().columns.map((column) => ({ ...column, editable: true, sortable: false })),
+            {
+                field: 'actions',
+                type: 'actions',
+                headerName: 'Actions',
+                getActions: ({ id }) => {
+                    const isEditMode = rowModels[id]?.mode === GridRowModes.Edit;
+
+                    return [
+                        <DataGridRowEditActions
+                            id={id}
+                            key="actions"
+                            isEditMode={isEditMode}
+                            handleCancelClick={handleCancelClick}
+                            handleDeleteClick={handleDeleteClick}
+                            handleEditClick={handleEditClick}
+                            handleSaveClick={handleSaveClick}
+                        />,
+                    ];
+                },
             },
-        },
-    ];
+        ],
+        [getGridFormProps, handleCancelClick, handleDeleteClick, handleEditClick, handleSaveClick, rowModels],
+    );
 
     const updatedGridColumns: GridColDef[] = [
         { field: 'id', headerName: 'No.', width: 50, sortable: false },
@@ -217,10 +221,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             : []),
     ];
 
-    const renderInputUI = (input: Input<V>, formik: FormikProps<V>) => {
+    const renderInputUI = useCallback((input: Input<V>, formik: FormikProps<V>) => {
         const { key, type, label } = input;
 
-        switch (input.type) {
+        switch (type) {
             case 'text':
             case 'number':
                 return <TextFieldInput label={label} {...getFormikFieldProps(formik, key)} type={type} />;
@@ -266,6 +270,34 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                     </SelectField>
                 );
 
+            case 'checkbox': {
+                const { setFieldValue, touched, errors } = formik;
+                const error = Boolean(touched[key] && errors[key]);
+
+                return (
+                    <FormControl error={error} component="fieldset" variant="standard">
+                        <FormLabel component="legend">{label}</FormLabel>
+                        <FormGroup>
+                            {input.options.map(({ name, value }) => (
+                                <CheckboxInput
+                                    key={name}
+                                    label={name}
+                                    onChange={(event) => {
+                                        const newValue = event.target.checked;
+                                        if (newValue) {
+                                            setFieldValue(key as string, value);
+                                        } else {
+                                            setFieldValue(key as string, '');
+                                        }
+                                    }}
+                                />
+                            ))}
+                        </FormGroup>
+                        {error && <FormHelperText>This field is required</FormHelperText>}
+                    </FormControl>
+                );
+            }
+
             case 'mulipleLocation':
                 return <SelectMultipleLocations<any> {...formik} label={label} />;
 
@@ -282,25 +314,28 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             default:
                 throw new Error('Invalid input type');
         }
-    };
+    }, []);
 
-    const renderGridForm = () => (
-        <DataGrid
-            columns={updatedFormColumns}
-            rows={formRows}
-            slots={{ toolbar }}
-            slotProps={{
-                toolbar: { setRows: setFormRows, setRowModesModel: setRowModels },
-            }}
-            rowModesModel={rowModels}
-            onRowModesModelChange={handleRowModesModelChange}
-            processRowUpdate={processRowUpdate}
-            onRowEditStop={handleRowEditStop}
-            checkboxSelection={false}
-            hideFooter
-            editMode="row"
-            autoHeight
-        />
+    const renderGridForm = useCallback(
+        () => (
+            <DataGrid
+                columns={updatedFormColumns}
+                rows={formRows}
+                slots={{ toolbar }}
+                slotProps={{
+                    toolbar: { setRows: setFormRows, setRowModesModel: setRowModels },
+                }}
+                rowModesModel={rowModels}
+                onRowModesModelChange={handleRowModesModelChange}
+                processRowUpdate={processRowUpdate}
+                onRowEditStop={handleRowEditStop}
+                checkboxSelection={false}
+                hideFooter
+                editMode="row"
+                autoHeight
+            />
+        ),
+        [updatedFormColumns, formRows, toolbar, rowModels, handleRowModesModelChange, processRowUpdate, handleRowEditStop],
     );
 
     const renderFormUI = () => {
@@ -346,57 +381,57 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 );
 
             case 'stepperForm': {
-                const normalForm = formModel.steps.find((step) => step.type === 'normal');
                 const formIndex = formModel.steps.findIndex((step) => step.type === 'normal');
                 const gridFormIndex = formModel.steps.findIndex((step) => step.type === 'gridForm');
 
-                if (normalForm) {
-                    return (
-                        <Formik
-                            initialValues={normalForm.initialValues}
-                            onSubmit={(val) => console.log(val)}
-                            validationSchema={validationSchema()}
-                            validateOnBlur={false}
-                        >
-                            {(formik) => {
-                                return (
-                                    <HorizontalLinearStepper
-                                        steps={formModel.stepsLabels}
-                                        activeStep={activeStep}
-                                        setActiveStep={setActiveStep}
-                                        disableNext={validateObjectFields([formik.values])}
-                                        submitButton={() => (
-                                            <Box sx={{ width: 150 }}>
-                                                <SubmitButton
-                                                    loading={formLoading}
-                                                    onClick={() => {
-                                                        const gridValues = formRows.map(({ id, isNew, ...rest }) => rest);
-                                                        const payload = { gridValues, ...formik.values };
-                                                        handleSubmit(payload);
-                                                    }}
-                                                    disabled={formRows.length === 0 || validateObjectFields([...formRows])}
-                                                />
-                                            </Box>
-                                        )}
-                                    >
-                                        <Form>
-                                            <Stack spacing={3} sx={{ mt: getMarginTop(formIndex, gridFormIndex) }}>
-                                                {activeStep === formIndex && normalForm.inputs.map((input) => renderInputUI(input, formik))}
-                                                {activeStep === gridFormIndex && (
-                                                    <Stack direction="column" spacing={3}>
-                                                        {renderGridForm()}
-                                                    </Stack>
-                                                )}
-                                            </Stack>
-                                        </Form>
-                                    </HorizontalLinearStepper>
-                                );
-                            }}
-                        </Formik>
-                    );
-                }
-
-                return null;
+                return (
+                    <Formik
+                        initialValues={formModel.initialValues}
+                        onSubmit={(val) => console.log(val)}
+                        validationSchema={validationSchema()}
+                        validateOnBlur={false}
+                    >
+                        {(formik) => {
+                            return (
+                                <HorizontalLinearStepper
+                                    steps={formModel.stepsLabels}
+                                    activeStep={activeStep}
+                                    setActiveStep={setActiveStep}
+                                    disableNext={validateObjectFields([formik.values])}
+                                    submitButton={() => (
+                                        <Box sx={{ width: 150 }}>
+                                            <SubmitButton
+                                                loading={formLoading}
+                                                onClick={() => {
+                                                    const gridValues = formRows.map(({ id, isNew, ...rest }) => rest);
+                                                    const payload = { gridValues, ...formik.values };
+                                                    handleSubmit(payload);
+                                                }}
+                                                disabled={formRows.length === 0 || validateObjectFields([...formRows])}
+                                            />
+                                        </Box>
+                                    )}
+                                >
+                                    <Form>
+                                        <Stack spacing={3} sx={{ mt: getMarginTop(formIndex, gridFormIndex) }}>
+                                            {formModel.steps.map(
+                                                (step, index) =>
+                                                    activeStep === index &&
+                                                    (step.type === 'normal' ? (
+                                                        step.inputs.map((input) => renderInputUI(input, formik))
+                                                    ) : (
+                                                        <Stack direction="column" spacing={3} key={step.focusField}>
+                                                            {renderGridForm()}
+                                                        </Stack>
+                                                    )),
+                                            )}
+                                        </Stack>
+                                    </Form>
+                                </HorizontalLinearStepper>
+                            );
+                        }}
+                    </Formik>
+                );
             }
             default:
                 throw new Error('Inavlid form type');
@@ -423,34 +458,28 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
 
             {isOptionsOnly && (
                 <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={onClose}>
-                    {options!.map(({ name, onClick }) =>
-                        name.toLowerCase() !== 'delete' ? (
+                    {options!.map(({ name, onClick }) => {
+                        const isDelete = name.toLowerCase() === 'delete';
+
+                        return (
                             <MenuItem
                                 key={name}
-                                sx={{ pr: 6 }}
+                                sx={{ pr: 6, color: isDelete ? 'red !important' : '' }}
                                 dense={isMobile}
                                 onClick={() => {
                                     setAnchorEl(null);
-                                    onClick!(activeRecord, setDeleteParams, setDeleteOpen);
+                                    if (isDelete) {
+                                        setDeleteOpen(true);
+                                        setDeleteParams(v(activeRecord));
+                                    } else {
+                                        onClick!(activeRecord, setDeleteParams, setDeleteOpen);
+                                    }
                                 }}
                             >
                                 {name}
                             </MenuItem>
-                        ) : (
-                            <MenuItem
-                                key={name}
-                                sx={{ pr: 6, color: 'red !important' }}
-                                dense={isMobile}
-                                onClick={() => {
-                                    setAnchorEl(null);
-                                    setDeleteOpen(true);
-                                    setDeleteParams(v(activeRecord));
-                                }}
-                            >
-                                Delete
-                            </MenuItem>
-                        ),
-                    )}
+                        );
+                    })}
                 </Popover>
             )}
 

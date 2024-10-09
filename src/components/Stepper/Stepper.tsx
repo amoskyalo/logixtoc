@@ -29,7 +29,7 @@ const HorizontalLinearStepper = ({ steps, activeStep, setActiveStep, submitButto
 
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Stepper activeStep={activeStep} orientation={orientation} sx={{ width: steps.length < 3 && !isMobile ? 400 : '100%' }}>
+            <Stepper activeStep={activeStep} orientation={orientation} sx={{ width: steps.length < 4 && !isMobile ? 400 : '100%' }}>
                 {steps.map((label) => {
                     const stepProps: { completed?: boolean } = {};
                     return (

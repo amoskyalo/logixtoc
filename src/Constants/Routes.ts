@@ -84,7 +84,7 @@ export const routes = [
             {
                 name: "Product prices",
                 Icon: RequestPage,
-                path: "/finance/product prices/price history",
+                path: "/dashboard/finance/product-prices",
             }
         ]
     },

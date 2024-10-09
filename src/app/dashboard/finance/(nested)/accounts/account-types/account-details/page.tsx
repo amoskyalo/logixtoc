@@ -5,9 +5,7 @@ import { VendorAccount, APPCRUD } from '@/api';
 import { AccountsColumns } from '@/app/dashboard/finance/accounts/page';
 import { TablessContainer } from '@/components/Containers';
 
-type Params = {
-    VendorAccountTypeID: number;
-};
+type Params = { VendorAccountTypeID: number };
 
 const AccountTypeDetails = () => {
     const VendorAccountTypeID = useSearchParams().get('VendorAccountTypeID') as unknown as number;

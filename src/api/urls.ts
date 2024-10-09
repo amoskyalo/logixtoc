@@ -70,6 +70,7 @@ export const urls = {
     getVendorProductCategoryType: 'Product/GetVendorProductCategoryType',
     addVendorProductCategoryType: 'Product/AddVendorProductCategoryType',
     getVendorProductCategoryTypeDetail: 'Product/GetVendorProductCategoryTypeDetail',
+    postVendorRegionPriceAssignmentTx: 'Finance/PostVendorRegionPriceAssignmentTx',
 
     //regions
     getVendorRegions: 'Region/GetVendorRegion',
@@ -78,14 +79,21 @@ export const urls = {
     addVendorRegionBranch: 'Region/AddVendorRegionBranch',
     removeVendorRegionBranch: 'Region/RemoveVendorRegionBranch',
 
-    //accounts
+    //finance
     getVendorAccounts: 'Finance/GetVendorAccount',
     postVendorAccount: 'Finance/PostVendorAccount',
     removeVendorAccount: 'Finance/RemoveVendorAccount',
+    getVendorAccountStatement: 'Finance/GetVendorAccountStatement',
     getVendorAccountTypes: 'Finance/GetVendorAccountType',
     getAccountType: 'Finance/GetAccountType',
     postVendorAccountType: '/Finance/PostVendorAccountType',
     deleteVendorAccountType: 'Finance/RemoveVendorAccountType',
+    getVendorPriceHistory: 'Finance/GetVendorPriceHistory',
+    postVendorPriceTx: 'Finance/PostVendorPriceTx',
+    getVendorProductPriceDetail: 'Finance/GetVendorProductPriceDetail',
+    postVendorPriceDetail: 'Finance/PostVendorPriceDetail',
+    removeVendorPriceDetail: 'Finance/RemoveVendorPriceDetail',
+    getVendorRegionPrice: 'Finance/GetVendorRegionPrice',
 
     //customers
     getVendorCustomer: 'Customer/GetVendorCustomer',

@@ -129,7 +129,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     }, [formModel, formRows.length, formType]);
 
     const getMarginTop = (formIndex: number, gridFormIndex: number) => {
-        if (activeStep === formIndex) {
+        if (activeStep !== gridFormIndex) {
             return isMobile ? 3 : 5;
         } else if (activeStep === gridFormIndex) {
             return isMobile ? 0 : 4;
@@ -277,7 +277,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 return (
                     <FormControl error={error} component="fieldset" variant="standard">
                         <FormLabel component="legend">{label}</FormLabel>
-                        <FormGroup>
+                        <FormGroup sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                             {input.options.map(({ name, value }) => (
                                 <CheckboxInput
                                     key={name}

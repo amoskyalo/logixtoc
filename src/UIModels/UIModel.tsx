@@ -392,12 +392,24 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                         validateOnBlur={false}
                     >
                         {(formik) => {
+                            const x = formModel.steps[activeStep];
+
+                            function getStepValues() {
+                                if (x.type === 'normal') {
+                                    return x.inputs.reduce((acc, { key }) => {
+                                        acc[key] = formik.values[key];
+
+                                        return acc;
+                                    }, {} as V);
+                                } else return {};
+                            }
+
                             return (
                                 <HorizontalLinearStepper
                                     steps={formModel.stepsLabels}
                                     activeStep={activeStep}
                                     setActiveStep={setActiveStep}
-                                    disableNext={validateObjectFields([formik.values])}
+                                    disableNext={validateObjectFields([getStepValues()])}
                                     submitButton={() => (
                                         <Box sx={{ width: 150 }}>
                                             <SubmitButton

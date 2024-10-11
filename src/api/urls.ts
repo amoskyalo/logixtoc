@@ -74,6 +74,7 @@ export const urls = {
 
     //regions
     getVendorRegions: 'Region/GetVendorRegion',
+    postVendorRegionTx: 'Region/PostVendorRegionTx',
     removeVendorRegion: 'Region/RemoveVendorRegion',
     getVendorRegionBranch: 'Region/GetVendorRegionBranch',
     addVendorRegionBranch: 'Region/AddVendorRegionBranch',
@@ -96,9 +97,10 @@ export const urls = {
     getVendorRegionPrice: 'Finance/GetVendorRegionPrice',
 
     //customers
-    getCustomerType: "Customer/GetCustomerType",
+    getCustomerType: 'Customer/GetCustomerType',
     getVendorCustomer: 'Customer/GetVendorCustomer',
-    postVendorCustomerTx: "Customer/PostVendorCustomerTx",
+    postVendorCustomerTx: 'Customer/PostVendorCustomerTx',
+    removeVendorCustomer: 'Customer/RemoveVendorCustomer',
     getVendorCustomerLocation: 'Customer/GetVendorCustomerLocation',
     addVendorCustomerLocation: 'Customer/AddVendorCustomerLocation',
     getVendorCustomerPayment: 'Customer/GetVendorCustomerPayment',

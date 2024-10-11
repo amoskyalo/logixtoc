@@ -1,3 +1,7 @@
+export interface CustomerType {
+    CustomerTypeID: number;
+    CustomerTypeName: string;
+}
 export interface VendorCustomerPayment {
     VendorCustomerPaymentID: number;
     VendorAccountName: string;

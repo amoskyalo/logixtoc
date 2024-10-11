@@ -98,7 +98,7 @@ export interface MultipleSelect {
 
 export interface Checkbox {
     type: 'checkbox';
-    options: Array<{ name: string; value: string }>;
+    options: Array<{ name: string; value: string | number }>;
 }
 
 export type Input<V> = CommonInputTypes<V> &

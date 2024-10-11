@@ -96,7 +96,9 @@ export const urls = {
     getVendorRegionPrice: 'Finance/GetVendorRegionPrice',
 
     //customers
+    getCustomerType: "Customer/GetCustomerType",
     getVendorCustomer: 'Customer/GetVendorCustomer',
+    postVendorCustomerTx: "Customer/PostVendorCustomerTx",
     getVendorCustomerLocation: 'Customer/GetVendorCustomerLocation',
     addVendorCustomerLocation: 'Customer/AddVendorCustomerLocation',
     getVendorCustomerPayment: 'Customer/GetVendorCustomerPayment',

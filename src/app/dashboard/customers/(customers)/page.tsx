@@ -5,6 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useGetUser, useResponsiveness } from '@/hooks';
 import { useState } from 'react';
 
+const initialValues = {
+    customerTypeID: '',
+    vendorCustomerCategoryID: '',
+    customerName: '',
+    customerPhone: '',
+    customerPinNO: '',
+    customerMail: '',
+    openingBalance: '',
+    creditLimit: '',
+    paymentTerms: '',
+    saleNotification: '',
+    isAdvance: '',
+};
+
 const Customers = () => {
     const [selectedRegion, setSelectedRegion] = useState(null);
 
@@ -26,10 +40,12 @@ const Customers = () => {
     const formWidth = isMobile ? { width: 120 } : { flex: 1 };
     const commonWidth = isMobile ? 170 : 150;
 
-    const UI = new APPCRUD<VendorCustomer, any, void, GetCustomer>({
+    const UI = new APPCRUD<VendorCustomer, any, any, GetCustomer>({
         grid: {
             fetchUrl: 'getVendorCustomer',
+            deleteUrl: 'removeVendorCustomer',
             actions: ['options'],
+            initialDeleteParams: { vendorCustomerID: '' },
             params: { VendorCustomerCategoryID: 0, CustomerTypeID: 0 },
             options: [
                 { name: 'Shops', onClick: (activeRecord) => handleNavigate(activeRecord, 'shops') },
@@ -40,7 +56,7 @@ const Customers = () => {
                 { name: 'Statement', onClick: (activeRecord) => handleNavigate(activeRecord, 'statement') },
                 { name: 'UOM Statement', onClick: (activeRecord) => handleNavigate(activeRecord, 'uom-statement') },
                 { name: 'Edit', onClick: () => null },
-                { name: 'Delete', onClick: () => null },
+                { name: 'Delete' },
             ],
             columns: [
                 { field: 'CustomerName', headerName: 'Customer Name', width: commonWidth },
@@ -59,19 +75,7 @@ const Customers = () => {
             submitKey: 'postVendorCustomerTx',
             title: 'Add Customer Form',
             stepsLabels: isMobile ? mobileLabels : desktopLabels,
-            initialValues: {
-                customerTypeID: '',
-                vendorCustomerCategoryID: '',
-                customerName: '',
-                customerPhone: '',
-                customerPinNO: '',
-                customerMail: '',
-                openingBalance: '',
-                creditLimit: '',
-                paymentTerms: '',
-                saleNotification: '',
-                isAdvance: '',
-            },
+            initialValues,
             stepBasedDialogSize: (step) => (step === 2 ? 'md' : 'xs'),
             modifyData: ({ gridValues, isAdvance, openingBalance, ...rest }) => {
                 const vendorCustomerLocationArray = gridValues.map((item: any) => ({

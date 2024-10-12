@@ -37,14 +37,14 @@ const ProductPerformance = ({ DailyPerformanceArray, loading }: ProductPerfomane
       let colorIndex = 0;
       const productsGraph = Array.from(categoryMap, ([label, data]) => ({
          label,
-         data: data.toReversed(),
+         data: [...data].reverse(),
          tension: 0.4,
          borderWidth: 2,
          pointRadius: 4,
          borderColor: ChartColors[colorIndex++],
       }));
 
-      setLabels(days.toReversed());
+      setLabels([...days].reverse());
       setGraphData(productsGraph);
    }, [DailyPerformanceArray]);
 

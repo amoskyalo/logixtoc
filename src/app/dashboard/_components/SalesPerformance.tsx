@@ -33,7 +33,7 @@ const SalesPerformance = ({ PerformanceArray, loading }: SalesPerformanceInterfa
          datasets: [
             {
                data: totalValue,
-               backgroundColor: ChartColors.toReversed(),
+               backgroundColor: [...ChartColors].reverse(),
                borderColor: 'transparent',
                weight: 80,
                borderJoinStyle: 'round',

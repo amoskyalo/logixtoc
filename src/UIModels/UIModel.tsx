@@ -48,7 +48,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [rowModels, setRowModels] = useState<GridRowModesModel>({});
     const [activeStep, setActiveStep] = useState<number>(0);
 
-    const { isMobile, isMiniTablet } = useResponsiveness();
+    const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
 
     const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
         ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
@@ -189,7 +189,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         ...columns.map(({ mobileWidth, width, ...rest }) => {
             return {
                 ...rest,
-                ...(width ? { width } : (isMobile || isMiniTablet) && mobileWidth ? { width: mobileWidth } : { flex: 1 }),
+                ...(isDesktop ? { flex: 1 } : width ? { width } : (isMobile || isMiniTablet) && mobileWidth ? { width: mobileWidth } : { flex: 1 }),
             };
         }),
         ...(showActions

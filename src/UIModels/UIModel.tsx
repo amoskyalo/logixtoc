@@ -119,7 +119,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             focusField = formModel!.focusField;
             columns = formModel!.columns;
         } else if (formType === 'stepperForm') {
-            const gridForm = formModel?.steps.find((step) => step.type === 'gridForm');
+            const gridForm = formModel?.steps.find((step) => step.type === 'gridForm') as any;
             newRow = { ...gridForm?.newRow, id: formRows.length + 1 };
             focusField = gridForm?.focusField ?? '';
             columns = gridForm?.columns || [];

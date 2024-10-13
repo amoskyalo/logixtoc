@@ -16,9 +16,13 @@ export const APPCRUD = class<R, V, D, P> {
             const form = this.config.form;
 
             const inputs =
-                form?.type === 'normal' ? form.inputs : form?.type === 'stepperForm' ? form.steps.find((step) => step.type === 'normal')?.inputs : [];
+                form?.type === 'normal'
+                    ? form.inputs
+                    : form?.type === 'stepperForm'
+                      ? (form.steps.find((step) => step.type === 'normal') as any).inputs
+                      : [];
 
-            const v = inputs?.reduce((acc, input) => {
+            const v = inputs?.reduce((acc: any, input: any) => {
                 const { key, type, validate } = input;
 
                 const string_v = string().required('This field is required');

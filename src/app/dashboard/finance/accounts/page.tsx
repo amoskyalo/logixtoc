@@ -2,32 +2,9 @@
 
 import { VendorAccount, GetUserAccountsParams, APPCRUD, useFetch, VendorAccountType } from '@/api';
 import { useResponsiveness } from '@/hooks';
-import { GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/navigation';
 
-type Columns = GridColDef & { mobileWidth: number };
 type Delete = { vendorAccountID: number };
-
-export const AccountsColumns: Columns[] = [
-    { field: 'VendorAccountTypeName', headerName: 'Account Type', mobileWidth: 150 },
-    { field: 'VendorAccountName', headerName: 'Account Name', mobileWidth: 170 },
-    { field: 'VendorAccountNO', headerName: 'Account No.', type: 'number', mobileWidth: 150 },
-    { field: 'isShared', headerName: 'Shared', type: 'boolean', valueGetter: (__, row) => row.isShared === 1, mobileWidth: 150 },
-    {
-        field: 'isAdminOnly',
-        headerName: 'Admin Only',
-        type: 'boolean',
-        valueGetter: (__, row) => row.isAdminOnly === 1,
-        mobileWidth: 150,
-    },
-    {
-        field: 'isIntegrated',
-        headerName: 'Integrated',
-        type: 'boolean',
-        valueGetter: (__, row) => row.isIntegrated === 1,
-        mobileWidth: 150,
-    },
-];
 
 const singleSelect = {
     getOptionValue: (option: any) => option.value,
@@ -58,7 +35,26 @@ const Accounts = () => {
                 { name: 'Edit', onClick: () => null },
                 { name: 'Delete' },
             ],
-            columns: AccountsColumns,
+            columns: [
+                { field: 'VendorAccountTypeName', headerName: 'Account Type', mobileWidth: 150 },
+                { field: 'VendorAccountName', headerName: 'Account Name', mobileWidth: 170 },
+                { field: 'VendorAccountNO', headerName: 'Account No.', type: 'number', mobileWidth: 150 },
+                { field: 'isShared', headerName: 'Shared', type: 'boolean', valueGetter: (__, row) => row.isShared === 1, mobileWidth: 150 },
+                {
+                    field: 'isAdminOnly',
+                    headerName: 'Admin Only',
+                    type: 'boolean',
+                    valueGetter: (__, row) => row.isAdminOnly === 1,
+                    mobileWidth: 150,
+                },
+                {
+                    field: 'isIntegrated',
+                    headerName: 'Integrated',
+                    type: 'boolean',
+                    valueGetter: (__, row) => row.isIntegrated === 1,
+                    mobileWidth: 150,
+                },
+            ],
         },
         form: {
             title: 'Add New Account',

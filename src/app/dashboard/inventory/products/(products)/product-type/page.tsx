@@ -22,6 +22,8 @@ type Values = {
     }>;
 };
 
+type Delete = { vendorProductTypeID: string | number };
+
 const ProductType = () => {
     const [activeRecord, setActiveRecord] = useState<{ type: string; row: ProductTypeInterface | null }>({
         type: '',
@@ -38,24 +40,19 @@ const ProductType = () => {
         setActiveRecord({ type: '', row: null });
     };
 
-    const UI = new APPCRUD<ProductTypeInterface, Values, void, void>({
+    const UI = new APPCRUD<ProductTypeInterface, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductTypes',
             deleteUrl: 'deleteVendorProductTypes',
             actions: ['options'],
+            initialDeleteParams: { vendorProductTypeID: '' },
             options: [
                 { name: 'UOM List', onClick: (record) => setActiveRecord({ row: record, type: 'uom list' }) },
                 { name: 'Class List', onClick: (record) => setActiveRecord({ row: record, type: 'class list' }) },
                 { name: 'Brands List', onClick: (record) => setActiveRecord({ row: record, type: 'brands list' }) },
                 { name: 'Edit', onClick: () => null },
-                {
-                    name: 'Delete',
-                    onClick: (record, setDeleteParams, setDeleteOpen) => {
-                        setDeleteOpen(true);
-                        setDeleteParams({ vendorProductTypeID: record.VendorProductTypeID });
-                    },
-                },
+                { name: 'Delete' },
             ],
             columns: [
                 { field: 'VendorProductTypeName', headerName: 'Product Type Name', mobileWidth: 200 },
@@ -84,7 +81,7 @@ const ProductType = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add Product Type',
             submitKey: 'addVendorProductTypes',
             initialValues: {

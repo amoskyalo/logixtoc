@@ -9,9 +9,7 @@ type Values = {
     vendorLocationTypeName: string;
 };
 
-type Delete = {
-    vendorLocationTypeID: number;
-};
+type Delete = { vendorLocationTypeID: number };
 
 const LocationTypes = () => {
     const { data: systemLocationTypes } = useFetch<SystemLocationType, void>('getSystemLocationType');
@@ -43,7 +41,7 @@ const LocationTypes = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'postVendorLocationType',
             title: 'Add new location type',
             initialValues: { locationTypeID: '' as unknown as number, vendorLocationTypeName: '' },

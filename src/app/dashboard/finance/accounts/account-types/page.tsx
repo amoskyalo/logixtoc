@@ -8,9 +8,7 @@ type Values = {
     vendorAccountTypeName: string;
 };
 
-type Delete = {
-    vendorAccountTypeID: number;
-};
+type Delete = { vendorAccountTypeID: number | string };
 
 const AccountTypes = () => {
     const router = useRouter();
@@ -23,6 +21,7 @@ const AccountTypes = () => {
             fetchUrl: 'getVendorAccountTypes',
             deleteUrl: 'deleteVendorAccountType',
             actions: ['options'],
+            initialDeleteParams: { vendorAccountTypeID: '' },
             options: [
                 {
                     name: 'Accounts',
@@ -32,13 +31,7 @@ const AccountTypes = () => {
                         ),
                 },
                 { name: 'Edit', onClick: () => null },
-                {
-                    name: 'Delete',
-                    onClick: (record, setDeleteParams, setDeleteOpen) => {
-                        setDeleteOpen(true);
-                        setDeleteParams({ vendorAccountTypeID: record.VendorAccountTypeID });
-                    },
-                },
+                { name: 'Delete' },
             ],
             columns: [
                 { field: 'VendorAccountTypeName', headerName: 'Account', mobileWidth: 150 },
@@ -54,7 +47,7 @@ const AccountTypes = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'postVendorAccountType',
             title: 'Add Account Type',
             initialValues: { accountTypeID: '', vendorAccountTypeName: '' },

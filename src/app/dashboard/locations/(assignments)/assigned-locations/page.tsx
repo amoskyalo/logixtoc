@@ -2,13 +2,9 @@
 
 import { AssignedLocationObject, APPCRUD } from '@/api';
 
-type Params = {
-    VendorLocationID: number;
-};
+type Params = { VendorLocationID: number };
 
-type Delete = {
-    vendorLocationAssignmentID: number;
-};
+type Delete = { vendorLocationAssignmentID: number };
 
 type Values = {
     vendorLocationID: number;
@@ -35,7 +31,7 @@ const AssignedLocations = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add New Assigned Location',
             submitKey: 'postAssignedLocations',
             initialValues: { locationsArray: [], vendorLocationID: '' as unknown as number },

@@ -32,13 +32,7 @@ const Suppliers = () => {
                 { name: 'Payment', onClick: (record) => handleNavigate(record, 'supplier-payment') },
                 { name: 'Statement', onClick: (record) => handleNavigate(record, 'supplier-statement') },
                 { name: 'Edit', onClick: () => null },
-                {
-                    name: 'Delete',
-                    onClick: (activeRecord, setDeleteParams, setDeleteOpen) => {
-                        setDeleteOpen(true);
-                        setDeleteParams(activeRecord.VendorSupplierID);
-                    },
-                },
+                { name: 'Delete' },
             ],
             columns: [
                 { field: 'SupplierName', headerName: 'Supplier Name', width: 150 },
@@ -57,7 +51,7 @@ const Suppliers = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'postVendorSupplierTx',
             title: 'Add Supplier Payment',
             initialValues: { SupplierMail: '', openingBalance: '', supplierName: '', supplierPhone: '' },

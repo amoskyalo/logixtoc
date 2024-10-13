@@ -9,13 +9,9 @@ type Values = {
     }>;
 };
 
-type Delete = {
-    vendorLocationProductTypeID: number;
-};
+type Delete = { vendorLocationProductTypeID: number };
 
-type Params = {
-    VendorLocationID: number;
-};
+type Params = { VendorLocationID: number };
 
 const AssignedProducts = () => {
     const { data: vendorProducts } = useFetch<ProductType, void>('getVendorProductTypes');
@@ -35,7 +31,7 @@ const AssignedProducts = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'postAssignedProducts',
             title: 'Add New Location Product Type',
             initialValues: { vendorLocationID: '' as unknown as number, productTypeArray: [] },
@@ -55,7 +51,7 @@ const AssignedProducts = () => {
                     optionKey: 'vendorProductTypeID',
                     optionValueKey: 'VendorProductTypeID',
                     optionLabelKey: 'VendorProductTypeName',
-                    lookups: vendorProducts?.Data ?? []
+                    lookups: vendorProducts?.Data ?? [],
                 },
             ],
         },

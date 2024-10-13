@@ -1,15 +1,6 @@
 import { Dialog, Button, DialogTitle, DialogActions, DialogContent, CircularProgress, DialogContentText } from '@mui/material';
 
-const DeleteDialog = ({
-    open,
-    onCancel,
-    onOkay,
-    loading,
-    dialogTitle,
-    contentText,
-    onCancelButtonText,
-    onOkayButtonText,
-}: Readonly<{
+type Props = {
     open: boolean;
     loading: boolean;
     onCancel: () => void;
@@ -18,7 +9,9 @@ const DeleteDialog = ({
     contentText?: string;
     onOkayButtonText?: string;
     onCancelButtonText?: string;
-}>) => {
+};
+
+const DeleteDialog = ({ open, onCancel, onOkay, loading, dialogTitle, contentText, onCancelButtonText, onOkayButtonText }: Readonly<Props>) => {
     return (
         <Dialog
             open={open}

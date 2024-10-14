@@ -6,7 +6,6 @@ import lightlogo from '../../Assets/lightlogo.png';
 import lighticon from '../../Assets/lighticon.png';
 import darkicon from '../../Assets/darkicon.png';
 import Box, { BoxProps } from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
@@ -118,7 +117,6 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
             </Box>
          </DrawerHeader>
 
-         <Divider />
          <Box
             sx={{
                flex: 1,

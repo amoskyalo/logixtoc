@@ -12,10 +12,16 @@ type Props = {
 };
 
 const DeleteDialog = ({ open, onCancel, onOkay, loading, dialogTitle, contentText, onCancelButtonText, onOkayButtonText }: Readonly<Props>) => {
+    const handlCancel = () => {
+        if (!loading) {
+            onCancel();
+        }
+    };
+    
     return (
         <Dialog
             open={open}
-            onClose={onCancel}
+            onClose={handlCancel}
             maxWidth="xs"
             fullWidth
             aria-labelledby="alert-dialog-title"

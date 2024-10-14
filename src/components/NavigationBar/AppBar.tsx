@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import {
     MenuList,
@@ -23,13 +23,14 @@ import { Popover } from '../Popover';
 import { countries, profileOptions } from '@/Constants';
 import { useGetUser, useResponsiveness, useConnectivityStatus } from '@/hooks';
 import { ThemeContext } from '@/Context';
-import { DeleteDialog } from '../Dialogs';
+import { DeleteDialog, SearchDialog } from '../Dialogs';
+import { FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import ke from '../../Assets/kenya.jpg';
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 
 const flexStyles = {
     display: 'flex',
@@ -86,6 +87,7 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [menuType, setMenuType] = useState<'countries' | 'profile' | null>(null);
     const [activeProfileOption, setActiveProfileOption] = useState<string | null>(null);
+    const [routeSearch, setRouteSearch] = useState(false);
 
     const handleToggleTheme = () => {
         const setModeTo = mode === 'light' ? 'dark' : 'light';
@@ -113,6 +115,25 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
         }
     };
 
+    useEffect(() => {
+        const cb = (event: KeyboardEvent) => {
+            const { key, ctrlKey } = event;
+
+            if (key === 'k' && ctrlKey) {
+                event.preventDefault();
+                setRouteSearch(true);
+            }
+
+            if (key === 'Escape' && !ctrlKey) {
+                setRouteSearch(false);
+            }
+        };
+
+        document.addEventListener('keydown', cb);
+
+        return () => document.removeEventListener('keydown', cb);
+    }, []);
+
     return (
         <Bar isSmallScreen={isMobile || isTablet}>
             <Toolbar>
@@ -138,14 +159,39 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
                     </Box>
 
                     <Box sx={{ cursor: 'pointer', ...flexStyles }}>
-                        <Box sx={flexStyles} onClick={(event) => handlePopover(event, 'countries')}>
-                            <Image src={ke} height={16} width={24} alt={user?.CountryFlag} />
-                            <Typography variant="body1">{user?.CountryFlag?.toLocaleUpperCase()}</Typography>
-                            <KeyboardArrowDownIcon />
-                        </Box>
+                        {/* <IconButton sx={{ height: 40, width: 40 }} onClick={(event) => handlePopover(event, 'countries')}>
+                            <Image src={ke} height={24} width={24} alt={user?.CountryFlag} className="country" />
+                        </IconButton> */}
+
                         <Tooltip title={`Turn ${mode === 'light' ? 'off' : 'on'} the light`}>
                             <IconButton onClick={handleToggleTheme}>{mode === 'dark' ? <WbSunnyIcon /> : <DarkModeIcon />}</IconButton>
                         </Tooltip>
+
+                        <Stack
+                            direction="row"
+                            alignItems={'center'}
+                            spacing={1}
+                            onClick={() => setRouteSearch(true)}
+                            sx={{
+                                backgroundColor: mode === 'dark' ? '#1d242c' : 'rgba(0, 0, 0, 0.1)',
+                                px: 1,
+                                py: 0.7,
+                                borderRadius: 2,
+                                marginRight: 1,
+                                marginLeft: 1,
+                            }}
+                        >
+                            <FiSearch />
+                            <Stack
+                                alignItems={'center'}
+                                direction="row"
+                                sx={{ backgroundColor: 'white', borderRadius: 1, py: 0.3, px: 0.5, color: 'black' }}
+                            >
+                                <KeyboardCommandKeyIcon sx={{ fontWeight: 800, fontSize: 12 }} />
+                                <Typography sx={{ fontWeight: 800, fontSize: 12 }}>K</Typography>
+                            </Stack>
+                        </Stack>
+
                         <StyledBadge
                             variant="dot"
                             color="success"
@@ -172,7 +218,7 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
                                     <Stack>
                                         <Stack direction="row" spacing={1}>
                                             <Typography variant="body2">{`${user?.FirstName} ${user?.LastName}`}</Typography>
-                                            <Chip label="Admin" variant="outlined" color='primary' size="small" sx={{ fontSize: '10px' }} />
+                                            <Chip label="Admin" variant="outlined" color="primary" size="small" sx={{ fontSize: '10px' }} />
                                         </Stack>
                                         <Typography variant="caption">{user?.Email}</Typography>
                                     </Stack>
@@ -240,6 +286,8 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
                 dialogTitle="Log Out"
                 onOkayButtonText="Log out"
             />
+
+            <SearchDialog open={routeSearch} onCancel={() => setRouteSearch(false)} />
         </Bar>
     );
 };

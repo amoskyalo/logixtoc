@@ -25,11 +25,12 @@ import { useGetUser, useResponsiveness, useConnectivityStatus } from '@/hooks';
 import { ThemeContext } from '@/Context';
 import { DeleteDialog, SearchDialog } from '../Dialogs';
 import { FiSearch } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
-import ke from '../../Assets/kenya.jpg';
+// import ke from '../../Assets/kenya.jpg';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 
 const flexStyles = {
@@ -83,6 +84,7 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
     const { status } = useConnectivityStatus();
     const { mode, setMode } = useContext(ThemeContext);
     const user = useGetUser();
+    const router = useRouter();
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [menuType, setMenuType] = useState<'countries' | 'profile' | null>(null);
@@ -232,7 +234,7 @@ const AppBar = ({ open, setExpand, expand }: Readonly<{ open: boolean; setExpand
                                     dense={isMobile}
                                     onClick={() => {
                                         setAnchorEl(null);
-                                        setActiveProfileOption(name);
+                                        name  === 'Settings' ? router.push('/dashboard/settings') :  setActiveProfileOption(name);
                                     }}
                                     sx={{ py: 1 }}
                                 >

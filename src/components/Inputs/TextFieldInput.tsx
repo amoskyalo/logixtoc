@@ -18,7 +18,7 @@ const TextFieldInput = (props: TextFieldProps) => {
             }}
             inputProps={{
                style: {
-                  height: '24px',
+                  height: '28px',
                },
             }}
             {...props}

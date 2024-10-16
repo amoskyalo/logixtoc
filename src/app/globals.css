@@ -25,6 +25,11 @@ body {
   border-radius: 2px;
 }
 
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .glassmorphism {
     background: rgba(255, 255, 255, 0.1);

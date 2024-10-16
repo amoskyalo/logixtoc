@@ -209,12 +209,12 @@ export const routes = [
             {
                 name: "Tracking",
                 icon: EvStation,
-                path: "/insights/tracking"
+                path: "/dashboard/analytics/tracking"
             },
             {
-                name: "Analytics",
+                name: "CRM",
                 icon: EvStation,
-                path: "/coming soon",
+                path: "/dashboard/analytics/crm",
                 isNew: true
             }
         ]

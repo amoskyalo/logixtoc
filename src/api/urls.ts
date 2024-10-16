@@ -121,4 +121,8 @@ export const urls = {
     postVendorSupplierTx: 'Supplier/PostVendorSupplierTx',
     removeVendorSupplier: 'Supplier/RemoveVendorSupplier',
     getVendorSupplierStatement: 'Supplier/GetVendorSupplierStatement',
+
+    // Tracker
+    getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',
+    getVendorCustomerHeatMap: 'Tracker/GetVendorCustomerHeatMap'
 };

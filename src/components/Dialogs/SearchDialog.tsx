@@ -1,12 +1,13 @@
 import { Dialog, DialogTitle, TextField, Box, Divider, Typography } from '@mui/material';
 import { routes } from '@/Constants';
 import { useCallback, useState } from 'react';
-import { useThemeMode } from '@/hooks';
+import { useThemeMode, useResponsiveness } from '@/hooks';
 import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
 
 const SearchDialog = ({ open, onCancel }: { open: boolean; onCancel: any }) => {
     const { isDarkMode } = useThemeMode();
+    const { isMobile } = useResponsiveness();
 
     const [search, setSearch] = useState('');
 
@@ -60,7 +61,7 @@ const SearchDialog = ({ open, onCancel }: { open: boolean; onCancel: any }) => {
 
             <Divider />
 
-            <Box sx={{ height: '400px', overflowY: 'hidden', p: 2, ':hover': { overflowY: 'scroll' } }} id="side_bar">
+            <Box sx={{ height: '400px', overflowY: isMobile ? 'scroll' : 'hidden', p: 2, ':hover': { overflowY: 'scroll' } }} id="side_bar">
                 {routesList().map(({ name, path }) => (
                     <Box
                         key={name}

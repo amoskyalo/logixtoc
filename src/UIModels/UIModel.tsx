@@ -370,10 +370,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                                 <SubmitButton
                                     loading={formLoading}
                                     onClick={() => {
-                                        const payload = formRows.map(({ id, isNew, ...rest }) => rest);
-                                        console.log(payload);
+                                        const gridValues = formRows.map(({ id, isNew, ...rest }) => rest);
+                                        handleSubmit(gridValues as V);
                                     }}
-                                    disabled={formRows.length === 0}
+                                    disabled={formRows.length === 0 || validateObjectFields([...formRows])}
                                 />
                             </Box>
                         </Stack>

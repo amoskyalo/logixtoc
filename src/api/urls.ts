@@ -122,7 +122,13 @@ export const urls = {
     removeVendorSupplier: 'Supplier/RemoveVendorSupplier',
     getVendorSupplierStatement: 'Supplier/GetVendorSupplierStatement',
 
+    //reconciliation
+    getVendorLocationStockSaleSummary: 'Reconciliation/GetVendorLocationStockSaleSummary',
+    getSalePaymentCollection: 'Reconciliation/GetSalePaymentCollection',
+    postVendorSaleCollection: "Reconciliation/PostVendorSaleCollection",
+    getVendorSaleHistory: "Reconciliation/GetVendorSaleHistory",
+
     // Tracker
     getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',
-    getVendorCustomerHeatMap: 'Tracker/GetVendorCustomerHeatMap'
+    getVendorCustomerHeatMap: 'Tracker/GetVendorCustomerHeatMap',
 };

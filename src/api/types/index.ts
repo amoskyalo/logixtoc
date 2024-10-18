@@ -7,3 +7,4 @@ export * from './Customers';
 export * from './Finance';
 export * from './Suppliers';
 export * from './Reconciliation';
+export * from './Insights';

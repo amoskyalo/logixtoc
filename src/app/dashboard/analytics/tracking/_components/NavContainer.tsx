@@ -16,34 +16,17 @@ type Props = {
 };
 const NavContainer = ({ title, setSearchValue, searchValue, filterValue, filterOptions, setFilterValue, children }: Props) => {
     const [anchorEl, setAnchorEl] = useState<any>(null);
-    const [position, setPosition] = useState<any>(null);
-
     const open = Boolean(anchorEl);
-
     const { isMobile } = useResponsiveness();
-
-    useEffect(() => {
-        document.getElementById('scroll')?.addEventListener('scroll', () => {
-            const stickyEl = document.getElementById('sticky');
-            setPosition(stickyEl?.getBoundingClientRect().top);
-        });
-
-        return () =>
-            document.getElementById('scroll')?.removeEventListener('scroll', () => {
-                const stickyEl = document.getElementById('sticky');
-                setPosition(stickyEl?.getBoundingClientRect().top);
-            });
-    }, []);
 
     return (
         <Box
-            id="scroll"
             sx={{
                 width: isMobile ? '100%' : 600,
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
-                overflow: 'auto',
+                overflowY: 'auto',
             }}
         >
             <Box
@@ -69,28 +52,20 @@ const NavContainer = ({ title, setSearchValue, searchValue, filterValue, filterO
             {!isMobile && <Divider />}
 
             <Box
-                id="sticky"
                 sx={{
                     display: 'flex',
                     paddingY: 2,
                     paddingX: isMobile ? 0 : 2,
                     columnGap: 1,
                     alignItems: 'center',
-                    position: 'sticky',
                     top: 0,
                     zIndex: 99,
-                    ...(position === 56
-                        ? {
-                              boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.2)',
-                              backgroundColor: 'white',
-                          }
-                        : {}),
                 }}
             >
                 <OutlinedInput
                     sx={{ flex: 1 }}
                     size="small"
-                    placeholder="Enter Value"
+                    placeholder="Search..."
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue || ''}
                     endAdornment={

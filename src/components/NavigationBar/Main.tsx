@@ -132,7 +132,7 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
     );
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100%' }}>
+        <Box sx={{ display: 'flex', height: '100%' }}>
             <CssBaseline />
 
             {isMobile || isTablet ? (
@@ -145,12 +145,23 @@ export default function MainBar({ children }: Readonly<{ children: React.ReactNo
                 </DesktopDrawer>
             )}
 
-            <Box component="main" sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: `calc(100% - ${drawerWidth}px)` }}>
+            <Box
+                component="main"
+                sx={{
+                    maxHeight: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+                    width: `calc(100% - ${drawerWidth}px)`,
+                    ...(isTrackingPage && { overflow: 'hidden' }),
+                }}
+            >
                 <AppBar open={open} expand={expand} setExpand={setExpand} />
                 <Box
                     sx={{
-                        flexGrow: 1,
-                        height: '100%',
+                        flex: 1,
+                        maxHeight: '100%',
+                        ...(isTrackingPage && { overflow: 'hidden' }),
                         py: isTrackingPage ? 0 : 2,
                         px: isTrackingPage ? 0 : isMobile ? 2 : 3,
                     }}

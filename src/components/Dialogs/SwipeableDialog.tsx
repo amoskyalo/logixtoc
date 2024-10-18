@@ -10,6 +10,8 @@ const drawerBleeding = 56;
 type Props = {
     children: React.ReactNode;
     renderHeader: () => React.ReactNode;
+    open: boolean;
+    setOpen: (arg: boolean) => void;
 };
 
 const Root = styled('div')(({ theme }) => ({
@@ -40,9 +42,7 @@ const Puller = styled('div')(({ theme }) => ({
     }),
 }));
 
-export default function SwipeableEdgeDrawer({ children, renderHeader }: Readonly<Props>) {
-    const [open, setOpen] = React.useState(false);
-
+export default function SwipeableEdgeDrawer({ children, renderHeader, open, setOpen }: Readonly<Props>) {
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };

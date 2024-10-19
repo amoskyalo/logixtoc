@@ -52,6 +52,12 @@ export const urls = {
 
     //HR
     getVendorUsers: 'HR/GetVendorUsers',
+    GetVendorCommissionTypeRange: 'HR/GetVendorCommissionTypeRange',
+    getVendorCommissionType: 'HR/GetVendorCommissionType',
+    getSystemCommissionType: 'HR/GetSystemCommissionType',
+    postVendorCommissionType: 'HR/PostVendorCommissionType',
+    getSystemCommissionUserType: 'HR/GetSystemCommissionUserType',
+    removeVendorCommissionType: 'HR/RemoveVendorCommissionType',
 
     //products
     getProductClass: 'Product/GetProductClass',
@@ -95,6 +101,10 @@ export const urls = {
     postVendorPriceDetail: 'Finance/PostVendorPriceDetail',
     removeVendorPriceDetail: 'Finance/RemoveVendorPriceDetail',
     getVendorRegionPrice: 'Finance/GetVendorRegionPrice',
+    getVendorAllowanceRequest: 'Finance/GetVendorAllowanceRequest',
+    getVendorAllowanceType: 'Finance/GetVendorAllowanceType',
+    postVendorAllowanceType: 'Finance/PostVendorAllowanceType',
+    removeVendorAllowanceType: 'Finance/RemoveVendorAllowanceType',
 
     //customers
     getCustomerType: 'Customer/GetCustomerType',
@@ -125,8 +135,8 @@ export const urls = {
     //reconciliation
     getVendorLocationStockSaleSummary: 'Reconciliation/GetVendorLocationStockSaleSummary',
     getSalePaymentCollection: 'Reconciliation/GetSalePaymentCollection',
-    postVendorSaleCollection: "Reconciliation/PostVendorSaleCollection",
-    getVendorSaleHistory: "Reconciliation/GetVendorSaleHistory",
+    postVendorSaleCollection: 'Reconciliation/PostVendorSaleCollection',
+    getVendorSaleHistory: 'Reconciliation/GetVendorSaleHistory',
 
     // Tracker
     getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',

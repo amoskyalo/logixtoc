@@ -148,7 +148,7 @@ export const routes = [
             },
             {
                 name: "Allowance",
-                path: "/commission/allowance/allowance request",
+                path: "/dashboard/commission/allowance/allowance-request",
             }
         ]
     },

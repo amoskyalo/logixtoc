@@ -1,25 +1,10 @@
-export type HRParams = {
-    PageNo?: number;
-    PageSize?: number;
-    VendorID: number;
-};
-
-export type CommonResTypes = {
-    Error: string;
-    StatusCode: number;
-    Message: string;
-    TotalCount: number;
-    Page: number;
-    PageSize: number;
-};
-
-export type UserSystemRolePolicyInterface = {
+export interface UserSystemRolePolicyInterface {
     ID: number;
     SystemPolicyName: string;
     EndPointDescription: string;
-};
+}
 
-export type VendorUserObjectInterface = {
+export interface VendorUserObjectInterface {
     VendorUserID: number;
     UserID: number;
     SystemAccessTypeID: number;
@@ -34,4 +19,25 @@ export type VendorUserObjectInterface = {
     StatusID: number;
     DateAdded: string;
     UserSystemRolePolicyArray: UserSystemRolePolicyInterface[];
-};
+}
+export interface CommissionTypeRange {
+    SystemCommissionUserTypeName: string;
+    SystemCommissionUserTypeID: number;
+    SystemCommissionTypeName: string;
+    Description: string;
+    IsProductCommission: number;
+    SystemCommissionTypeID: number;
+    VendorCommissionTypeID: number;
+    StatusID: number;
+    DateAdded: string;
+}
+export interface SystemCommissionType {
+    SystemCommissionTypeName: string;
+    Description: string;
+    IsProductCommission: number;
+    SystemCommissionTypeID: number;
+}
+export interface GetSystemCommissionUserType {
+    SystemCommissionUserTypeName: string;
+    SystemCommissionUserTypeID: number;
+}

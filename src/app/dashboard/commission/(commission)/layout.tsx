@@ -5,7 +5,7 @@ const CommisionLayout = ({ children }: Readonly<{ children: React.ReactNode }>) 
     return (
         <TabsPageContainer
             headerName="Commision"
-            subTitle="Commission page"
+            subTitle="View, add your commisions from this page, from commision ranges, to commision types"
             initialRoute="commissions-rage"
             parentRoute="commission"
             tabsList={['Commission Range', 'Commission Type']}

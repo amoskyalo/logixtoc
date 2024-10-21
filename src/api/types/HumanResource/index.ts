@@ -1,9 +1,10 @@
+export * from './UserWallet';
+export * from './LeaveRequest';
 export interface UserSystemRolePolicyInterface {
     ID: number;
     SystemPolicyName: string;
     EndPointDescription: string;
 }
-
 export interface VendorUserObjectInterface {
     VendorUserID: number;
     UserID: number;
@@ -40,4 +41,13 @@ export interface SystemCommissionType {
 export interface GetSystemCommissionUserType {
     SystemCommissionUserTypeName: string;
     SystemCommissionUserTypeID: number;
+}
+export interface SystemAccessType {
+    SystemAccessTypeID: string;
+    SystemAccessTypeName: string;
+}
+export interface SystemRole {
+    SystemRoleID: number;
+    SystemRoleName: string;
+    SystemRolePolicyArray: any[];
 }

@@ -85,17 +85,6 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         return data?.Data?.map((row, index) => ({ id: index + 1, ...row }));
     };
 
-    const onClose: () => void = () => {
-        setDeleteOpen(false);
-        setFormOpen(false);
-        setDeleteParams(initialDeleteParams);
-        setAnchorEl(null);
-        setActiveRecord(null);
-        setActiveStep(0);
-        setFormRows([]);
-        setRowModels({});
-    };
-
     const v = (row: any) => {
         const keys = Object.keys(initialDeleteParams as object);
 
@@ -154,6 +143,17 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         newRow: getGridFormProps()?.newRow,
         rows: formRows,
     });
+
+    const onClose: () => void = () => {
+        setDeleteOpen(false);
+        setFormOpen(false);
+        setDeleteParams(initialDeleteParams);
+        setAnchorEl(null);
+        setActiveRecord(null);
+        setActiveStep(0);
+        setFormRows([]);
+        setRowModels({});
+    };
 
     const toolbar = useCallback(() => <EditToolbar handleClick={handleAddRecord} />, [handleAddRecord]);
 

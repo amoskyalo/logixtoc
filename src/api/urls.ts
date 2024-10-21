@@ -148,6 +148,19 @@ export const urls = {
     postVendorSaleCollection: 'Reconciliation/PostVendorSaleCollection',
     getVendorSaleHistory: 'Reconciliation/GetVendorSaleHistory',
 
+    //maintenance
+    getVendorLocationFuelRequest: "Maintenance/GetVendorLocationFuelRequest",
+    getVendorFuelStation: "Maintenance/GetVendorFuelStation",
+    removeVendorFuelStation: "Maintenance/RemoveVendorFuelStation",
+    postVendorFuelStation: "Maintenance/PostVendorFuelStation",
+    getVendorLocationFuelConsumption: "Maintenance/GetVendorLocationFuelConsumption",
+    getVendorLocationFuelSetup: "Maintenance/GetVendorLocationFuelSetup",
+    postVendorLocationFuelSetup: "Maintenance/PostVendorLocationFuelSetup",
+    getVendorMaintenanceRequest: "Maintenance/GetVendorMaintenanceRequest",
+    getMaintenanceRequestType: "Maintenance/GetMaintenanceRequestType",
+    addMaintenanceRequestType: "Maintenance/AddMaintenanceRequestType",
+    removeMaintenanceRequestType: "Maintenance/RemoveMaintenanceRequestType",
+
     // Tracker
     getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',
     getVendorCustomerHeatMap: 'Tracker/GetVendorCustomerHeatMap',

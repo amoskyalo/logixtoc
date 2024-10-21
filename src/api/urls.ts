@@ -52,12 +52,22 @@ export const urls = {
 
     //HR
     getVendorUsers: 'HR/GetVendorUsers',
+    vendorUserRegistration: "HR/VendorUserRegistration",
+    removeSystemUser: 'HR/RemoveSystemUser',
     GetVendorCommissionTypeRange: 'HR/GetVendorCommissionTypeRange',
     getVendorCommissionType: 'HR/GetVendorCommissionType',
     getSystemCommissionType: 'HR/GetSystemCommissionType',
     postVendorCommissionType: 'HR/PostVendorCommissionType',
     getSystemCommissionUserType: 'HR/GetSystemCommissionUserType',
     removeVendorCommissionType: 'HR/RemoveVendorCommissionType',
+    getSystemAccessType: 'HR/GetSystemAccessType',
+    getSystemRole: "HR/GetSystemRole",
+    getVendorUserWallet: "HR/GetVendorUserWallet",
+    getVendorUserWalletStatement: "HR/GetVendorUserWalletStatement",
+    getVendorLeaveRequest: "HR/GetVendorLeaveRequest",
+    getVendorLeaveType: "HR/GetVendorLeaveType",
+    postVendorLeaveType: "HR/PostVendorLeaveType",
+    removeVendorLeaveType: "HR/RemoveVendorLeaveType",
 
     //products
     getProductClass: 'Product/GetProductClass',

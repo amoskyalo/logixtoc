@@ -52,7 +52,7 @@ export const urls = {
 
     //HR
     getVendorUsers: 'HR/GetVendorUsers',
-    vendorUserRegistration: "HR/VendorUserRegistration",
+    vendorUserRegistration: 'HR/VendorUserRegistration',
     removeSystemUser: 'HR/RemoveSystemUser',
     GetVendorCommissionTypeRange: 'HR/GetVendorCommissionTypeRange',
     getVendorCommissionType: 'HR/GetVendorCommissionType',
@@ -61,13 +61,13 @@ export const urls = {
     getSystemCommissionUserType: 'HR/GetSystemCommissionUserType',
     removeVendorCommissionType: 'HR/RemoveVendorCommissionType',
     getSystemAccessType: 'HR/GetSystemAccessType',
-    getSystemRole: "HR/GetSystemRole",
-    getVendorUserWallet: "HR/GetVendorUserWallet",
-    getVendorUserWalletStatement: "HR/GetVendorUserWalletStatement",
-    getVendorLeaveRequest: "HR/GetVendorLeaveRequest",
-    getVendorLeaveType: "HR/GetVendorLeaveType",
-    postVendorLeaveType: "HR/PostVendorLeaveType",
-    removeVendorLeaveType: "HR/RemoveVendorLeaveType",
+    getSystemRole: 'HR/GetSystemRole',
+    getVendorUserWallet: 'HR/GetVendorUserWallet',
+    getVendorUserWalletStatement: 'HR/GetVendorUserWalletStatement',
+    getVendorLeaveRequest: 'HR/GetVendorLeaveRequest',
+    getVendorLeaveType: 'HR/GetVendorLeaveType',
+    postVendorLeaveType: 'HR/PostVendorLeaveType',
+    removeVendorLeaveType: 'HR/RemoveVendorLeaveType',
 
     //products
     getProductClass: 'Product/GetProductClass',
@@ -149,17 +149,23 @@ export const urls = {
     getVendorSaleHistory: 'Reconciliation/GetVendorSaleHistory',
 
     //maintenance
-    getVendorLocationFuelRequest: "Maintenance/GetVendorLocationFuelRequest",
-    getVendorFuelStation: "Maintenance/GetVendorFuelStation",
-    removeVendorFuelStation: "Maintenance/RemoveVendorFuelStation",
-    postVendorFuelStation: "Maintenance/PostVendorFuelStation",
-    getVendorLocationFuelConsumption: "Maintenance/GetVendorLocationFuelConsumption",
-    getVendorLocationFuelSetup: "Maintenance/GetVendorLocationFuelSetup",
-    postVendorLocationFuelSetup: "Maintenance/PostVendorLocationFuelSetup",
-    getVendorMaintenanceRequest: "Maintenance/GetVendorMaintenanceRequest",
-    getMaintenanceRequestType: "Maintenance/GetMaintenanceRequestType",
-    addMaintenanceRequestType: "Maintenance/AddMaintenanceRequestType",
-    removeMaintenanceRequestType: "Maintenance/RemoveMaintenanceRequestType",
+    getVendorLocationFuelRequest: 'Maintenance/GetVendorLocationFuelRequest',
+    getVendorFuelStation: 'Maintenance/GetVendorFuelStation',
+    removeVendorFuelStation: 'Maintenance/RemoveVendorFuelStation',
+    postVendorFuelStation: 'Maintenance/PostVendorFuelStation',
+    getVendorLocationFuelConsumption: 'Maintenance/GetVendorLocationFuelConsumption',
+    getVendorLocationFuelSetup: 'Maintenance/GetVendorLocationFuelSetup',
+    postVendorLocationFuelSetup: 'Maintenance/PostVendorLocationFuelSetup',
+    getVendorMaintenanceRequest: 'Maintenance/GetVendorMaintenanceRequest',
+    getMaintenanceRequestType: 'Maintenance/GetMaintenanceRequestType',
+    addMaintenanceRequestType: 'Maintenance/AddMaintenanceRequestType',
+    removeMaintenanceRequestType: 'Maintenance/RemoveMaintenanceRequestType',
+
+    //notifications
+    getVendorNotificationUsers: 'Notification/GetVendorNotificationUsers',
+    postVendorNotificationUserTx: 'Notification/PostVendorNotificationUserTx',
+    getVendorNotificationType: 'Notification/GetVendorNotificationType',
+    removeVendorNotificationUser: "Notification/RemoveVendorNotificationUser",
 
     // Tracker
     getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',

@@ -37,6 +37,7 @@ export interface Form<V> {
     title: string;
     submitKey: keyof typeof urls;
     modifyData?: (arg: V) => any;
+    watch?: (arg: V) => void;
 }
 export interface NormalForm<V> {
     type: 'normal';

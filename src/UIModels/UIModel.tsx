@@ -338,6 +338,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         [updatedFormColumns, formRows, toolbar, rowModels, handleRowModesModelChange, processRowUpdate, handleRowEditStop],
     );
 
+    const handleWatch = (values: V) => {
+        typeof formModel?.watch === 'function' && formModel.watch(values);
+    };
+
     const renderFormUI = () => {
         switch (formModel?.type) {
             case 'normal':
@@ -349,6 +353,8 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                         validateOnBlur={false}
                     >
                         {(formik) => {
+                            handleWatch(formik.values);
+
                             return (
                                 <Form>
                                     <Stack spacing={3}>
@@ -393,6 +399,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                     >
                         {(formik) => {
                             const x = formModel.steps[activeStep];
+                            handleWatch(formik.values);
 
                             function getStepValues() {
                                 if (x.type === 'normal') {

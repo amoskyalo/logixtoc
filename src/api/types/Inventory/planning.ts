@@ -47,3 +47,8 @@ export type DeliveryPlanType = {
     DeliveryPlanTypeID: number;
     DeliveryPlanTypeName: string;
 };
+
+export type DeliveryPlanStatus = {
+    DeliveryPlanStatusID: number;
+    DeliveryPlanStatusName: string;
+};

@@ -8,7 +8,7 @@ import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
 import { Formik, Form, FormikProps } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
-import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel } from '@mui/material';
+import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel, Typography } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation, CheckboxInput } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
 import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
@@ -25,13 +25,13 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         columns,
         deleteUrl,
         fetchUrl,
-        params,
         initialDeleteParams,
+        options,
+        filters,
         actions = ['delete', 'edit'],
         pagination = true,
         showDates = true,
         showActions = true,
-        options,
     } = gridModel;
 
     const [dates, setDates] = useState(getInitialDates());
@@ -47,6 +47,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [formRows, setFormRows] = useState<GridRowsProp>([]);
     const [rowModels, setRowModels] = useState<GridRowModesModel>({});
     const [activeStep, setActiveStep] = useState<number>(0);
+    const [params, setParams] = useState<P | undefined>(gridModel.params);
 
     const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
 
@@ -467,6 +468,9 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 rows={getIndexedRows() || []}
                 count={data?.TotalCount}
                 loading={isLoading || isFetching}
+                filters={filters}
+                params={params}
+                setParams={setParams}
                 {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}
                 {...(showDates && { setDates, dates })}
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}

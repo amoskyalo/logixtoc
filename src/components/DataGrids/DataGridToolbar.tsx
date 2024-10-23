@@ -1,10 +1,12 @@
 import { GridToolbarContainer, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, useGridApiContext } from '@mui/x-data-grid';
-import { useCallback, useState, useEffect } from 'react';
-import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box } from '@mui/material';
+import { useCallback, useState, useEffect, useMemo } from 'react';
+import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge } from '@mui/material';
 import { getInitialDates } from '@/utils';
 import { useResponsiveness, useThemeMode } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import { DataGridToolbarProps } from './types';
+import { Popover } from '../Popover';
+import { AutoCompleteField } from '../Inputs';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
@@ -34,13 +36,15 @@ const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(({
     }),
 }));
 
-const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarProps>) => {
+const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = [] }: Readonly<DataGridToolbarProps>) => {
     const apiRef = useGridApiContext();
     const { isMobile, isTablet } = useResponsiveness();
     const { isDarkMode } = useThemeMode();
 
     const [searchValue, setSearchValue] = useState('');
     const [searching, setSearching] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [unProcessedFilters, setUnProcessedFilters] = useState(params);
 
     const updateSearchValue = useCallback(
         (newSearchValue: string) => {
@@ -52,6 +56,23 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
     useEffect(() => {
         updateSearchValue(searchValue);
     }, [searchValue, updateSearchValue]);
+
+    const handleReset = (key?: string) => {
+        if (key) {
+            setUnProcessedFilters((prev: any) => ({ ...prev, [key]: params[key] }));
+        } else {
+            setUnProcessedFilters(params);
+        }
+    };
+
+    const handleApplyFilters = () => {
+        setParams?.(unProcessedFilters);
+        setAnchorEl(null);
+    };
+
+    const totalFilters = useMemo(() => {
+        return Object.values(params).filter((val) => val !== 0 && val !== 99).length;
+    }, [params]);
 
     return (
         <GridToolbarContainer
@@ -65,7 +86,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                 paddingX: '8px',
             }}
         >
-            <Stack direction={isMobile ? 'column' : 'row'} spacing={1}  justifyContent="space-between" width={"100%"}>
+            <Stack direction={isMobile ? 'column' : 'row'} spacing={1} justifyContent="space-between" width={'100%'}>
                 <Stack direction={'row'} spacing={1}>
                     {dates && (
                         <StyledCalendar isMobile={isMobile} searching={searching}>
@@ -129,13 +150,22 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                     />
                 </Stack>
 
-                <Stack direction="row" justifyContent={"flex-end"} className="w-full md:w-max">
+                <Stack direction="row" justifyContent={'flex-end'} className="w-full md:w-max">
                     {!isMobile && !isTablet && <GridToolbarColumnsButton />}
                     <GridToolbarDensitySelector />
                     <GridToolbarExport />
-                    <Button startIcon={<FilterListOffIcon />} color="primary" size="small" onClick={onAdd}>
-                        Filters
-                    </Button>
+                    {filters?.length > 0 && (
+                        <Badge badgeContent={totalFilters} invisible={totalFilters === 0} color="primary">
+                            <Button
+                                startIcon={<FilterListOffIcon />}
+                                color="primary"
+                                size="small"
+                                onClick={(event) => setAnchorEl(event?.currentTarget)}
+                            >
+                                Filters
+                            </Button>
+                        </Badge>
+                    )}
                     {onAdd && (
                         <Button startIcon={<AddIcon />} color="primary" size="small" onClick={onAdd}>
                             New
@@ -143,6 +173,73 @@ const DataGridToolbar = ({ setDates, dates, onAdd }: Readonly<DataGridToolbarPro
                     )}
                 </Stack>
             </Stack>
+
+            <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
+                <Box sx={{ padding: 2, borderBottom: 1, borderBottomColor: 'divider' }}>
+                    <Typography variant="h5">Filters</Typography>
+                </Box>
+                <Box>
+                    {filters.map(({ labelKey, valueKey, title, filterOptions }) => {
+                        const isStatus = valueKey.toLowerCase().includes('status');
+                        const allValue = isStatus ? 99 : 0;
+
+                        const options = [
+                            { label: 'All', value: allValue },
+                            ...filterOptions.map((option) => ({
+                                label: option[labelKey],
+                                value: option[valueKey],
+                            })),
+                        ];
+
+                        const value = options.find((option) => option.value === unProcessedFilters[valueKey]);
+
+                        return (
+                            <Box key={String(valueKey)} sx={{ minWidth: 300, padding: 2, paddingTop: 1, borderBottom: 1, borderColor: 'divider' }}>
+                                <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} sx={{ mb: 1 }}>
+                                    <Typography fontWeight={600} variant="body1">
+                                        {title}
+                                    </Typography>
+                                    <Button size="small" onClick={() => handleReset(valueKey)}>
+                                        Reset
+                                    </Button>
+                                </Stack>
+                                <AutoCompleteField
+                                    onChange={(__, newValue) => {
+                                        if (newValue) {
+                                            setUnProcessedFilters((prevValues: any) => ({ ...prevValues, [valueKey]: newValue.value }));
+                                        } else {
+                                            setUnProcessedFilters((prevValues: any) => ({ ...prevValues, [valueKey]: allValue }));
+                                        }
+                                    }}
+                                    renderOption={(props, option) => {
+                                        return (
+                                            <li {...props}>
+                                                <Stack direction={'row'} alignItems={'center'}>
+                                                    <Checkbox size="small" checked={value?.value === option.value} />
+                                                    <Typography fontWeight={600}>{option.label}</Typography>
+                                                </Stack>
+                                            </li>
+                                        );
+                                    }}
+                                    options={options}
+                                    value={value}
+                                    multiple={false}
+                                    disableClearable
+                                />
+                            </Box>
+                        );
+                    })}
+                </Box>
+
+                <Stack direction={'row'} justifyContent={'flex-end'} spacing={2} sx={{ padding: 2 }}>
+                    <Button size="small" variant="outlined" onClick={() => handleReset()}>
+                        Reset all
+                    </Button>
+                    <Button size="small" variant="contained" onClick={handleApplyFilters}>
+                        Apply filters
+                    </Button>
+                </Stack>
+            </Popover>
         </GridToolbarContainer>
     );
 };

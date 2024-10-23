@@ -61,7 +61,8 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        textTransform: isMobile ? 'none' : 'uppercase',
+                        textTransform: 'none',
+                        fontWeight: '800',
                     },
                 },
             },

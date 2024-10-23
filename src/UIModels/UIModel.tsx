@@ -69,6 +69,9 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
               ? formModel.dialogSize
               : 'xs';
 
+    //make refetch function accessible on the UI.
+    typeof gridModel.getRefetchFn === 'function' && gridModel.getRefetchFn(refetch);
+
     const handleSubmit = (data: V) => {
         setFormLoading(true);
         const payload = typeof formModel?.modifyData === 'function' ? formModel?.modifyData(data) : data;
@@ -477,7 +480,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
 
             {isOptionsOnly && (
                 <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} handleClose={onClose}>
-                    {options!.map(({ name, onClick }) => {
+                    {options?.map(({ name, onClick }) => {
                         const isDelete = name.toLowerCase() === 'delete';
 
                         return (

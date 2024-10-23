@@ -40,6 +40,12 @@ export const urls = {
 
     //planning
     getDeliveryPlanHistory: 'Planning/GetVendorDeliveryPlanHistory',
+    postVendorDeliveryPlanTx: 'Planning/PostVendorDeliveryPlanTx',
+    getDeliveryPlanType: 'Planning/GetDeliveryPlanType',
+    removeDeliveryPlan: 'Planning/RemoveDeliveryPlan',
+    getStockMovementStockNOSummary: 'Stock/GetStockMovementStockNOSummary',
+    changeDeliveryPlanType: 'Planning/ChangeDeliveryPlanType',
+    changeDeliveryPlanDriver: 'Planning/ChangeDeliveryPlanDriver',
 
     //stock-movement
     getStockMovementHistory: '/Stock/GetVendorStockMovementHistory',
@@ -165,7 +171,7 @@ export const urls = {
     getVendorNotificationUsers: 'Notification/GetVendorNotificationUsers',
     postVendorNotificationUserTx: 'Notification/PostVendorNotificationUserTx',
     getVendorNotificationType: 'Notification/GetVendorNotificationType',
-    removeVendorNotificationUser: "Notification/RemoveVendorNotificationUser",
+    removeVendorNotificationUser: 'Notification/RemoveVendorNotificationUser',
 
     // Tracker
     getVendorTrackerLocation: 'Tracker/GetVendorTrackerLocation',

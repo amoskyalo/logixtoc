@@ -31,6 +31,7 @@ export interface GridModelInterface<D, P> {
         name: string;
         onClick?: (arg1?: any, arg2?: any, arg3?: any) => void;
     }>;
+    getRefetchFn?: (arg: any) => any;
 }
 export interface Form<V> {
     dialogSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';

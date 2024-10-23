@@ -42,3 +42,8 @@ export type DeliveryPlan = {
     StockSummaryArray: StockSummary[];
     DeliveryPlanLocationArray: any[];
 };
+
+export type DeliveryPlanType = {
+    DeliveryPlanTypeID: number;
+    DeliveryPlanTypeName: string;
+};

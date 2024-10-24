@@ -85,7 +85,12 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     };
 
     const getIndexedRows = () => {
-        return data?.Data?.map((row, index) => ({ id: index + 1, ...row }));
+        const startIndex = (pageNo - 1) * pageSize;
+
+        return data?.Data?.map((row, index) => ({
+            id: startIndex + index + 1,
+            ...row,
+        }));
     };
 
     const v = (row: any) => {
@@ -465,7 +470,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             <DataGrid
                 columns={updatedGridColumns}
                 rows={getIndexedRows() || []}
-                count={data?.TotalCount}
+                totalPages={data?.TotalPages}
                 loading={isLoading || isFetching}
                 {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}
                 {...(showDates && { setDates, dates })}

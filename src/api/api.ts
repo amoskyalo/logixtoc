@@ -17,6 +17,8 @@ export interface Response<Data> {
     PageSize: number;
     StatusCode: number;
     TotalCount: number;
+    PageNO: number;
+    TotalPages: number;
     Data: Data[];
 }
 

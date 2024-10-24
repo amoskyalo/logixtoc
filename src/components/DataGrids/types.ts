@@ -51,7 +51,7 @@ export type AllDataGridProps = DataGridProps & DataGridToolbarProps & {
    hideToolbar?: boolean;
    pageNo?: number;
    pageSize?: number;
-   count?: number;
+   totalPages?: number;
    setPageSize?: (size: number) => void;
    setPageNo?: (size: number) => void;
 }

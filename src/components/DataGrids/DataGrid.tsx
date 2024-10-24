@@ -12,7 +12,7 @@ const Grid = (props: AllDataGridProps) => {
       setDates,
       onAdd,
       dates,
-      count,
+      totalPages,
       pageSize,
       pageNo,
       setPageSize,
@@ -29,7 +29,7 @@ const Grid = (props: AllDataGridProps) => {
    const footer = () => (
       <DataGridFooter
          loading={loading}
-         count={count}
+         count={totalPages}
          pageSize={pageSize}
          page={pageNo}
          setPageSize={setPageSize}

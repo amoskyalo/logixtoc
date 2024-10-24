@@ -1,4 +1,4 @@
-export interface VendorAllowanceType {
+export type VendorAllowanceType = {
     VendorAllowanceTypeID: number;
     VendorAllowanceTypeName: string;
     StatusID: number;

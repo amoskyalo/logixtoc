@@ -17,6 +17,14 @@ const Locations = () => {
             deleteUrl: 'deleteVendorLocation',
             params: { VendorLocationTypeID: 0 },
             initialDeleteParams: { vendorLocationID: '' as unknown as number },
+            filters: [
+                {
+                    title: 'Location types',
+                    valueKey: 'VendorLocationTypeID',
+                    labelKey: 'VendorLocationTypeName',
+                    filterOptions: locationTypes?.Data || []
+                }
+            ],
             columns: [
                 { field: 'VendorLocationName', headerName: 'Location', mobileWidth: 150 },
                 { field: 'VendorLocationTypeName', headerName: 'Type', mobileWidth: 150 },

@@ -18,6 +18,7 @@ const AssignedLocations = () => {
     const UI = new APPCRUD<AssignedLocationObject, Values, Delete, Params>({
         grid: {
             showDates: false,
+            hasLocationsFilters: true,
             actions: ['delete'],
             fetchUrl: 'getVendorLocationAssignedLocation',
             deleteUrl: 'deleteAssignedLocation',

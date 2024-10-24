@@ -80,3 +80,13 @@ export type ActualStock = {
     AddedByName: string;
     StockMovementDetailArray: StockMovementDetail[];
 };
+
+export type StockMovementType = {
+    StockMovementTypeID: number;
+    StockMovementTypeName: string;
+}
+
+export type StockMovementStatus = {
+    StockMovementStatusID: number;
+    StockMovementStatusName: string;
+};

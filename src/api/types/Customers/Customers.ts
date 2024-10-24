@@ -1,4 +1,4 @@
-export interface CustomerType {
+export type CustomerType = {
     CustomerTypeID: number;
     CustomerTypeName: string;
 }
@@ -41,7 +41,7 @@ export interface VendorCustomerUOMStatement {
     NewOpeningQuantity: number;
 }
 
-export interface VendorCustomerCategory {
+export type VendorCustomerCategory = {
     VendorCustomerCategoryID: number;
     VendorCustomerCategoryName: string;
     DateAdded: string;

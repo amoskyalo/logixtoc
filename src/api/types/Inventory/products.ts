@@ -129,3 +129,16 @@ export type VendorProductCategory = {
     StatusID: number;
     VendorProductCategoryTypeArray: VendorProductCategoryType[];
 };
+
+export type OrderType = {
+    SaleOrderTypeID: number;
+    SaleOrderTypeName: string;
+};
+
+export type VendorOrderType = {
+    VendorSaleOrderTypeID: number;
+    SaleOrderTypeID: number;
+    SaleOrderTypeName: string;
+    StatusID: number;
+    DateAdded: string;
+}

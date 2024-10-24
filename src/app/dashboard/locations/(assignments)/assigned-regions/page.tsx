@@ -11,11 +11,20 @@ const AssignedRegions = () => {
     const UI = new APPCRUD<AssignedRegionObjInterface, any, Delete, Params>({
         grid: {
             showDates: false,
+            hasLocationsFilters: true,
             actions: ['delete'],
             fetchUrl: 'getAssignedRegions',
             deleteUrl: 'deleteAssignedRegions',
             initialDeleteParams: { vendorLocationID: '' as unknown as number, vendorRegionID: '' as unknown as number },
             params: { VendorRegionID: 0, VendorLocationID: 0 },
+            filters: [
+                {
+                    title: 'Regions',
+                    valueKey: 'VendorRegionID',
+                    labelKey: 'VendorRegionName',
+                    filterOptions: vendorRegions?.Data || [],
+                },
+            ],
             columns: [
                 { field: 'VendorLocationName', headerName: 'Location', mobileWidth: 150 },
                 { field: 'VendorRegionName', headerName: 'Region', mobileWidth: 150 },

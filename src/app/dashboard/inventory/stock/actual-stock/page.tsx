@@ -3,12 +3,12 @@
 import { ActualStock as ActualStockProps, APPCRUD } from '@/api';
 import { StatusChips } from '@/components/Chips';
 
-type Params = {
-    VendorLocationID: number;
-};
+type Params = { VendorLocationID: number };
+
 const ActualStock = () => {
     const UI = new APPCRUD<ActualStockProps, void, void, Params>({
         grid: {
+            hasLocationsFilters: true,
             fetchUrl: 'getActualStock',
             actions: ['options'],
             params: { VendorLocationID: 0 },

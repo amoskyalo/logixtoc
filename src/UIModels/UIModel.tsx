@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, isValidElement, useCallback, useMemo } from 'react';
-import { useMutate, useFetch } from '@/api';
+import { useMutate, useFetch, LocationsArrayInterface } from '@/api';
 import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
 import { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } from '@/utils';
 import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '@/components/DataGrids';
@@ -25,13 +25,13 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         columns,
         deleteUrl,
         fetchUrl,
-        params,
         initialDeleteParams,
+        options,
+        filters,
         actions = ['delete', 'edit'],
         pagination = true,
         showDates = true,
         showActions = true,
-        options,
     } = gridModel;
 
     const [dates, setDates] = useState(getInitialDates());
@@ -47,9 +47,11 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [formRows, setFormRows] = useState<GridRowsProp>([]);
     const [rowModels, setRowModels] = useState<GridRowModesModel>({});
     const [activeStep, setActiveStep] = useState<number>(0);
+    const [params, setParams] = useState<P | undefined>(gridModel.params);
 
     const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
 
+    const { data: vendorLocations } = useFetch<LocationsArrayInterface, void>('getVendorLocation');
     const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
         ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
         ...(showDates && { StartDate: dates.startDate, EndDate: dates.endDate }),
@@ -132,6 +134,21 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             return isMobile ? 0 : 4;
         }
         return 0;
+    };
+
+    const getFilters = () => {
+        const locationFilter = {
+            title: 'Locations',
+            valueKey: 'VendorLocationID',
+            labelKey: 'VendorLocationName',
+            filterOptions: vendorLocations?.Data || [],
+        };
+
+        if (gridModel.hasLocationsFilters) {
+            return filters ? [...filters, locationFilter] : [locationFilter];
+        }
+
+        return filters;
     };
 
     const {
@@ -472,6 +489,9 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 rows={getIndexedRows() || []}
                 totalPages={data?.TotalPages}
                 loading={isLoading || isFetching}
+                filters={getFilters()}
+                params={params}
+                setParams={setParams}
                 {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}
                 {...(showDates && { setDates, dates })}
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}

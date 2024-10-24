@@ -1,4 +1,5 @@
 import { urls } from '@/api';
+import { FiltersObject } from '@/components/DataGrids';
 import { GridColDef } from '@mui/x-data-grid';
 import { FormikProps } from 'formik';
 
@@ -25,6 +26,7 @@ export interface GridModelInterface<D, P> {
     showDates?: boolean;
     pagination?: boolean;
     showActions?: boolean;
+    hasLocationsFilters?: boolean;
     actions?: Array<'edit' | 'delete' | 'options'>;
     params?: P;
     options?: Array<{
@@ -32,6 +34,7 @@ export interface GridModelInterface<D, P> {
         onClick?: (arg1?: any, arg2?: any, arg3?: any) => void;
     }>;
     getRefetchFn?: (arg: any) => any;
+    filters?: FiltersObject[];
 }
 export interface Form<V> {
     dialogSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';

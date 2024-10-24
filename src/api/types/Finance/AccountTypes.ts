@@ -15,7 +15,7 @@ export interface VendorAccountAssignment {
     AddedByName: string;
 }
 
-export interface VendorAccountType {
+export type VendorAccountType = {
     VendorAccountTypeID: number;
     VendorAccountTypeName: string;
     VendorAccountTypeLogo: string;

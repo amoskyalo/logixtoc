@@ -21,6 +21,12 @@ body {
   border-radius: 10px;
 }
 
+#list {
+  max-height: 40px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 .country {
   border-radius: 2px;
 }

@@ -1,10 +1,15 @@
 'use client';
 
-import { GetVendorStockParams, VendorStock, APPCRUD } from '@/api';
+import { GetVendorStockParams, VendorStock, APPCRUD, useFetch, ProductType, ProductBrand, ProductUOM } from '@/api';
 
 const StockLevel = () => {
+    const { data: vendorProducts } = useFetch<ProductType, void>('getVendorProductTypes');
+    const { data: vendorBrand } = useFetch<ProductBrand, void>('getProductBrands');
+    const { data: vendorUOM } = useFetch<ProductUOM, void>('getProductUOM');
+
     const UI = new APPCRUD<VendorStock, void, void, GetVendorStockParams>({
         grid: {
+            hasLocationsFilters: true,
             fetchUrl: 'getStockLevel',
             params: {
                 VendorLocationID: 0,
@@ -12,6 +17,26 @@ const StockLevel = () => {
                 VendorProductTypeID: 0,
                 VendorProductUOMID: 0,
             },
+            filters: [
+                {
+                    title: 'Product types',
+                    valueKey: 'VendorProductTypeID',
+                    labelKey: 'VendorProductTypeName',
+                    filterOptions: vendorProducts?.Data || [],
+                },
+                {
+                    title: 'Product brand',
+                    valueKey: 'VendorProductBrandID',
+                    labelKey: 'VendorProductBrandName',
+                    filterOptions: vendorBrand?.Data || [],
+                },
+                {
+                    title: 'Product UOM',
+                    valueKey: 'VendorProductUOMID',
+                    labelKey: 'VendorProductUOMName',
+                    filterOptions: vendorUOM?.Data || [],
+                },
+            ],
             columns: [
                 { field: 'VendorLocationName', headerName: 'Location', width: 150 },
                 { field: 'VendorProductBrandName', headerName: 'Product Brand', width: 150 },

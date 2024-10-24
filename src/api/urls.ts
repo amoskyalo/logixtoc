@@ -6,33 +6,21 @@ export const urls = {
     getVendorLocation: 'Location/GetVendorLocation',
     deleteVendorLocation: 'Location/RemoveVendorLocation',
     postVendorLocationTx: 'Location/PostVendorLocationTx',
-
-    //assigned users
     getVendorLocationUserAssignment: 'Location/GetVendorLocationUserAssignment',
     postVendorLocationUserAssignmentTx: 'Location/PostVendorLocationUserAssignmentTx',
     deleteVendorLocationUserAssignmentTX: 'Location/RemoveVendorLocationUserAssignmentTx',
-
-    //assigned locations
     getVendorLocationAssignedLocation: 'Location/GetVendorLocationAssignedLocation',
     postAssignedLocations: 'Location/PostVendorLocationAssignLocation',
     deleteAssignedLocation: 'Location/RemoveVendorLocationAssignLocation',
-
-    //asigned products
     getAssignedProducts: 'Location/GetVendorLocationProductType',
     postAssignedProducts: 'Location/PostVendorLocationProductType',
     deleteAssignedProducts: 'Location/RemoveVendorLocationProductType',
-
-    //asigned regions
     getAssignedRegions: 'Location/GetVendorRegionLocationAssignment',
     deleteAssignedRegions: 'Location/RemoveVendorRegionLocationAssignment',
     postAssignedRegions: 'Location/PostVendorRegionLocationAssignment',
-
-    //asigned accounts
     getAssignedAccounts: 'Location/GetVendorAccountLocationAssignment',
     deleteAssignedAccount: 'Location/RemoveVendorAccountLocationAssignment',
     postAssignedAccount: 'Location/PostVendorAccountLocationAssignment',
-
-    //location types
     getVendorLocationType: 'Location/GetVendorLocationType',
     deleteVendorLocationType: 'Location/RemoveVendorLocationType',
     postVendorLocationType: 'Location/PostVendorLocationType',
@@ -46,15 +34,14 @@ export const urls = {
     getStockMovementStockNOSummary: 'Stock/GetStockMovementStockNOSummary',
     changeDeliveryPlanType: 'Planning/ChangeDeliveryPlanType',
     changeDeliveryPlanDriver: 'Planning/ChangeDeliveryPlanDriver',
+    getDeliveryPlanStatus: "Planning/GetDeliveryPlanStatus",
 
-    //stock-movement
+    //stock
     getStockMovementHistory: '/Stock/GetVendorStockMovementHistory',
-
-    //stock-level
     getStockLevel: 'Stock/GetVendorStockLevel',
-
-    //actual-stock
     getActualStock: 'Stock/GetVendorActualStock',
+    getStockMovementType: 'Stock/GetStockMovementType',
+    getStockMovementStatus: 'Stock/GetStockMovementStatus',
 
     //HR
     getVendorUsers: 'HR/GetVendorUsers',
@@ -93,6 +80,12 @@ export const urls = {
     addVendorProductCategoryType: 'Product/AddVendorProductCategoryType',
     getVendorProductCategoryTypeDetail: 'Product/GetVendorProductCategoryTypeDetail',
     postVendorRegionPriceAssignmentTx: 'Finance/PostVendorRegionPriceAssignmentTx',
+
+    //sales
+    getVendorSaleOrderType: "Sales/GetVendorSaleOrderType",
+    getSaleOrderType: 'Sales/GetSaleOrderType',
+    postVendorSaleOrderType: "Sales/PostVendorSaleOrderType",
+    removeVendorSaleOrderType: "Sales/RemoveVendorSaleOrderType",
 
     //regions
     getVendorRegions: 'Region/GetVendorRegion',

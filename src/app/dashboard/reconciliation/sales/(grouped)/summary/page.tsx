@@ -15,6 +15,7 @@ const Summary = () => {
 
     const UI = new APPCRUD<SummaryDeliveryPlan, void, void, Params>({
         grid: {
+            hasLocationsFilters: true,
             fetchUrl: 'getVendorLocationStockSaleSummary',
             actions: ['options'],
             options: [

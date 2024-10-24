@@ -1,15 +1,34 @@
 'use client';
 
-import { APPCRUD } from '@/api';
+import { APPCRUD, useFetch, VendorUserObjectInterface, VendorAllowanceType } from '@/api';
 import { StatusChips } from '@/components/Chips';
 
-type Params = {VendorAllowanceTypeID: number; UserID: number};
+type Params = { VendorAllowanceTypeID: number; UserID: number };
 
 const AllowanceRequest = () => {
+    const { data: VendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
+    const { data: allowanceType } = useFetch<VendorAllowanceType, void>('getVendorAllowanceType');
+
+    const users = VendorUsers?.Data.map((user) => ({ userName: `${user.FirstName} ${user.LastName}`, UserID: user.UserID }));
+
     const UI = new APPCRUD<any, void, void, Params>({
         grid: {
             fetchUrl: 'getVendorAllowanceRequest',
-            params: {VendorAllowanceTypeID: 0, UserID: 0},
+            params: { VendorAllowanceTypeID: 0, UserID: 0 },
+            filters: [
+                {
+                    title: 'Users',
+                    valueKey: 'UserID',
+                    labelKey: 'userName',
+                    filterOptions: users ?? [],
+                },
+                {
+                    title: 'Allowance type',
+                    valueKey: 'VendorAllowanceTypeID',
+                    labelKey: 'VendorAllowanceTypeName',
+                    filterOptions: allowanceType?.Data || [],
+                },
+            ],
             columns: [
                 { field: 'RequestNO', headerName: 'Request Number', mobileWidth: 170 },
                 { field: 'VendorAllowanceTypeName', headerName: 'Allowance Type', mobileWidth: 170 },

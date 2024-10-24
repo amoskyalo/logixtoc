@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetch, AssignedAccount, GetUserAccountsParams, VendorAccount, APPCRUD } from '@/api';
+import { useFetch, AssignedAccount, GetUserAccountsParams, VendorAccount, APPCRUD, VendorAccountType } from '@/api';
 
 type Params = {
     VendorAccountTypeID: number;
@@ -20,6 +20,7 @@ type Values = {
 };
 
 const AssignedAccounts = () => {
+    const { data: vendorAccountType } = useFetch<VendorAccountType, void>('getVendorAccountTypes');
     const { data: vendorAccounts } = useFetch<VendorAccount, GetUserAccountsParams>('getVendorAccounts', {
         VendorAccountTypeID: 0,
     });
@@ -28,11 +29,20 @@ const AssignedAccounts = () => {
         grid: {
             showDates: false,
             pagination: false,
+            hasLocationsFilters: true,
             actions: ['delete'],
             fetchUrl: 'getAssignedAccounts',
             deleteUrl: 'deleteAssignedAccount',
             initialDeleteParams: { vendorAccountID: '' as unknown as number, vendorLocationID: '' as unknown as number },
             params: { VendorAccountTypeID: 0, VendorLocationID: 0 },
+            filters: [
+                {
+                    title: 'Account Type',
+                    valueKey: 'VendorAccountTypeID',
+                    labelKey: 'VendorAccountTypeName',
+                    filterOptions: vendorAccountType?.Data || [],
+                },
+            ],
             columns: [
                 { field: 'VendorLocationName', headerName: 'Location', width: 150 },
                 { field: 'VendorAccountTypeName', headerName: 'Account Type', width: 150 },
@@ -44,7 +54,7 @@ const AssignedAccounts = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add New Assigned Accounts',
             submitKey: 'postAssignedAccount',
             initialValues: { vendorAccountArray: [], vendorLocationID: '' as unknown as number },

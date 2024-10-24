@@ -47,6 +47,20 @@ const Customers = () => {
             actions: ['options'],
             initialDeleteParams: { vendorCustomerID: '' },
             params: { VendorCustomerCategoryID: 0, CustomerTypeID: 0 },
+            filters: [
+                {
+                    title: 'Customer type',
+                    valueKey: 'CustomerTypeID',
+                    labelKey: 'CustomerTypeName',
+                    filterOptions: customerType?.Data || []
+                },
+                {
+                    title: 'Customer category',
+                    valueKey: 'VendorCustomerCategoryID',
+                    labelKey: 'VendorCustomerCategoryName',
+                    filterOptions: customerCategory?.Data || []
+                }
+            ],
             options: [
                 { name: 'Shops', onClick: (activeRecord) => handleNavigate(activeRecord, 'shops') },
                 { name: 'Sales', onClick: (activeRecord) => handleNavigate(activeRecord, 'sales') },

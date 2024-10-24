@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, isValidElement, useCallback, useMemo } from 'react';
-import { useMutate, useFetch } from '@/api';
+import { useMutate, useFetch, LocationsArrayInterface } from '@/api';
 import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
 import { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } from '@/utils';
 import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '@/components/DataGrids';
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
 import { Formik, Form, FormikProps } from 'formik';
 import { SubmitButton } from '@/components/Buttons';
-import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel, Typography } from '@mui/material';
+import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation, CheckboxInput } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
 import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
@@ -51,6 +51,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
 
     const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
 
+    const { data: vendorLocations } = useFetch<LocationsArrayInterface, void>('getVendorLocation');
     const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
         ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
         ...(showDates && { StartDate: dates.startDate, EndDate: dates.endDate }),
@@ -86,7 +87,12 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     };
 
     const getIndexedRows = () => {
-        return data?.Data?.map((row, index) => ({ id: index + 1, ...row }));
+        const startIndex = (pageNo - 1) * pageSize;
+
+        return data?.Data?.map((row, index) => ({
+            id: startIndex + index + 1,
+            ...row,
+        }));
     };
 
     const v = (row: any) => {
@@ -128,6 +134,21 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             return isMobile ? 0 : 4;
         }
         return 0;
+    };
+
+    const getFilters = () => {
+        const locationFilter = {
+            title: 'Locations',
+            valueKey: 'VendorLocationID',
+            labelKey: 'VendorLocationName',
+            filterOptions: vendorLocations?.Data || [],
+        };
+
+        if (gridModel.hasLocationsFilters) {
+            return filters ? [...filters, locationFilter] : [locationFilter];
+        }
+
+        return filters;
     };
 
     const {
@@ -466,9 +487,9 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             <DataGrid
                 columns={updatedGridColumns}
                 rows={getIndexedRows() || []}
-                count={data?.TotalCount}
+                totalPages={data?.TotalPages}
                 loading={isLoading || isFetching}
-                filters={filters}
+                filters={getFilters()}
                 params={params}
                 setParams={setParams}
                 {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}

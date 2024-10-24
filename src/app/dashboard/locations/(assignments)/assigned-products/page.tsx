@@ -19,6 +19,7 @@ const AssignedProducts = () => {
     const UI = new APPCRUD<AssignedProductInterface, Values, Delete, Params>({
         grid: {
             showDates: false,
+            hasLocationsFilters: true,
             actions: ['delete'],
             fetchUrl: 'getAssignedProducts',
             deleteUrl: 'deleteAssignedProducts',

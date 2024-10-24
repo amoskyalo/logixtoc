@@ -50,7 +50,7 @@ const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
             },
             h5: {
                 fontWeight: '700',
-                fontSize: 16
+                fontSize: 16,
             },
             h4: {
                 fontWeight: '700',

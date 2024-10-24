@@ -19,6 +19,7 @@ const AssignedUsers = () => {
     const UI = new APPCRUD<VendorLocationUserAssignmentRow, FormiValues, Delete, Params>({
         grid: {
             showDates: false,
+            hasLocationsFilters: true,
             fetchUrl: 'getVendorLocationUserAssignment',
             deleteUrl: 'deleteVendorLocationUserAssignmentTX',
             initialDeleteParams: { vendorLocationUserAssignmentID: '' },

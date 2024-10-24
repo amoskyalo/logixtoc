@@ -1,6 +1,6 @@
 import { GridToolbarContainer, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, useGridApiContext } from '@mui/x-data-grid';
 import { useCallback, useState, useEffect, useMemo } from 'react';
-import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge } from '@mui/material';
+import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge, Grid } from '@mui/material';
 import { getInitialDates } from '@/utils';
 import { useResponsiveness, useThemeMode } from '@/hooks';
 import { styled } from '@mui/material/styles';
@@ -71,8 +71,11 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
     };
 
     const totalFilters = useMemo(() => {
-        return Object.values(params).filter((val) => val !== 0 && val !== 99).length;
+        return typeof params === 'object' ? Object.values(params).filter((val) => val !== 0 && val !== 99).length : 0;
     }, [params]);
+
+    const width = isMobile ? "100%" : filters.length > 1 ? 450 : 250;
+    const mdSpan = filters.length > 1 ? 6 : 12
 
     return (
         <GridToolbarContainer
@@ -178,7 +181,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                 <Box sx={{ padding: 2, borderBottom: 1, borderBottomColor: 'divider' }}>
                     <Typography variant="h5">Filters</Typography>
                 </Box>
-                <Box>
+                <Grid container rowGap={2} columnSpacing={2} sx={{ borderBottom: 1, borderColor: 'divider', width, padding: 2 }}>
                     {filters.map(({ labelKey, valueKey, title, filterOptions }) => {
                         const isStatus = valueKey.toLowerCase().includes('status');
                         const allValue = isStatus ? 99 : 0;
@@ -194,15 +197,13 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                         const value = options.find((option) => option.value === unProcessedFilters[valueKey]);
 
                         return (
-                            <Box key={String(valueKey)} sx={{ minWidth: 300, padding: 2, paddingTop: 1, borderBottom: 1, borderColor: 'divider' }}>
+                            <Grid item xs={12} md={mdSpan} key={valueKey}>
                                 <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} sx={{ mb: 1 }}>
-                                    <Typography fontWeight={600} variant="body1">
+                                    <Typography fontWeight={600} variant="body2">
                                         {title}
                                     </Typography>
-                                    <Button size="small" onClick={() => handleReset(valueKey)}>
-                                        Reset
-                                    </Button>
                                 </Stack>
+
                                 <AutoCompleteField
                                     onChange={(__, newValue) => {
                                         if (newValue) {
@@ -213,23 +214,63 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                                     }}
                                     renderOption={(props, option) => {
                                         return (
-                                            <li {...props}>
+                                            <li {...props} id="list">
                                                 <Stack direction={'row'} alignItems={'center'}>
                                                     <Checkbox size="small" checked={value?.value === option.value} />
-                                                    <Typography fontWeight={600}>{option.label}</Typography>
+                                                    <Typography fontWeight={600} fontSize={14}>
+                                                        {option.label}
+                                                    </Typography>
                                                 </Stack>
                                             </li>
                                         );
+                                    }}
+                                    slotProps={{
+                                        paper: {
+                                            sx: {
+                                                '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
+                                                    backgroundColor: 'transparent',
+                                                    width: '0px',
+                                                },
+                                                '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
+                                                    backgroundColor: 'transparent',
+                                                    border: 'none',
+                                                },
+                                                maxHeight: 200,
+                                                minWidth: 200,
+                                                overflow: 'auto'
+                                            },
+                                        },
                                     }}
                                     options={options}
                                     value={value}
                                     multiple={false}
                                     disableClearable
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '32px',
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                        '& .MuiAutocomplete-input': {
+                                            fontSize: '14px',
+                                            fontWeight: '600',
+                                        },
+                                        borderWidth: 2,
+                                        borderColor: 'divider',
+                                        borderRadius: '6px',
+                                    }}
                                 />
-                            </Box>
+                            </Grid>
                         );
                     })}
-                </Box>
+                </Grid>
 
                 <Stack direction={'row'} justifyContent={'flex-end'} spacing={2} sx={{ padding: 2 }}>
                     <Button size="small" variant="outlined" onClick={() => handleReset()}>

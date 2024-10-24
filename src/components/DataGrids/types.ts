@@ -59,12 +59,11 @@ export type DataGridActionsProps = {
     onOptions?: (args: any) => void;
 };
 
-export type AllDataGridProps = DataGridProps &
-    DataGridToolbarProps & {
-        hideToolbar?: boolean;
-        pageNo?: number;
-        pageSize?: number;
-        count?: number;
-        setPageSize?: (size: number) => void;
-        setPageNo?: (size: number) => void;
-    };
+export type AllDataGridProps = DataGridProps & DataGridToolbarProps & {
+   hideToolbar?: boolean;
+   pageNo?: number;
+   pageSize?: number;
+   totalPages?: number;
+   setPageSize?: (size: number) => void;
+   setPageNo?: (size: number) => void;
+}

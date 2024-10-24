@@ -26,6 +26,7 @@ export interface GridModelInterface<D, P> {
     showDates?: boolean;
     pagination?: boolean;
     showActions?: boolean;
+    hasLocationsFilters?: boolean;
     actions?: Array<'edit' | 'delete' | 'options'>;
     params?: P;
     options?: Array<{

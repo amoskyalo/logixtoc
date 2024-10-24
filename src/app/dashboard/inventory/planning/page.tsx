@@ -8,7 +8,6 @@ import {
     useFetch,
     useMutate,
     urls,
-    LocationsArrayInterface,
     DeliveryPlanStatus,
 } from '@/api';
 import { StatusChips } from '@/components/Chips';
@@ -49,7 +48,6 @@ const Planning = () => {
 
     const { data: vendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
     const { data: deliveryPlanType } = useFetch<DeliveryPlanType, void>('getDeliveryPlanType');
-    const { data: vendorLocations } = useFetch<LocationsArrayInterface, void>('getVendorLocation');
     const { data: deliveryPlanStatus } = useFetch<DeliveryPlanStatus, void>('getDeliveryPlanStatus');
     const router = useRouter();
     let refetch: any;
@@ -106,7 +104,7 @@ const Planning = () => {
 
     const UI = new APPCRUD<DeliveryPlan, Values, Delete, Params>({
         grid: {
-            pagination: false,
+            hasLocationsFilters: true,
             fetchUrl: 'getDeliveryPlanHistory',
             deleteUrl: 'removeDeliveryPlan',
             actions: ['options'],
@@ -118,19 +116,13 @@ const Planning = () => {
             },
             filters: [
                 {
-                    title: 'Locations',
-                    valueKey: 'VendorLocationID',
-                    labelKey: 'VendorLocationName',
-                    filterOptions: vendorLocations?.Data || [],
-                },
-                {
-                    title: 'Delivery Type',
+                    title: 'Delivery type',
                     valueKey: 'DeliveryPlanTypeID',
                     labelKey: 'DeliveryPlanTypeName',
                     filterOptions: deliveryPlanType?.Data || [],
                 },
                 {
-                    title: 'Delivery Status',
+                    title: 'Delivery status',
                     valueKey: 'DeliveryPlanStatusID',
                     labelKey: 'DeliveryPlanStatusName',
                     filterOptions: deliveryPlanStatus?.Data || [],

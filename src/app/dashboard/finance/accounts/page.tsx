@@ -35,6 +35,14 @@ const Accounts = () => {
                 { name: 'Edit', onClick: () => null },
                 { name: 'Delete' },
             ],
+            filters: [
+                {
+                    title: 'Account type',
+                    valueKey: 'VendorAccountTypeID',
+                    labelKey: 'VendorAccountTypeName',
+                    filterOptions: vendorAccountTypes?.Data || [],
+                }
+            ],
             columns: [
                 { field: 'VendorAccountTypeName', headerName: 'Account Type', mobileWidth: 150 },
                 { field: 'VendorAccountName', headerName: 'Account Name', mobileWidth: 170 },

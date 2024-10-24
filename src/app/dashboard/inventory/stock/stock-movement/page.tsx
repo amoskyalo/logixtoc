@@ -1,6 +1,6 @@
 'use client';
 
-import { StockMovement, APPCRUD } from '@/api';
+import { StockMovement, APPCRUD, useFetch, StockMovementType, StockMovementStatus } from '@/api';
 import { StatusChips } from '@/components/Chips';
 
 type Params = {
@@ -10,14 +10,32 @@ type Params = {
 };
 
 const Stock = () => {
+    const { data: movementType } = useFetch<StockMovementType, void>('getStockMovementType');
+    const { data: movementStatus } = useFetch<StockMovementStatus, void>('getStockMovementStatus')
+
     const UI = new APPCRUD<StockMovement, void, void, Params>({
         grid: {
+            hasLocationsFilters: true,
             fetchUrl: 'getStockMovementHistory',
             params: {
                 StockMovementTypeID: 0,
                 StockMovementStatusID: 99,
                 VendorLocationID: 0,
             },
+            filters: [
+                {
+                    title: 'Movement Type',
+                    valueKey: 'StockMovementTypeID',
+                    labelKey: 'StockMovementTypeName',
+                    filterOptions: movementType?.Data || [],
+                },
+                {
+                    title: 'Movement Status',
+                    valueKey: 'StockMovementStatusID',
+                    labelKey: 'StockMovementStatusName',
+                    filterOptions: movementStatus?.Data || [],
+                },
+            ],
             columns: [
                 { field: 'StockNO', headerName: 'Stock NO', width: 150 },
                 { field: 'SourceVendorLocationName', headerName: 'Source Location Name', width: 200 },

@@ -2,13 +2,14 @@
 
 import { APPCRUD } from '@/api';
 
-type Params = {VendorLocationID: number};
+type Params = { VendorLocationID: number };
 
 const FuelConsumption = () => {
     const UI = new APPCRUD<any, void, void, Params>({
         grid: {
+            hasLocationsFilters: true,
             fetchUrl: 'getVendorLocationFuelConsumption',
-            params: {VendorLocationID: 0},
+            params: { VendorLocationID: 0 },
             columns: [
                 { field: 'VendorLocationName', headerName: 'Vehicle', width: 150 },
                 { field: 'VendorLocationFuelSetUpName', headerName: 'Type', width: 150 },

@@ -40,6 +40,8 @@ export const urls = {
     getStockMovementHistory: '/Stock/GetVendorStockMovementHistory',
     getStockLevel: 'Stock/GetVendorStockLevel',
     getActualStock: 'Stock/GetVendorActualStock',
+    getStockMovementType: 'Stock/GetStockMovementType',
+    getStockMovementStatus: 'Stock/GetStockMovementStatus',
 
     //HR
     getVendorUsers: 'HR/GetVendorUsers',

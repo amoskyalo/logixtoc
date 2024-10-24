@@ -94,7 +94,6 @@ const Planning = () => {
 
     const UI = new APPCRUD<DeliveryPlan, Values, Delete, Params>({
         grid: {
-            pagination: false,
             fetchUrl: 'getDeliveryPlanHistory',
             deleteUrl: 'removeDeliveryPlan',
             actions: ['options'],

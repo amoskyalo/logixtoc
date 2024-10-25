@@ -14,6 +14,7 @@ import { Popover } from '@/components/Popover';
 import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
 import { HorizontalLinearStepper } from '@/components/Stepper';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
@@ -47,9 +48,12 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [formRows, setFormRows] = useState<GridRowsProp>([]);
     const [rowModels, setRowModels] = useState<GridRowModesModel>({});
     const [activeStep, setActiveStep] = useState<number>(0);
-    const [params, setParams] = useState<P | undefined>(gridModel.params);
+    const [params, setParams] = useState<any>({ ...(gridModel.params ?? {}), SearchTerm: '' });
 
     const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const searchKey = useSearchParams().get('searchKey');
 
     const { data: vendorLocations } = useFetch<LocationsArrayInterface, void>('getVendorLocation');
     const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
@@ -74,6 +78,44 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     //make refetch function accessible on the UI.
     typeof gridModel.getRefetchFn === 'function' && gridModel.getRefetchFn(refetch);
 
+    const rows = useMemo(() => {
+        if (data) {
+            if (searchKey) {
+                const localSearch = data?.Data.filter((item) => {
+                    return Object.values(item).some(
+                        (value) =>
+                            (typeof value === 'string' && typeof searchKey === 'string' && value.toLowerCase().includes(searchKey.toLowerCase())) ||
+                            (typeof value === 'number' && value == (searchKey as unknown as number)),
+                    );
+                });
+
+                if (localSearch.length !== 0) {
+                    return localSearch;
+                }
+
+                setParams((prev: any) => ({ ...prev, SearchTerm: searchKey }));
+                return data.Data;
+            }
+
+            setParams((prev: any) => ({ ...prev, SearchTerm: '' }));
+            return data.Data;
+        }
+
+        return [];
+    }, [data, searchKey]);
+
+    const handleSearch = (value: string) => {
+        const p = new URLSearchParams(searchParams);
+
+        if (!value) {
+            p.delete('searchKey');
+        } else {
+            p.set('searchKey', value);
+        }
+
+        router.push(`?${p.toString()}`);
+    };
+
     const handleSubmit = (data: V) => {
         setFormLoading(true);
         const payload = typeof formModel?.modifyData === 'function' ? formModel?.modifyData(data) : data;
@@ -89,7 +131,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const getIndexedRows = () => {
         const startIndex = (pageNo - 1) * pageSize;
 
-        return data?.Data?.map((row, index) => ({
+        return rows.map((row, index) => ({
             id: startIndex + index + 1,
             ...row,
         }));
@@ -492,6 +534,8 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 filters={getFilters()}
                 params={params}
                 setParams={setParams}
+                filterMode="server"
+                onFilterModelChange={({ quickFilterValues }) => handleSearch(quickFilterValues![0])}
                 {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}
                 {...(showDates && { setDates, dates })}
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}

@@ -1,4 +1,11 @@
-import { GridToolbarContainer, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, useGridApiContext } from '@mui/x-data-grid';
+import {
+    GridToolbarContainer,
+    GridToolbarExport,
+    GridToolbarColumnsButton,
+    GridToolbarDensitySelector,
+    useGridApiContext,
+    GridToolbarQuickFilter,
+} from '@mui/x-data-grid';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge, Grid } from '@mui/material';
 import { getInitialDates } from '@/utils';
@@ -74,8 +81,8 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
         return typeof params === 'object' ? Object.values(params).filter((val) => val !== 0 && val !== 99).length : 0;
     }, [params]);
 
-    const width = isMobile ? "100%" : filters.length > 1 ? 450 : 250;
-    const mdSpan = filters.length > 1 ? 6 : 12
+    const width = isMobile ? '100%' : filters.length > 1 ? 450 : 250;
+    const mdSpan = filters.length > 1 ? 6 : 12;
 
     return (
         <GridToolbarContainer
@@ -237,7 +244,7 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                                                 },
                                                 maxHeight: 200,
                                                 minWidth: 200,
-                                                overflow: 'auto'
+                                                overflow: 'auto',
                                             },
                                         },
                                     }}

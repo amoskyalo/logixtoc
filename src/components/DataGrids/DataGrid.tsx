@@ -2,10 +2,21 @@
 
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
-import { AllDataGridProps } from './types';
+import { AllDataGridProps, DatesInterface, FiltersObject } from './types';
 import { useThemeMode } from '@/hooks';
 import DataGridFooter from './DataGridFooter';
 import DataGridToolbar from './DataGridToolbar';
+
+declare module '@mui/x-data-grid' {
+    interface ToolbarPropsOverrides {
+        setDates?: any;
+        dates?: DatesInterface;
+        filters?: FiltersObject[];
+        params?: any;
+        onAdd?: () => void;
+        setParams?: (args: any) => void;
+    }
+}
 
 const Grid = (props: AllDataGridProps) => {
     const {
@@ -22,13 +33,11 @@ const Grid = (props: AllDataGridProps) => {
         filters,
         params,
         setParams,
-        hideToolbar = false,
         checkboxSelection = true,
         ...otherProps
     } = props;
 
     const { isDarkMode } = useThemeMode();
-
     const footer = () => (
         <DataGridFooter
             loading={loading}
@@ -42,8 +51,6 @@ const Grid = (props: AllDataGridProps) => {
         />
     );
 
-    const toolbar = () => <DataGridToolbar onAdd={onAdd} setDates={setDates} dates={dates} filters={filters} params={params} setParams={setParams} />;
-
     return (
         <Box sx={{ backgroundColor: isDarkMode ? '#1c252e' : 'white', borderRadius: 2 }}>
             <DataGrid
@@ -52,7 +59,20 @@ const Grid = (props: AllDataGridProps) => {
                 disableColumnMenu={true}
                 loading={loading}
                 getRowClassName={({ indexRelativeToCurrentPage }) => (indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
-                slots={{ footer, ...(!hideToolbar && { toolbar }) }}
+                slots={{
+                    footer,
+                    toolbar: DataGridToolbar 
+                }}
+                slotProps={{
+                    toolbar: {
+                        onAdd,
+                        setDates,
+                        dates,
+                        filters,
+                        params,
+                        setParams,
+                    },
+                }}
                 getRowId={getRowId || ((row) => row.id)}
                 checkboxSelection={checkboxSelection}
                 {...otherProps}

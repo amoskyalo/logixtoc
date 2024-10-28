@@ -1,7 +1,8 @@
-import { useFetch, LocationsArrayInterface } from '@/api';
+import { LocationsArrayInterface } from '@/api';
 import { FormikProps } from 'formik';
 import { MenuItem } from '@mui/material';
-import { getFormikFieldProps } from '@/utils';
+import { useFetch } from '@/hooks';
+import utils from '@/utils';
 import SelectField from '../SelectInput';
 import AutoCompleteField from '../Autocomplete';
 
@@ -14,7 +15,7 @@ const SelectSingleLocation = <Type extends { vendorLocationID: number }>(
    );
 
    return (
-      <SelectField label="Locations" {...getFormikFieldProps(formik, 'vendorLocationID')}>
+      <SelectField label="Locations" {...utils.getFormikFieldProps(formik, 'vendorLocationID')}>
          {locations?.Data?.map(({ VendorLocationID, VendorLocationName }) => (
             <MenuItem value={VendorLocationID} key={VendorLocationID}>
                {VendorLocationName}
@@ -45,7 +46,7 @@ const SelectMultipleLocations = <
          }))}
          getOptionLabel={(option: any) => option.locationName}
          label={label}
-         {...getFormikFieldProps(formikProps, 'locationsArray', true)}
+         {...utils.getFormikFieldProps(formikProps, 'locationsArray', true)}
       />
    );
 };

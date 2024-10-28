@@ -1,7 +1,9 @@
 'use client';
 
-import { APPCRUD, useFetch, VendorUserObjectInterface, VendorAllowanceType } from '@/api';
+import { VendorUserObjectInterface, VendorAllowanceType } from '@/api';
 import { StatusChips } from '@/components/Chips';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorAllowanceTypeID: number; UserID: number };
 
@@ -11,7 +13,7 @@ const AllowanceRequest = () => {
 
     const users = VendorUsers?.Data.map((user) => ({ userName: `${user.FirstName} ${user.LastName}`, UserID: user.UserID }));
 
-    const UI = new APPCRUD<any, void, void, Params>({
+    const UI = new UIConstructor<any, void, void, Params>({
         grid: {
             fetchUrl: 'getVendorAllowanceRequest',
             params: { VendorAllowanceTypeID: 0, UserID: 0 },

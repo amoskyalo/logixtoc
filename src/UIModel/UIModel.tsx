@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, isValidElement, useCallback, useMemo } from 'react';
-import { useMutate, useFetch, LocationsArrayInterface } from '@/api';
+import { LocationsArrayInterface } from '@/api';
 import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
-import { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } from '@/utils';
 import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '@/components/DataGrids';
 import { DeleteDialog, FormDialog } from '@/components/Dialogs';
 import { Formik, Form, FormikProps } from 'formik';
@@ -11,10 +10,11 @@ import { SubmitButton } from '@/components/Buttons';
 import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation, CheckboxInput } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
-import { useGridRowEditFunctions, useResponsiveness } from '@/hooks';
+import { useGridRowEditFunctions, useResponsiveness, useFetch, useMutate } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
 import { HorizontalLinearStepper } from '@/components/Stepper';
 import { useRouter, useSearchParams } from 'next/navigation';
+import utils from '@/utils';
 
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
     // R is the response object we are getting from API after fetching data;
@@ -34,6 +34,8 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         showDates = true,
         showActions = true,
     } = gridModel;
+
+    const { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } = utils;
 
     const [dates, setDates] = useState(getInitialDates());
     const [pageNo, setPageNo] = useState(1);
@@ -381,7 +383,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             default:
                 throw new Error('Invalid input type');
         }
-    }, []);
+    }, [getFormikFieldProps]);
 
     const renderGridForm = useCallback(
         () => (

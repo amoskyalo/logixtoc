@@ -1,8 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useFetch, ProductUOM, VendorProductCategoryType, APPCRUD } from '@/api';
+import { ProductUOM, VendorProductCategoryType } from '@/api';
+import { useFetch } from '@/hooks';
 import { TablessContainer } from '@/components/Containers';
+import { UIConstructor } from '@/UIModel';
 
 type Values = {
     isAdminSaleOnly: number;
@@ -19,7 +21,7 @@ const SaleCategoryType = () => {
     const VendorProductCategoryID = useSearchParams().get('VendorProductCategoryID') as unknown as number;
     const { data: uomList } = useFetch<ProductUOM, void>('getProductUOM');
 
-    const UI = new APPCRUD<VendorProductCategoryType, Values, void, Params>({
+    const UI = new UIConstructor<VendorProductCategoryType, Values, void, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductCategoryType',
@@ -59,7 +61,7 @@ const SaleCategoryType = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add New Product Category Type',
             submitKey: 'addVendorProductCategoryType',
             initialValues: {

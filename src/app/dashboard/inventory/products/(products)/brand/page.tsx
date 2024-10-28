@@ -1,7 +1,8 @@
 'use client';
 
-import { useGetUser } from '@/hooks';
-import { useFetch, ProductClass, ProductBrand, APPCRUD } from '@/api';
+import { useGetUser, useFetch } from '@/hooks';
+import { ProductClass, ProductBrand } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type DeleteParams = {
     vendorProductBrandID: number | string;
@@ -16,7 +17,7 @@ const Brand = () => {
     const { VendorTypeID, UserID: AddedBy } = useGetUser();
     const { data: productClass } = useFetch<ProductClass, { VendorTypeID: number }>('getProductClass', { VendorTypeID });
 
-    const model = new APPCRUD<ProductBrand, Values, DeleteParams, void>({
+    const model = new UIConstructor<ProductBrand, Values, DeleteParams, void>({
         grid: {
             showDates: false,
             pagination: false,
@@ -31,7 +32,7 @@ const Brand = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add Product Brand',
             modifyData: (data: any) => ({ ...data, AddedBy }),
             initialValues: { productClassID: '' as unknown as number, vendorProductBrandName: '' },

@@ -1,15 +1,6 @@
 'use client';
 
-import {
-    DeliveryPlan,
-    APPCRUD,
-    VendorUserObjectInterface,
-    DeliveryPlanType,
-    useFetch,
-    useMutate,
-    urls,
-    DeliveryPlanStatus,
-} from '@/api';
+import { DeliveryPlan, VendorUserObjectInterface, DeliveryPlanType, urls, DeliveryPlanStatus } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { TablessContainer } from '@/components/Containers';
 import { useCallback, useMemo, useState } from 'react';
@@ -19,7 +10,9 @@ import { SelectField } from '@/components/Inputs';
 import { FormDialog } from '@/components/Dialogs';
 import { MenuItem, Stack } from '@mui/material';
 import { SubmitButton } from '@/components/Buttons';
-import { getFormikFieldProps, mutateOptions } from '@/utils';
+import { useFetch, useMutate } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
+import utils from '@/utils';
 
 type Delete = { deliveryPlanNO: string };
 
@@ -46,9 +39,12 @@ const Planning = () => {
     const [activeRecord, setActiveRecord] = useState<DeliveryPlan | null>(null);
     const [loading, setLoading] = useState(false);
 
+    const { getFormikFieldProps, mutateOptions } = utils;
+
     const { data: vendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
     const { data: deliveryPlanType } = useFetch<DeliveryPlanType, void>('getDeliveryPlanType');
     const { data: deliveryPlanStatus } = useFetch<DeliveryPlanStatus, void>('getDeliveryPlanStatus');
+
     const router = useRouter();
     let refetch: any;
 
@@ -102,7 +98,7 @@ const Planning = () => {
         mutate({ ...data, deliveryPlanNO: activeRecord?.DeliveryPlanNO }, mutateOptions({ onClose, setLoading, refetch }));
     };
 
-    const UI = new APPCRUD<DeliveryPlan, Values, Delete, Params>({
+    const UI = new UIConstructor<DeliveryPlan, Values, Delete, Params>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getDeliveryPlanHistory',

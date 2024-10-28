@@ -1,8 +1,10 @@
 'use client';
 
-import { SystemLocationType, VendorLocationType, useFetch, APPCRUD } from '@/api';
+import { SystemLocationType, VendorLocationType } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { TablessContainer } from '@/components/Containers';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Values = {
     locationTypeID: number;
@@ -14,7 +16,7 @@ type Delete = { vendorLocationTypeID: number };
 const LocationTypes = () => {
     const { data: systemLocationTypes } = useFetch<SystemLocationType, void>('getSystemLocationType');
 
-    const UI = new APPCRUD<VendorLocationType, Values, Delete, void>({
+    const UI = new UIConstructor<VendorLocationType, Values, Delete, void>({
         grid: {
             showDates: false,
             pagination: false,

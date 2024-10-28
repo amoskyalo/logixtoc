@@ -33,6 +33,7 @@ const Grid = (props: AllDataGridProps) => {
         filters,
         params,
         setParams,
+        hideToolbar,
         checkboxSelection = true,
         ...otherProps
     } = props;
@@ -61,7 +62,7 @@ const Grid = (props: AllDataGridProps) => {
                 getRowClassName={({ indexRelativeToCurrentPage }) => (indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
                 slots={{
                     footer,
-                    toolbar: DataGridToolbar 
+                    ...(!hideToolbar && { toolbar: DataGridToolbar }),
                 }}
                 slotProps={{
                     toolbar: {

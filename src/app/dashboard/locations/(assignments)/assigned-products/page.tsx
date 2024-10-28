@@ -1,6 +1,8 @@
 'use client';
 
-import { useFetch, AssignedProductInterface, ProductType, APPCRUD } from '@/api';
+import { AssignedProductInterface, ProductType } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Values = {
     vendorLocationID: number;
@@ -10,13 +12,12 @@ type Values = {
 };
 
 type Delete = { vendorLocationProductTypeID: number };
-
 type Params = { VendorLocationID: number };
 
 const AssignedProducts = () => {
     const { data: vendorProducts } = useFetch<ProductType, void>('getVendorProductTypes');
 
-    const UI = new APPCRUD<AssignedProductInterface, Values, Delete, Params>({
+    const UI = new UIConstructor<AssignedProductInterface, Values, Delete, Params>({
         grid: {
             showDates: false,
             hasLocationsFilters: true,

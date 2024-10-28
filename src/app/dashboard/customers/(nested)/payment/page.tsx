@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, useFetch, VendorCustomerPayment, VendorAccount } from '@/api';
+import { VendorCustomerPayment, VendorAccount } from '@/api';
 import { useSearchParams } from 'next/navigation';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { vendorCustomerPaymentID: number };
 type Params = { VendorCustomerID: number };
@@ -13,7 +15,7 @@ const CustomerPament = () => {
     const VendorCustomerID = useSearchParams().get('VendorCustomerID') as unknown as number;
     const { data: accounts } = useFetch<VendorAccount, void>('getVendorAccounts');
 
-    const UI = new APPCRUD<VendorCustomerPayment, Values, Delete, Params>({
+    const UI = new UIConstructor<VendorCustomerPayment, Values, Delete, Params>({
         grid: {
             fetchUrl: 'getVendorCustomerPayment',
             deleteUrl: 'removeVendorCustomerPayment',
@@ -30,7 +32,7 @@ const CustomerPament = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'addVendorCustomerPayment',
             title: 'Add Customer Payment',
             initialValues: {

@@ -1,8 +1,9 @@
 'use client';
 
-import { VendorAccount, GetUserAccountsParams, APPCRUD, useFetch, VendorAccountType } from '@/api';
-import { useResponsiveness } from '@/hooks';
+import { VendorAccount, GetUserAccountsParams, VendorAccountType } from '@/api';
+import { useResponsiveness, useFetch } from '@/hooks';
 import { useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { vendorAccountID: number };
 
@@ -20,7 +21,7 @@ const Accounts = () => {
     const { isMobile } = useResponsiveness();
     const router = useRouter();
 
-    const UI = new APPCRUD<VendorAccount, any, Delete, GetUserAccountsParams>({
+    const UI = new UIConstructor<VendorAccount, any, Delete, GetUserAccountsParams>({
         grid: {
             fetchUrl: 'getVendorAccounts',
             deleteUrl: 'removeVendorAccount',
@@ -41,7 +42,7 @@ const Accounts = () => {
                     valueKey: 'VendorAccountTypeID',
                     labelKey: 'VendorAccountTypeName',
                     filterOptions: vendorAccountTypes?.Data || [],
-                }
+                },
             ],
             columns: [
                 { field: 'VendorAccountTypeName', headerName: 'Account Type', mobileWidth: 150 },

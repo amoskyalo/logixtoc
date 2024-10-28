@@ -1,8 +1,10 @@
 'use client';
 
-import { useFetch, VendorLocationUserAssignmentRow, VendorUserObjectInterface, APPCRUD } from '@/api';
+import { VendorLocationUserAssignmentRow, VendorUserObjectInterface } from '@/api';
 import { AutoCompleteField } from '@/components/Inputs';
-import { getFormikFieldProps } from '@/utils';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
+import utils from '@/utils';
 
 type Params = { VendorLocationID: number };
 type Delete = { vendorLocationUserAssignmentID: string | number };
@@ -14,9 +16,10 @@ type FormiValues = {
 };
 
 const AssignedUsers = () => {
+    const { getFormikFieldProps } = utils;
     const { data: vendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
 
-    const UI = new APPCRUD<VendorLocationUserAssignmentRow, FormiValues, Delete, Params>({
+    const UI = new UIConstructor<VendorLocationUserAssignmentRow, FormiValues, Delete, Params>({
         grid: {
             showDates: false,
             hasLocationsFilters: true,

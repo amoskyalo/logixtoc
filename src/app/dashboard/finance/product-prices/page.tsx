@@ -1,11 +1,13 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, useFetch, VendorProductCategoryType, VendorCustomerCategory, VendorProductPrice } from '@/api';
+import { VendorProductCategoryType, VendorCustomerCategory, VendorProductPrice } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { AutoCompleteField } from '@/components/Inputs';
-import { getFormikFieldProps } from '@/utils';
 import { useRouter } from 'next/navigation';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
+import utils from '@/utils';
 
 type Values = {
     vendorProductCategoryTypeID: number | string;
@@ -16,6 +18,7 @@ type Values = {
 
 const ProductPrices = () => {
     const router = useRouter();
+    const { getFormikFieldProps } = utils;
 
     const { data: productCategoryType } = useFetch<VendorProductCategoryType, void>('getVendorProductCategoryType');
     const { data: customerCategory } = useFetch<VendorCustomerCategory, void>('getVendorCustomerCategory');
@@ -24,7 +27,7 @@ const ProductPrices = () => {
         router.push(`/dashboard/finance/product-prices/${route}?VendorPriceNO=${activeRecord.VendorPriceNO}`);
     };
 
-    const UI = new APPCRUD<VendorProductPrice, Values, void, void>({
+    const UI = new UIConstructor<VendorProductPrice, Values, void, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorPriceHistory',
@@ -35,7 +38,7 @@ const ProductPrices = () => {
                 { name: 'Delete' },
             ],
             columns: [
-                { field: 'VendorPriceNO', headerName: 'Price Number', mobileWidth: 170},
+                { field: 'VendorPriceNO', headerName: 'Price Number', mobileWidth: 170 },
                 { field: 'regionsCount', headerName: 'Regions Count', mobileWidth: 150 },
                 { field: 'DateAdded', headerName: 'Date Started', mobileWidth: 150 },
                 { field: 'DateClosed', headerName: 'Date Closed', mobileWidth: 150 },

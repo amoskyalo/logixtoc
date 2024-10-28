@@ -1,14 +1,11 @@
 'use client';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useResponsiveness } from '@/hooks';
 import { useMemo, useState, createContext, useEffect } from 'react';
 
 export const ThemeContext = createContext<any>('');
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
-    const { isMobile } = useResponsiveness();
-
     const [mode, setMode] = useState<'dark' | 'light'>();
 
     useEffect(() => {

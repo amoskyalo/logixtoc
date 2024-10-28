@@ -1,6 +1,8 @@
 'use client';
 
-import { useFetch, AssignedAccount, GetUserAccountsParams, VendorAccount, APPCRUD, VendorAccountType } from '@/api';
+import { AssignedAccount, GetUserAccountsParams, VendorAccount, VendorAccountType } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Params = {
     VendorAccountTypeID: number;
@@ -25,7 +27,7 @@ const AssignedAccounts = () => {
         VendorAccountTypeID: 0,
     });
 
-    const UI = new APPCRUD<AssignedAccount, Values, Delete, Params>({
+    const UI = new UIConstructor<AssignedAccount, Values, Delete, Params>({
         grid: {
             showDates: false,
             pagination: false,

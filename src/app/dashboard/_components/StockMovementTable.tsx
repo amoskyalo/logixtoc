@@ -5,10 +5,12 @@ import { Chip, Grid } from '@mui/material';
 import { SectionsBox, StockMovementTableInterface } from '.';
 import { GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/navigation';
-import { getIndexedRows } from '@/utils';
+import utils from '@/utils';
 
 const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
     const router = useRouter();
+    const { getIndexedRows } = utils;
+
     const renderActionButton = () => {
         return <Chip label="View all" color="secondary" onClick={() => router.push('/dashboard/inventory/stock')} sx={{ width: 75 }} />;
     };
@@ -30,7 +32,7 @@ const StockMovementTable = ({ loading, rows }: StockMovementTableInterface) => {
     return (
         <Grid item lg={6} xs={12}>
             <SectionsBox title="Stock movement" renderActionButton={renderActionButton}>
-                <DataGrid rows={getIndexedRows(rows)} checkboxSelection={false} columns={columns} loading={loading} hideToolbar hideFooter />
+                <DataGrid rows={getIndexedRows(rows)} checkboxSelection={false} columns={columns} loading={loading} hideFooter hideToolbar />
             </SectionsBox>
         </Grid>
     );

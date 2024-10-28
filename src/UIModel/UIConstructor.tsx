@@ -1,7 +1,8 @@
-import { UIModel, GridModelInterface, FormModelInterface } from '@/UIModels';
+import { GridModelInterface, FormModelInterface } from './types';
 import { number, string, array, object } from 'yup';
+import UIModel from './UIModel';
 
-export const APPCRUD = class<R, V, D, P> {
+const UIConstructor = class<R, V, D, P> {
     config: {
         grid: GridModelInterface<D, P>;
         form?: FormModelInterface<V>;
@@ -55,3 +56,5 @@ export const APPCRUD = class<R, V, D, P> {
         return <UIModel<R, V, D, P> gridModel={this.config.grid} formModel={this.config.form} validationSchema={validationSchema} />;
     }
 };
+
+export default UIConstructor;

@@ -1,11 +1,12 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorProductPriceDetail, useFetch, VendorProductCategoryType } from '@/api';
+import { VendorProductPriceDetail, VendorProductCategoryType } from '@/api';
 import { useSearchParams } from 'next/navigation';
 import { AutoCompleteField } from '@/components/Inputs';
-import { getFormikFieldProps } from '@/utils';
-import { useResponsiveness } from '@/hooks';
+import { useResponsiveness, useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
+import utils from '@/utils';
 
 type Params = { VendorPriceNO: string };
 type Delete = { vendorProductPriceDetailID: number | string };
@@ -17,10 +18,11 @@ type Values = {
 
 const PriceDetails = () => {
     const VendorPriceNO = useSearchParams().get('VendorPriceNO') as string;
+    const { getFormikFieldProps } = utils;
     const { isMobile } = useResponsiveness();
     const { data: productCategoryType } = useFetch<VendorProductCategoryType, void>('getVendorProductCategoryType');
 
-    const UI = new APPCRUD<VendorProductPriceDetail, Values, Delete, Params>({
+    const UI = new UIConstructor<VendorProductPriceDetail, Values, Delete, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductPriceDetail',
@@ -88,7 +90,7 @@ const PriceDetails = () => {
 
     return (
         <TablessContainer headerName="Price Details" backURL="/dashboard/finance/product-prices">
-            {UI.render()}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+            {UI.render()}
         </TablessContainer>
     );
 };

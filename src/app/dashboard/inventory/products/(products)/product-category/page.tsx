@@ -1,13 +1,15 @@
 'use client';
 
-import { APPCRUD, VendorProductCategory, useFetch, ProductUOM } from '@/api';
+import { VendorProductCategory, ProductUOM } from '@/api';
 import { useRouter } from 'next/navigation';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 const ProductCategory = () => {
     const router = useRouter();
     const { data: UOM } = useFetch<ProductUOM, void>('getProductUOM');
 
-    const UI = new APPCRUD<VendorProductCategory, any, any, void>({
+    const UI = new UIConstructor<VendorProductCategory, any, any, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductCategory',

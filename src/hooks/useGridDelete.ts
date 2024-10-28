@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { urls, useMutate } from '@/api';
-import { mutateOptions } from '@/utils';
+import { urls } from '@/api';
+import { useMutate } from './useMutate';
+import utils from '@/utils';
 
 interface Args<T> {
     deleteKey: keyof typeof urls;
@@ -10,6 +11,7 @@ interface Args<T> {
 
 export const useGridDelete = <T>(args: Args<T>) => {
     const { deleteKey, initialDeleteParams, refetch } = args;
+    const { mutateOptions } = utils;
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);

@@ -37,7 +37,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `app` folder contains primary page components organized by business domains (e.g., `dashboard`, `finance`, `suppliers`). Each subfolder is responsible for rendering specific pages or views within the application and organizing related files (`page.tsx`, `layout.tsx`, `loading.tsx`) into isolated units for each feature.
+- The `app` folder contains primary page components organized by business domains (e.g., `dashboard`, `finance`, `suppliers`). Each subfolder is responsible for rendering specific pages or views within the application and organizing related files (`page.tsx`, `layout.tsx`, `loading.tsx`) into isolated units for each feature.
 
 ---
 
@@ -61,7 +61,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `components` folder acts as a UI library, containing reusable UI components like buttons, grids, inputs, dialogs, and navigational elements. Each subfolder groups similar components together, enabling modular and consistent UI development.
+- The `components` folder acts as a UI library, containing reusable UI components like buttons, grids, inputs, dialogs, and navigational elements. Each subfolder groups similar components together, enabling modular and consistent UI development.
 
 ---
 
@@ -88,7 +88,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `api` folder is dedicated to managing API requests and handling configuration for HTTP requests. The `apiClient.ts` file is the central file for configuring `axios` with custom headers and interceptors, while `urls.ts` centralizes the API endpoints, and `types.ts` provides typings for API responses.
+- The `api` folder is dedicated to managing API requests and handling configuration for HTTP requests. The `apiClient.ts` file is the central file for configuring `axios` with custom headers and interceptors, while `urls.ts` centralizes the API endpoints, and `types.ts` provides typings for API responses.
 
 ---
 
@@ -116,7 +116,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `UIModel` folder encapsulates components and classes responsible for managing data grids, forms, and CRUD interactions within the UI. This includes `UIModel.tsx` as the main component for UI data management, and `UIConstructor.tsx` for constructing model instances or configurations. Types are defined within `types.ts` to support these components.
+- The `UIModel` folder encapsulates components and classes responsible for managing data grids, forms, and CRUD interactions within the UI. This includes `UIModel.tsx` as the main component for UI data management, and `UIConstructor.tsx` for constructing model instances or configurations. Types are defined within `types.ts` to support these components.
 
 ---
 
@@ -135,7 +135,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `Context` folder contains files related to React Context and global state management. It provides global state to components where needed, facilitating state-sharing across deeply nested component trees.
+- The `Context` folder contains files related to React Context and global state management. It provides global state to components where needed, facilitating state-sharing across deeply nested component trees.
 
 ---
 
@@ -154,8 +154,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `hooks` folder centralizes custom hooks, such as `useFetch` and `useMutate`, for API interaction. These hooks abstract the logic for data fetching and mutation, making them reusable and maintaining a clean separation from the components.
-
+- The `hooks` folder centralizes custom hooks.
 ---
 
 #### 7. **Utilities and Constants**
@@ -182,7 +181,7 @@ In the previous version, we used a package called `NextGenMUI`. While it was use
 └──────────────────────────────────────────────┘
 ```
 
--   **Description**: The `utils` folder contains utility functions that can be reused across the project, such as formatters, validators, and general-purpose helpers. The `Constants` folder stores values that are constant throughout the app, such as color schemes, route definitions, and dropdown options.
+- The `utils` folder contains utility functions that can be reused across the project, such as formatters, validators, and general-purpose helpers.
 
 ### Running the project
 

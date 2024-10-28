@@ -1,11 +1,10 @@
 'use client';
 
-import { useFetch, ProductUOMType, ProductUOM, APPCRUD } from '@/api';
+import { ProductUOMType, ProductUOM } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
-type Delete = {
-    vendorProductUOMID: number;
-};
-
+type Delete = { vendorProductUOMID: number };
 type Values = {
     uomSize: number;
     vendorProductUOMName: string;
@@ -15,7 +14,7 @@ type Values = {
 const UOM = () => {
     const { data: productUOMTypes } = useFetch<ProductUOMType, void>('getProductUOMType');
 
-    const UI = new APPCRUD<ProductUOM, Values, Delete, void>({
+    const UI = new UIConstructor<ProductUOM, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getProductUOM',
@@ -29,7 +28,7 @@ const UOM = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add Product UOM',
             submitKey: 'postProductUOM',
             initialValues: { uomSize: '' as unknown as number, vendorProductUOMName: '', productUOMTypeID: '' as unknown as number },

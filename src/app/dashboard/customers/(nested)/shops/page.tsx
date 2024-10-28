@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
 import { useSearchParams } from 'next/navigation';
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, useFetch, VendorCustomerLocation, VendorRegion } from '@/api';
+import { VendorCustomerLocation, VendorRegion } from '@/api';
 import { SelectField } from '@/components/Inputs';
 import { MenuItem } from '@mui/material';
-import { getFormikFieldProps } from '@/utils';
+import { UIConstructor } from '@/UIModel';
+import { useFetch } from '@/hooks';
+import utils from '@/utils';
 
 type Values = {
     locationName: string;
@@ -18,11 +19,13 @@ type Values = {
 type Params = { VendorCustomerID: number };
 
 const CustomerShops = () => {
+    const { getFormikFieldProps } = utils;
+
     const VendorCustomerID = useSearchParams().get('VendorCustomerID') as unknown as number;
 
     const { data: regions } = useFetch<VendorRegion, void>('getVendorRegions');
 
-    const UI = new APPCRUD<VendorCustomerLocation, Values, void, Params>({
+    const UI = new UIConstructor<VendorCustomerLocation, Values, void, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorCustomerLocation',
@@ -35,7 +38,7 @@ const CustomerShops = () => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             submitKey: 'addVendorCustomerLocation',
             title: 'Add Customer Shops',
             modifyData(data) {

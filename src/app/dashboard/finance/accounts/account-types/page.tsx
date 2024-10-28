@@ -1,13 +1,11 @@
 'use client';
 
-import { APPCRUD, VendorAccountType, AccountType, useFetch } from '@/api';
+import { VendorAccountType, AccountType } from '@/api';
+import { useFetch } from '@/hooks';
 import { useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
-type Values = {
-    accountTypeID: number;
-    vendorAccountTypeName: string;
-};
-
+type Values = { accountTypeID: number; vendorAccountTypeName: string };
 type Delete = { vendorAccountTypeID: number | string };
 
 const AccountTypes = () => {
@@ -15,7 +13,7 @@ const AccountTypes = () => {
 
     const { data: accountType } = useFetch<AccountType, void>('getAccountType');
 
-    const UI = new APPCRUD<VendorAccountType, Values, Delete, void>({
+    const UI = new UIConstructor<VendorAccountType, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorAccountTypes',

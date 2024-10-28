@@ -1,6 +1,8 @@
 'use client';
 
-import { APPCRUD, OrderType as SaleOrderTypeInterface, useFetch, VendorOrderType } from '@/api';
+import { OrderType as SaleOrderTypeInterface, VendorOrderType } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Values = { SaleOrderTypeID: string };
 type Delete = { VendorSaleOrderTypeID: number };
@@ -8,11 +10,11 @@ type Delete = { VendorSaleOrderTypeID: number };
 const OrderType = () => {
     const { data: saleOrderType } = useFetch<SaleOrderTypeInterface, void>('getSaleOrderType');
 
-    const UI = new APPCRUD<VendorOrderType, Values, Delete, void>({
+    const UI = new UIConstructor<VendorOrderType, Values, Delete, void>({
         grid: {
             fetchUrl: 'getVendorSaleOrderType',
             deleteUrl: 'removeVendorSaleOrderType',
-            actions: ["delete"],
+            actions: ['delete'],
             initialDeleteParams: { VendorSaleOrderTypeID: 0 },
             columns: [
                 { field: 'SaleOrderTypeName', headerName: 'UOM Type Name', flex: 1 },

@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ProductType as ProductTypeInterface, useFetch, ProductClass, ProductBrand, ProductUOM, APPCRUD } from '@/api';
-import { useGetUser } from '@/hooks';
+import { ProductType as ProductTypeInterface,  ProductClass, ProductBrand, ProductUOM } from '@/api';
+import { useGetUser, useFetch } from '@/hooks';
 import { BrandsList, UOMList, ClassList } from './_components';
-import { getMappedObjectArray } from '@/utils';
+import { UIConstructor } from '@/UIModel';
+import utils from '@/utils';
 
 type Values = {
     vendorProductTypeName: string;
@@ -31,6 +32,7 @@ const ProductType = () => {
     });
 
     const { VendorTypeID } = useGetUser();
+    const { getMappedObjectArray } = utils;
 
     const { data: productsClass } = useFetch<ProductClass, { VendorTypeID: number }>('getProductClass', { VendorTypeID });
     const { data: productUOMTypes } = useFetch<ProductUOM, void>('getProductUOM');
@@ -40,7 +42,7 @@ const ProductType = () => {
         setActiveRecord({ type: '', row: null });
     };
 
-    const UI = new APPCRUD<ProductTypeInterface, Values, Delete, void>({
+    const UI = new UIConstructor<ProductTypeInterface, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductTypes',

@@ -2,18 +2,21 @@
 
 import { TablessContainer } from '@/components/Containers';
 import { useSearchParams } from 'next/navigation';
-import { APPCRUD, VendorRegionPrice, useFetch, VendorRegion } from '@/api';
+import { VendorRegionPrice, VendorRegion } from '@/api';
 import { StatusChips } from '@/components/Chips';
-import { getMappedObjectArray } from '@/utils';
+import { UIConstructor } from '@/UIModel';
+import { useFetch } from '@/hooks';
+import utils from '@/utils';
 
 type Params = { VendorPriceNO: string };
 type Values = { regionsArray: any[] };
 
 const RegionPricing = () => {
     const VendorPriceNO = useSearchParams().get('VendorPriceNO') as string;
+    const { getMappedObjectArray } = utils;
     const { data: regions } = useFetch<VendorRegion, void>('getVendorRegions');
 
-    const UI = new APPCRUD<VendorRegionPrice, Values, void, Params>({
+    const UI = new UIConstructor<VendorRegionPrice, Values, void, Params>({
         grid: {
             showDates: false,
             showActions: false,

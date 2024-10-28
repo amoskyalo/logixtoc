@@ -1,9 +1,10 @@
 'use client';
 
-import { APPCRUD, SalePaymentCollection, useFetch, VendorAccount } from '@/api';
+import { SalePaymentCollection, VendorAccount } from '@/api';
 import { TablessContainer } from '@/components/Containers';
 import { useSearchParams } from 'next/navigation';
-import { useResponsiveness } from '@/hooks';
+import { useResponsiveness, useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { DeliveryPlanNO: number };
 type Values = {
@@ -17,7 +18,7 @@ const Collection = () => {
     const stockNO = useSearchParams().get('stockNO');
     const { isMobile } = useResponsiveness();
 
-    const UI = new APPCRUD<SalePaymentCollection, Values, void, Params>({
+    const UI = new UIConstructor<SalePaymentCollection, Values, void, Params>({
         grid: {
             showActions: false,
             fetchUrl: 'getSalePaymentCollection',

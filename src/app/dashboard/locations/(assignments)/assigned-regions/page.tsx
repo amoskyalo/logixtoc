@@ -1,6 +1,8 @@
 'use client';
 
-import { VendorRegion, useFetch, AssignedRegionObjInterface, APPCRUD } from '@/api';
+import { VendorRegion, AssignedRegionObjInterface } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorLocationID: number; VendorRegionID: number };
 type Delete = { vendorLocationID: number; vendorRegionID: number };
@@ -8,7 +10,7 @@ type Delete = { vendorLocationID: number; vendorRegionID: number };
 const AssignedRegions = () => {
     const { data: vendorRegions } = useFetch<VendorRegion, void>('getVendorRegions');
 
-    const UI = new APPCRUD<AssignedRegionObjInterface, any, Delete, Params>({
+    const UI = new UIConstructor<AssignedRegionObjInterface, any, Delete, Params>({
         grid: {
             showDates: false,
             hasLocationsFilters: true,

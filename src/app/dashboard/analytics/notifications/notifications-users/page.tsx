@@ -1,8 +1,10 @@
 'use client';
 
-import { APPCRUD, NotificationData, VendorUserObjectInterface, NotificationType, useFetch } from '@/api';
+import { NotificationData, VendorUserObjectInterface, NotificationType } from '@/api';
 import { AutoCompleteField } from '@/components/Inputs';
-import { getFormikFieldProps } from '@/utils';
+import { UIConstructor } from '@/UIModel';
+import { useFetch } from '@/hooks';
+import utils from '@/utils';
 
 type Values = {
     notificationTypeID: string;
@@ -12,10 +14,11 @@ type Values = {
 type Delete = { NotificationUserID: number };
 
 const NotificationsUsers = () => {
+    const { getFormikFieldProps } = utils;
     const { data: vendorUsers } = useFetch<VendorUserObjectInterface, void>('getVendorUsers');
     const { data: notificationType } = useFetch<NotificationType, void>('getVendorNotificationType');
 
-    const UI = new APPCRUD<NotificationData, Values, Delete, any>({
+    const UI = new UIConstructor<NotificationData, Values, Delete, any>({
         grid: {
             showDates: false,
             actions: ['delete'],

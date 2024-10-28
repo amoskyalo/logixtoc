@@ -1,9 +1,10 @@
 'use client';
 
-import { APPCRUD, VendorCustomer, GetCustomer, CustomerType, useFetch, VendorCustomerCategory, VendorRegion } from '@/api';
+import { VendorCustomer, GetCustomer, CustomerType, VendorCustomerCategory, VendorRegion } from '@/api';
 import { useRouter } from 'next/navigation';
-import { useGetUser, useResponsiveness } from '@/hooks';
+import { useGetUser, useResponsiveness, useFetch } from '@/hooks';
 import { useState } from 'react';
+import { UIConstructor } from '@/UIModel';
 
 const initialValues = {
     customerTypeID: '',
@@ -40,7 +41,7 @@ const Customers = () => {
     const formWidth = isMobile ? { width: 120 } : { flex: 1 };
     const commonWidth = isMobile ? 170 : 150;
 
-    const UI = new APPCRUD<VendorCustomer, any, any, GetCustomer>({
+    const UI = new UIConstructor<VendorCustomer, any, any, GetCustomer>({
         grid: {
             fetchUrl: 'getVendorCustomer',
             deleteUrl: 'removeVendorCustomer',

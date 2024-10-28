@@ -1,13 +1,15 @@
 'use client';
 
-import { GetVendorStockParams, VendorStock, APPCRUD, useFetch, ProductType, ProductBrand, ProductUOM } from '@/api';
+import { GetVendorStockParams, VendorStock, ProductType, ProductBrand, ProductUOM } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 const StockLevel = () => {
     const { data: vendorProducts } = useFetch<ProductType, void>('getVendorProductTypes');
     const { data: vendorBrand } = useFetch<ProductBrand, void>('getProductBrands');
     const { data: vendorUOM } = useFetch<ProductUOM, void>('getProductUOM');
 
-    const UI = new APPCRUD<VendorStock, void, void, GetVendorStockParams>({
+    const UI = new UIConstructor<VendorStock, void, void, GetVendorStockParams>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getStockLevel',

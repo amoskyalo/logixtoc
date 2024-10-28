@@ -1,7 +1,9 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorUserObjectInterface, SystemAccessType, SystemRole, useFetch } from '@/api';
+import { VendorUserObjectInterface, SystemAccessType, SystemRole } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 import { Chip } from '@mui/material';
 
 type Params = { SystemRoleID: number | string };
@@ -19,7 +21,7 @@ const Employees = () => {
     const { data: systemAccessType } = useFetch<SystemAccessType, void>('getSystemAccessType');
     const { data: systemRole } = useFetch<SystemRole, void>('getSystemRole');
 
-    const UI = new APPCRUD<VendorUserObjectInterface, Values, Delete, Params>({
+    const UI = new UIConstructor<VendorUserObjectInterface, Values, Delete, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorUsers',

@@ -8,7 +8,6 @@ import {
 } from '@mui/x-data-grid';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge, Grid } from '@mui/material';
-import { getInitialDates } from '@/utils';
 import { useResponsiveness, useThemeMode } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import { DataGridToolbarProps } from './types';
@@ -19,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import Datepicker from 'react-tailwindcss-datepicker';
+import utils from '@/utils';
 
 type SearchProps = TextFieldProps & {
     isMobile: boolean;
@@ -45,6 +45,8 @@ const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(({
 
 const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = [] }: Readonly<DataGridToolbarProps>) => {
     const apiRef = useGridApiContext();
+    const { getInitialDates } = utils;
+
     const { isMobile, isTablet } = useResponsiveness();
     const { isDarkMode } = useThemeMode();
 

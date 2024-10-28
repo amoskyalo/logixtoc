@@ -1,7 +1,9 @@
 'use client';
 
-import { StockMovement, APPCRUD, useFetch, StockMovementType, StockMovementStatus } from '@/api';
+import { StockMovement, StockMovementType, StockMovementStatus } from '@/api';
 import { StatusChips } from '@/components/Chips';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Params = {
     StockMovementTypeID: number;
@@ -11,9 +13,9 @@ type Params = {
 
 const Stock = () => {
     const { data: movementType } = useFetch<StockMovementType, void>('getStockMovementType');
-    const { data: movementStatus } = useFetch<StockMovementStatus, void>('getStockMovementStatus')
+    const { data: movementStatus } = useFetch<StockMovementStatus, void>('getStockMovementStatus');
 
-    const UI = new APPCRUD<StockMovement, void, void, Params>({
+    const UI = new UIConstructor<StockMovement, void, void, Params>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getStockMovementHistory',

@@ -1,7 +1,8 @@
 'use client';
 
-import { LocationsArrayInterface, APPCRUD, useFetch, VendorLocationType } from '@/api';
-import { useGetUser } from '@/hooks';
+import { LocationsArrayInterface, VendorLocationType } from '@/api';
+import { useGetUser, useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { vendorLocationID: number };
 type Params = { VendorLocationTypeID: number };
@@ -10,7 +11,7 @@ const Locations = () => {
     const { VendorID } = useGetUser();
     const { data: locationTypes } = useFetch<VendorLocationType, void>('getVendorLocationType');
 
-    const UI = new APPCRUD<LocationsArrayInterface, any, Delete, Params>({
+    const UI = new UIConstructor<LocationsArrayInterface, any, Delete, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorLocation',

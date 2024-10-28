@@ -5,24 +5,9 @@ import rw from '../Assets/rwanda.png';
 import bu from '../Assets/burundi.png';
 
 export const countries = [
-   {
-      name: 'Kenya',
-      flag: ke,
-   },
-   {
-      name: 'Tanzania',
-      flag: tz,
-   },
-   {
-      name: 'Uganda',
-      flag: ug,
-   },
-   {
-      name: 'Rwanda',
-      flag: rw,
-   },
-   {
-      name: 'Burundi',
-      flag: bu,
-   },
+    { name: 'Kenya', flag: ke },
+    { name: 'Tanzania', flag: tz },
+    { name: 'Uganda', flag: ug },
+    { name: 'Rwanda', flag: rw },
+    { name: 'Burundi', flag: bu },
 ];

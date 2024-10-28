@@ -1,5 +1,7 @@
 'use client';
-import { APPCRUD, CommissionTypeRange, SystemCommissionType, GetSystemCommissionUserType, useFetch } from '@/api';
+import { CommissionTypeRange, SystemCommissionType, GetSystemCommissionUserType } from '@/api';
+import { useFetch } from '@/hooks';
+import { UIConstructor } from '@/UIModel';
 
 type Values = { systemCommissionTypeID: number; systemCommissionUserTypeID: number };
 type Delete = { vendorCommissionTypeID: number | string };
@@ -8,7 +10,7 @@ const CommisionType = () => {
     const { data: commissionType } = useFetch<SystemCommissionType, void>('getSystemCommissionType');
     const { data: getSystemCommissionUserType } = useFetch<GetSystemCommissionUserType, void>('getSystemCommissionUserType');
 
-    const UI = new APPCRUD<CommissionTypeRange, Values, Delete, void>({
+    const UI = new UIConstructor<CommissionTypeRange, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorCommissionType',

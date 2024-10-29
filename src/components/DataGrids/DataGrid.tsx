@@ -3,7 +3,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { AllDataGridProps, DatesInterface, FiltersObject } from './types';
-import { useThemeMode } from '@/hooks';
+import { useThemeMode, useSetSearchParams } from '@/hooks';
 import DataGridFooter from './DataGridFooter';
 import DataGridToolbar from './DataGridToolbar';
 
@@ -14,40 +14,36 @@ declare module '@mui/x-data-grid' {
         filters?: FiltersObject[];
         params?: any;
         onAdd?: () => void;
-        setParams?: (args: any) => void;
     }
 }
 
 const Grid = (props: AllDataGridProps) => {
     const {
-        setDates,
         onAdd,
         dates,
         totalPages,
         pageSize,
         pageNo,
-        setPageSize,
-        setPageNo,
         getRowId,
         loading,
         filters,
         params,
-        setParams,
         hideToolbar,
         checkboxSelection = true,
         ...otherProps
     } = props;
 
     const { isDarkMode } = useThemeMode();
+    const setParams = useSetSearchParams();
+
     const footer = () => (
         <DataGridFooter
             loading={loading}
             count={totalPages}
             pageSize={pageSize}
             page={pageNo}
-            setPageSize={setPageSize}
             onChange={(__, page) => {
-                setPageNo?.(page);
+                setParams({ PageNO: page });
             }}
         />
     );
@@ -65,14 +61,7 @@ const Grid = (props: AllDataGridProps) => {
                     ...(!hideToolbar && { toolbar: DataGridToolbar }),
                 }}
                 slotProps={{
-                    toolbar: {
-                        onAdd,
-                        setDates,
-                        dates,
-                        filters,
-                        params,
-                        setParams,
-                    },
+                    toolbar: { onAdd, dates, filters, params },
                 }}
                 getRowId={getRowId || ((row) => row.id)}
                 checkboxSelection={checkboxSelection}

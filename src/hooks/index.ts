@@ -7,3 +7,4 @@ export * from './useGetUserDeviceTheme';
 export * from './useGridDelete';
 export * from './useFetch';
 export * from './useMutate';
+export * from './useSetSearchParams';

@@ -29,18 +29,15 @@ export type GridProps<R> = {
 };
 
 export type DataGridToolbarProps = {
-    setDates?: any;
     dates?: DatesInterface;
     filters?: FiltersObject[];
     params?: any;
     onAdd?: () => void;
-    setParams?: (args: any) => void;
 };
 
 export type DataGridFooterProps = PaginationProps & {
     loading: boolean | undefined;
     pageSize?: number;
-    setPageSize?: (size: number) => void;
 };
 
 export type DataGridRowEditActionsProps = {

@@ -6,42 +6,60 @@ import { FormikProps } from 'formik';
 import { snackbarToast } from '@/components/Snackbar';
 import dayjs from 'dayjs';
 
-const utils = {
-    validateObjectFields: (fields: any[]) => {
+const Utils = class {
+    constructor() {
+        this.isDefaltDate = this.isDefaltDate.bind(this);
+    }
+
+    isDefaultFilter(value: any) {
+        return value === 99 || value === 0;
+    }
+
+    isDefaltDate(param: string, value: any) {
+        return (
+            (param === 'StartDate' && value === this.getInitialDates().startDate) || (param === 'EndDate' && value === this.getInitialDates().endDate)
+        );
+    }
+
+    isDefaultPagination(param: string, value: any) {
+        return (param === 'PageNO' && value === 1) || (param === 'PageSize' && value === 10);
+    }
+
+    validateObjectFields(fields: any[]) {
         return fields.some((field) => Object.values(field).some((value) => value === ''));
-    },
+    }
 
-    getIndexedRows: (rows?: GridRowModel[]) => {
+    getIndexedRows(rows?: GridRowModel[]) {
         return rows?.map((row, index) => ({ id: index + 1, ...row }));
-    },
+    }
 
-    getMappedObjectArray: <Type>(key: keyof Type, arr: Type[]) => {
+    getMappedObjectArray<Type>(key: keyof Type, arr: Type[]) {
         return arr.map((item) => {
             return { [key]: item[key] } as Pick<Type, typeof key>;
         });
-    },
+    }
 
-    getStatusChipColor: (statusID: string | number) => {
+    getStatusChipColor(statusID: string | number) {
         const key = `statusID${statusID}`;
 
         return statusColors[key as keyof typeof statusColors] ?? '#66CC66';
-    },
+    }
 
-    getColumnWidth: (width: number, isMobile: boolean) => {
+    getColumnWidth(width: number, isMobile: boolean) {
         return {
             ...(isMobile ? { width } : { flex: 1 }),
         };
-    },
+    }
 
-    getInitialDates: (): DatesInterface => {
+    getInitialDates(): DatesInterface {
         const format = 'YYYY-MM-DD';
         const startDate = dayjs().subtract(1, 'month').format(format);
         const endDate = dayjs().format(format);
 
         return { startDate, endDate };
-    },
+    }
 
-    mutateOptions: (args: MutateOptionsArgs) => {
+    mutateOptions(args: MutateOptionsArgs) {
         const { onClose, refetch, setLoading } = args;
 
         const options = {
@@ -59,9 +77,9 @@ const utils = {
         };
 
         return options;
-    },
+    }
 
-    getFormikFieldProps: <Type>(formik: FormikProps<Type>, field: keyof Type, autoCompleteField?: boolean) => {
+    getFormikFieldProps<Type>(formik: FormikProps<Type>, field: keyof Type, autoCompleteField?: boolean) {
         const { values, errors, touched, getFieldProps, setFieldValue } = formik;
 
         const error = touched[field] && Boolean(errors[field]);
@@ -78,7 +96,9 @@ const utils = {
         };
 
         return fieldProps;
-    },
+    }
 };
 
-export default utils
+const utils = new Utils();
+
+export default utils;

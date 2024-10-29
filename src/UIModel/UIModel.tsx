@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, isValidElement, useCallback, useMemo } from 'react';
+import { useState, isValidElement, useCallback, useMemo, useEffect } from 'react';
 import { LocationsArrayInterface } from '@/api';
 import { GridColDef, GridRowsProp, GridRowModesModel, GridRowModes } from '@mui/x-data-grid';
 import { DataGrid, DataGridActions, DataGridRowEditActions, EditToolbar } from '@/components/DataGrids';
@@ -10,10 +10,10 @@ import { SubmitButton } from '@/components/Buttons';
 import { Stack, MenuItem, Box, FormGroup, FormHelperText, FormControl, FormLabel } from '@mui/material';
 import { TextFieldInput, SelectField, AutoCompleteField, SelectMultipleLocations, SelectSingleLocation, CheckboxInput } from '@/components/Inputs';
 import { Popover } from '@/components/Popover';
-import { useGridRowEditFunctions, useResponsiveness, useFetch, useMutate } from '@/hooks';
+import { useGridRowEditFunctions, useResponsiveness, useFetch, useMutate, useSetSearchParams } from '@/hooks';
 import { UIProps, APIResponse, Input } from './types';
 import { HorizontalLinearStepper } from '@/components/Stepper';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import utils from '@/utils';
 
 const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps<V, D, P>) => {
@@ -36,10 +36,26 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     } = gridModel;
 
     const { getInitialDates, mutateOptions, getFormikFieldProps, validateObjectFields } = utils;
+    const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
+    
+    const searchParams = useSearchParams();
+    const setSearchTerm = useSetSearchParams();
+    const SearchTerm = useSearchParams().get('SearchTerm');
+    const PageNO = parseInt(useSearchParams().get('PageNO') ?? '1');
+    const PageSize = parseInt(useSearchParams().get('PageSize') ?? '10');
+    const StartDate = useSearchParams().get('StartDate') ?? getInitialDates().startDate;
+    const EndDate = useSearchParams().get('EndDate') ?? getInitialDates().endDate;
 
-    const [dates, setDates] = useState(getInitialDates());
-    const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const initialParams = useMemo(
+        () => ({
+            SearchTerm: '',
+            ...(gridModel.params ?? {}),
+            ...(pagination ? { PageNO, PageSize } : {}),
+            ...(showDates && { StartDate, EndDate }),
+        }),
+        [gridModel.params, StartDate, EndDate, PageSize, PageNO, pagination, showDates],
+    );
+
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
@@ -50,17 +66,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     const [formRows, setFormRows] = useState<GridRowsProp>([]);
     const [rowModels, setRowModels] = useState<GridRowModesModel>({});
     const [activeStep, setActiveStep] = useState<number>(0);
-    const [params, setParams] = useState<any>({ ...(gridModel.params ?? {}), SearchTerm: '' });
-
-    const { isMobile, isMiniTablet, isDesktop } = useResponsiveness();
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const searchKey = useSearchParams().get('searchKey');
+    const [params, setParams] = useState<any>(initialParams);
 
     const { data: vendorLocations } = useFetch<LocationsArrayInterface, void>('getVendorLocation');
     const { data, isLoading, isFetching, refetch } = useFetch<APIResponse<R>, any>(fetchUrl, {
-        ...(pagination && { PageNO: pageNo, PageSize: pageSize }),
-        ...(showDates && { StartDate: dates.startDate, EndDate: dates.endDate }),
         ...(typeof params === 'object' && params),
     });
 
@@ -77,17 +86,16 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
               ? formModel.dialogSize
               : 'xs';
 
-    //make refetch function accessible on the UI.
     typeof gridModel.getRefetchFn === 'function' && gridModel.getRefetchFn(refetch);
 
     const rows = useMemo(() => {
         if (data) {
-            if (searchKey) {
+            if (SearchTerm) {
                 const localSearch = data?.Data.filter((item) => {
                     return Object.values(item).some(
                         (value) =>
-                            (typeof value === 'string' && typeof searchKey === 'string' && value.toLowerCase().includes(searchKey.toLowerCase())) ||
-                            (typeof value === 'number' && value == (searchKey as unknown as number)),
+                            (typeof value === 'string' && typeof SearchTerm === 'string' && value.toLowerCase().includes(SearchTerm.toLowerCase())) ||
+                            (typeof value === 'number' && value == (SearchTerm as unknown as number)),
                     );
                 });
 
@@ -95,7 +103,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                     return localSearch;
                 }
 
-                setParams((prev: any) => ({ ...prev, SearchTerm: searchKey }));
+                setParams((prev: any) => ({ ...prev, SearchTerm: SearchTerm }));
                 return data.Data;
             }
 
@@ -104,19 +112,23 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         }
 
         return [];
-    }, [data, searchKey]);
+    }, [data, SearchTerm]);
 
-    const handleSearch = (value: string) => {
-        const p = new URLSearchParams(searchParams);
+    useEffect(() => {
+        const updatedParams = searchParams
+            .toString()
+            .split('&')
+            .reduce((acc, entry) => {
+                const [param, value] = entry.split('=');
 
-        if (!value) {
-            p.delete('searchKey');
-        } else {
-            p.set('searchKey', value);
-        }
+                if (!param) return acc;
+                acc[param] = param.includes('ID') ? parseInt(value) : value;
 
-        router.push(`?${p.toString()}`);
-    };
+                return acc;
+            }, initialParams as any);
+
+        setParams(updatedParams);
+    }, [initialParams, searchParams]);
 
     const handleSubmit = (data: V) => {
         setFormLoading(true);
@@ -131,7 +143,7 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
     };
 
     const getIndexedRows = () => {
-        const startIndex = (pageNo - 1) * pageSize;
+        const startIndex = (PageNO - 1) * PageSize;
 
         return rows.map((row, index) => ({
             id: startIndex + index + 1,
@@ -150,6 +162,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
 
             return acc;
         }, {} as D);
+    };
+
+    const handleWatch = (values: V) => {
+        typeof formModel?.watch === 'function' && formModel.watch(values);
     };
 
     const getGridFormProps = useCallback(() => {
@@ -290,100 +306,103 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
             : []),
     ];
 
-    const renderInputUI = useCallback((input: Input<V>, formik: FormikProps<V>) => {
-        const { key, type, label } = input;
+    const renderInputUI = useCallback(
+        (input: Input<V>, formik: FormikProps<V>) => {
+            const { key, type, label } = input;
 
-        switch (type) {
-            case 'text':
-            case 'number':
-                return <TextFieldInput label={label} {...getFormikFieldProps(formik, key)} type={type} />;
+            switch (type) {
+                case 'text':
+                case 'number':
+                    return <TextFieldInput label={label} {...getFormikFieldProps(formik, key)} type={type} />;
 
-            case 'select':
-                return (
-                    <SelectField label={label} key={key as string | number} {...getFormikFieldProps(formik, key)}>
-                        {input.lookups.map((lookup) => (
-                            <MenuItem
-                                value={lookup[input.lookupDisplayValue] as string | number}
-                                key={lookup[input.lookupDisplayValue] as string | number}
-                            >
-                                {lookup[input.lookupDisplayName] as string | number}
-                            </MenuItem>
-                        ))}
-                    </SelectField>
-                );
-
-            case 'multiple':
-                return (
-                    <AutoCompleteField
-                        options={input.lookups.map((lookup) => ({
-                            [input.optionKey]: lookup[input.optionValueKey],
-                            label: lookup[input.optionLabelKey],
-                        }))}
-                        getOptionLabel={(option: any) => option.label}
-                        label={label}
-                        {...getFormikFieldProps(formik, key, true)}
-                    />
-                );
-
-            case 'boolean':
-                return (
-                    <SelectField label={label} {...getFormikFieldProps(formik, key)}>
-                        {[
-                            { label: 'Yes', value: 1 },
-                            { label: 'No', value: 0 },
-                        ].map(({ label, value }) => (
-                            <MenuItem value={value} key={value}>
-                                {label}
-                            </MenuItem>
-                        ))}
-                    </SelectField>
-                );
-
-            case 'checkbox': {
-                const { setFieldValue, touched, errors } = formik;
-                const error = Boolean(touched[key] && errors[key]);
-
-                return (
-                    <FormControl error={error} component="fieldset" variant="standard">
-                        <FormLabel component="legend">{label}</FormLabel>
-                        <FormGroup sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            {input.options.map(({ name, value }) => (
-                                <CheckboxInput
-                                    key={name}
-                                    label={name}
-                                    onChange={(event) => {
-                                        const newValue = event.target.checked;
-                                        if (newValue) {
-                                            setFieldValue(key as string, value);
-                                        } else {
-                                            setFieldValue(key as string, '');
-                                        }
-                                    }}
-                                />
+                case 'select':
+                    return (
+                        <SelectField label={label} key={key as string | number} {...getFormikFieldProps(formik, key)}>
+                            {input.lookups.map((lookup) => (
+                                <MenuItem
+                                    value={lookup[input.lookupDisplayValue] as string | number}
+                                    key={lookup[input.lookupDisplayValue] as string | number}
+                                >
+                                    {lookup[input.lookupDisplayName] as string | number}
+                                </MenuItem>
                             ))}
-                        </FormGroup>
-                        {error && <FormHelperText>This field is required</FormHelperText>}
-                    </FormControl>
-                );
-            }
+                        </SelectField>
+                    );
 
-            case 'mulipleLocation':
-                return <SelectMultipleLocations<any> {...formik} label={label} />;
+                case 'multiple':
+                    return (
+                        <AutoCompleteField
+                            options={input.lookups.map((lookup) => ({
+                                [input.optionKey]: lookup[input.optionValueKey],
+                                label: lookup[input.optionLabelKey],
+                            }))}
+                            getOptionLabel={(option: any) => option.label}
+                            label={label}
+                            {...getFormikFieldProps(formik, key, true)}
+                        />
+                    );
 
-            case 'singleLocation':
-                return <SelectSingleLocation<any> {...formik} />;
+                case 'boolean':
+                    return (
+                        <SelectField label={label} {...getFormikFieldProps(formik, key)}>
+                            {[
+                                { label: 'Yes', value: 1 },
+                                { label: 'No', value: 0 },
+                            ].map(({ label, value }) => (
+                                <MenuItem value={value} key={value}>
+                                    {label}
+                                </MenuItem>
+                            ))}
+                        </SelectField>
+                    );
 
-            case 'customInput':
-                if (!isValidElement(input.renderInput(formik))) {
-                    throw new Error('Invalid element');
+                case 'checkbox': {
+                    const { setFieldValue, touched, errors } = formik;
+                    const error = Boolean(touched[key] && errors[key]);
+
+                    return (
+                        <FormControl error={error} component="fieldset" variant="standard">
+                            <FormLabel component="legend">{label}</FormLabel>
+                            <FormGroup sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {input.options.map(({ name, value }) => (
+                                    <CheckboxInput
+                                        key={name}
+                                        label={name}
+                                        onChange={(event) => {
+                                            const newValue = event.target.checked;
+                                            if (newValue) {
+                                                setFieldValue(key as string, value);
+                                            } else {
+                                                setFieldValue(key as string, '');
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </FormGroup>
+                            {error && <FormHelperText>This field is required</FormHelperText>}
+                        </FormControl>
+                    );
                 }
 
-                return input.renderInput(formik);
+                case 'mulipleLocation':
+                    return <SelectMultipleLocations<any> {...formik} label={label} />;
 
-            default:
-                throw new Error('Invalid input type');
-        }
-    }, [getFormikFieldProps]);
+                case 'singleLocation':
+                    return <SelectSingleLocation<any> {...formik} />;
+
+                case 'customInput':
+                    if (!isValidElement(input.renderInput(formik))) {
+                        throw new Error('Invalid element');
+                    }
+
+                    return input.renderInput(formik);
+
+                default:
+                    throw new Error('Invalid input type');
+            }
+        },
+        [getFormikFieldProps],
+    );
 
     const renderGridForm = useCallback(
         () => (
@@ -406,10 +425,6 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
         ),
         [updatedFormColumns, formRows, toolbar, rowModels, handleRowModesModelChange, processRowUpdate, handleRowEditStop],
     );
-
-    const handleWatch = (values: V) => {
-        typeof formModel?.watch === 'function' && formModel.watch(values);
-    };
 
     const renderFormUI = () => {
         switch (formModel?.type) {
@@ -535,11 +550,10 @@ const UIModel = <R, V, D, P>({ formModel, gridModel, validationSchema }: UIProps
                 loading={isLoading || isFetching}
                 filters={getFilters()}
                 params={params}
-                setParams={setParams}
                 filterMode="server"
-                onFilterModelChange={({ quickFilterValues }) => handleSearch(quickFilterValues![0])}
-                {...(pagination && { pageNo, pageSize, setPageNo, setPageSize })}
-                {...(showDates && { setDates, dates })}
+                onFilterModelChange={({ quickFilterValues }) => setSearchTerm({ SearchTerm: quickFilterValues![0] })}
+                {...(pagination && { pageNo: PageNO, pageSize: PageSize })}
+                {...(showDates && { dates: { startDate: StartDate, endDate: EndDate } })}
                 {...(hasNew && { onAdd: () => setFormOpen(true) })}
             />
 

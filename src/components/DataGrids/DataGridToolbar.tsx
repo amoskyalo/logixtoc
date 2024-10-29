@@ -1,14 +1,7 @@
-import {
-    GridToolbarContainer,
-    GridToolbarExport,
-    GridToolbarColumnsButton,
-    GridToolbarDensitySelector,
-    useGridApiContext,
-    GridToolbarQuickFilter,
-} from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarExport, GridToolbarColumnsButton, GridToolbarDensitySelector, useGridApiContext } from '@mui/x-data-grid';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { Button, Stack, TextField, InputAdornment, TextFieldProps, Box, Typography, Checkbox, Badge, Grid } from '@mui/material';
-import { useResponsiveness, useThemeMode } from '@/hooks';
+import { useResponsiveness, useThemeMode, useSetSearchParams } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import { DataGridToolbarProps } from './types';
 import { Popover } from '../Popover';
@@ -18,7 +11,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import Datepicker from 'react-tailwindcss-datepicker';
-import utils from '@/utils';
+
+const MAX_DATE = new Date();
+MAX_DATE.setDate(MAX_DATE.getDate());
 
 type SearchProps = TextFieldProps & {
     isMobile: boolean;
@@ -43,9 +38,9 @@ const StyledCalendar = styled(Box)<{ isMobile: boolean; searching: boolean }>(({
     }),
 }));
 
-const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = [] }: Readonly<DataGridToolbarProps>) => {
+const DataGridToolbar = ({ dates, onAdd, params, filters = [] }: Readonly<DataGridToolbarProps>) => {
     const apiRef = useGridApiContext();
-    const { getInitialDates } = utils;
+    const setFilterSearchParams = useSetSearchParams();
 
     const { isMobile, isTablet } = useResponsiveness();
     const { isDarkMode } = useThemeMode();
@@ -66,21 +61,27 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
         updateSearchValue(searchValue);
     }, [searchValue, updateSearchValue]);
 
-    const handleReset = (key?: string) => {
-        if (key) {
-            setUnProcessedFilters((prev: any) => ({ ...prev, [key]: params[key] }));
-        } else {
-            setUnProcessedFilters(params);
-        }
-    };
+    useEffect(() => {
+        setUnProcessedFilters(params);
+    }, [params]);
 
-    const handleApplyFilters = () => {
-        setParams?.(unProcessedFilters);
-        setAnchorEl(null);
+    const handleReset = () => {
+        setUnProcessedFilters(params);
     };
 
     const totalFilters = useMemo(() => {
-        return typeof params === 'object' ? Object.values(params).filter((val) => val !== 0 && val !== 99).length : 0;
+        return typeof params === 'object'
+            ? Object.entries(params).filter(
+                  ([key, value]) =>
+                      key !== 'StartDate' &&
+                      key !== 'EndDate' &&
+                      key !== 'PageNO' &&
+                      key !== 'PageSize' &&
+                      key !== 'SearchTerm' &&
+                      value !== 0 &&
+                      value !== 99,
+              ).length
+            : 0;
     }, [params]);
 
     const width = isMobile ? '100%' : filters.length > 1 ? 450 : 250;
@@ -93,7 +94,8 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                borderBottom: 1,
+                borderColor: 'divider',
                 paddingY: '8px',
                 paddingX: '8px',
             }}
@@ -109,16 +111,13 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                                 showShortcuts={!isMobile}
                                 useRange={!isMobile}
                                 onChange={(newValue) => {
-                                    if (!newValue?.startDate && !newValue?.endDate) {
-                                        setDates(getInitialDates());
-                                    } else {
-                                        setDates(newValue);
-                                    }
+                                    setFilterSearchParams({ StartDate: newValue?.startDate, EndDate: newValue?.endDate });
                                 }}
                                 primaryColor="blue"
                                 inputClassName="w-full rounded-md h-full pl-2 bg-transparent focus:outline-none lg:font-bold"
                                 containerClassName={`relative border ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} p-0 h-8 rounded-[5px] hover:border-gray-600 bg-transparent w-full`}
                                 toggleClassName={`${searching && isMobile ? 'opacity-0' : ''}`}
+                                maxDate={MAX_DATE}
                             />
                         </StyledCalendar>
                     )}
@@ -285,7 +284,14 @@ const DataGridToolbar = ({ setDates, dates, onAdd, params, setParams, filters = 
                     <Button size="small" variant="outlined" onClick={() => handleReset()}>
                         Reset all
                     </Button>
-                    <Button size="small" variant="contained" onClick={handleApplyFilters}>
+                    <Button
+                        size="small"
+                        variant="contained"
+                        onClick={() => {
+                            setFilterSearchParams(unProcessedFilters);
+                            setAnchorEl(null);
+                        }}
+                    >
                         Apply filters
                     </Button>
                 </Stack>

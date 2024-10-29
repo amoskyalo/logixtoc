@@ -1,10 +1,10 @@
 'use client';
 
 import { StatusChips } from '@/components/Chips';
-import { APPCRUD } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 const LeaveRequest = () => {
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorLeaveRequest',

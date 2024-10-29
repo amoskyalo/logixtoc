@@ -2,12 +2,12 @@
 
 import { useSearchParams } from 'next/navigation';
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 const AccountsStatement = () => {
     const VendorAccountID = useSearchParams().get('VendorAccountTypeID') as unknown as number;
 
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             showActions: false,
             fetchUrl: 'getVendorAccountStatement',

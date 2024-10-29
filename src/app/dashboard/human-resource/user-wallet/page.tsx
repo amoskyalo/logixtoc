@@ -1,7 +1,8 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, UserWallet as UserWalletDataInterface } from '@/api';
+import { UserWallet as UserWalletDataInterface } from '@/api';
+import { UIConstructor } from '@/UIModel';
 import { useRouter } from 'next/navigation';
 
 type Params = { UserID: number };
@@ -14,7 +15,7 @@ const UserWallet = () => {
         router.push(url);
     };
 
-    const UI = new APPCRUD<UserWalletDataInterface, void, void, Params>({
+    const UI = new UIConstructor<UserWalletDataInterface, void, void, Params>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorUserWallet',

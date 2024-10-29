@@ -1,11 +1,11 @@
 'use client';
 
-import { APPCRUD } from '@/api';
+import { UIConstructor } from "@/UIModel";
 
 type Params = { VendorLocationID: number };
 
 const FuelConsumption = () => {
-    const UI = new APPCRUD<any, void, void, Params>({
+    const UI = new UIConstructor<any, void, void, Params>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getVendorLocationFuelConsumption',

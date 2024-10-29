@@ -1,12 +1,13 @@
 'use client';
 
-import { APPCRUD, VendorCustomerCategory } from '@/api';
+import { VendorCustomerCategory } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Values = { vendorCustomerCategoryName: string };
 type Delete = { vendorCustomerCategoryID: number };
 
 const CustomerCategory = () => {
-    const UI = new APPCRUD<VendorCustomerCategory, Values, Delete, void>({
+    const UI = new UIConstructor<VendorCustomerCategory, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorCustomerCategory',

@@ -1,6 +1,7 @@
 'use client';
 
-import { APPCRUD, VendorFuelStation } from '@/api';
+import {  VendorFuelStation } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { VendorFuelStationID: number };
 type Values = {
@@ -10,7 +11,7 @@ type Values = {
 };
 
 const FuelStation = () => {
-    const UI = new APPCRUD<VendorFuelStation, Values, Delete, void>({
+    const UI = new UIConstructor<VendorFuelStation, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorFuelStation',

@@ -1,12 +1,13 @@
 'use client';
 
-import { APPCRUD, VendorAllowanceType } from '@/api';
+import { VendorAllowanceType } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Values = { vendorAllowanceTypeName: string };
 type Delete = { VendorAllowanceTypeID: string | number };
 
 const AllowanceType = () => {
-    const UI = new APPCRUD<VendorAllowanceType, Values, Delete, void>({
+    const UI = new UIConstructor<VendorAllowanceType, Values, Delete, void>({
         grid: {
             showDates: false,
             actions: ['delete'],

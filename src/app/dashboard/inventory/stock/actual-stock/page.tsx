@@ -1,12 +1,13 @@
 'use client';
 
-import { ActualStock as ActualStockProps, APPCRUD } from '@/api';
+import { ActualStock as ActualStockProps } from '@/api';
 import { StatusChips } from '@/components/Chips';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorLocationID: number };
 
 const ActualStock = () => {
-    const UI = new APPCRUD<ActualStockProps, void, void, Params>({
+    const UI = new UIConstructor<ActualStockProps, void, void, Params>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getActualStock',

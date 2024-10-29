@@ -1,8 +1,9 @@
 'use client';
-import { APPCRUD, NotificationType as NotificationTypeInterface } from '@/api';
+import { NotificationType as NotificationTypeInterface } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 const NotificationType = () => {
-    const UI = new APPCRUD<NotificationTypeInterface, void, void, void>({
+    const UI = new UIConstructor<NotificationTypeInterface, void, void, void>({
         grid: {
             showDates: false,
             showActions: false,

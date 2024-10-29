@@ -2,7 +2,8 @@
 
 import { TablessContainer } from '@/components/Containers';
 import { useSearchParams } from 'next/navigation';
-import { APPCRUD, Statement } from '@/api';
+import { Statement } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorCustomerID: number; VendorProductUOMID: number };
 
@@ -10,7 +11,7 @@ const ProductStatement = () => {
     const VendorProductUOMID = useSearchParams().get('VendorProductUOMID') as unknown as number;
     const VendorCustomerID = useSearchParams().get('VendorCustomerID') as unknown as number;
 
-    const UI = new APPCRUD<Statement, void, void, Params>({
+    const UI = new UIConstructor<Statement, void, void, Params>({
         grid: {
             showActions: false,
             fetchUrl: 'getVendorCustomerProductStatement',

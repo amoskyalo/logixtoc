@@ -1,10 +1,10 @@
 'use client';
 
-import { APPCRUD } from '@/api';
 import { StatusChips } from '@/components/Chips';
+import { UIConstructor } from '@/UIModel';
 
 const FuelRequest = () => {
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             fetchUrl: 'getVendorLocationFuelRequest',
             columns: [

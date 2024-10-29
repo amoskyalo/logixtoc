@@ -1,13 +1,14 @@
 'use client';
 
-import { APPCRUD, LeaveRequestType } from '@/api';
+import { LeaveRequestType } from '@/api';
 import { Chip } from '@mui/material';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { vendorLeaveTypeID: number };
 type Values = { vendorLeaveTypeName: string };
 
 const LeaveType = () => {
-    const UI = new APPCRUD<LeaveRequestType, Values, Delete, void>({
+    const UI = new UIConstructor<LeaveRequestType, Values, Delete, void>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorLeaveType',

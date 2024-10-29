@@ -1,6 +1,7 @@
 'use client';
 
-import { AssignedLocationObject, APPCRUD } from '@/api';
+import { AssignedLocationObject } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorLocationID: number };
 
@@ -15,7 +16,7 @@ type Values = {
 };
 
 const AssignedLocations = () => {
-    const UI = new APPCRUD<AssignedLocationObject, Values, Delete, Params>({
+    const UI = new UIConstructor<AssignedLocationObject, Values, Delete, Params>({
         grid: {
             showDates: false,
             hasLocationsFilters: true,

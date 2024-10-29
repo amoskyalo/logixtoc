@@ -6,7 +6,7 @@ import { QueryClient } from '@tanstack/react-query';
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const user = typeof window !== 'undefined' && localStorage.getItem('user');
-const { userToken, VendorID, UserID: addedBy } = user && JSON.parse(user);
+const { userToken, VendorID, UserID: addedBy } = user && JSON.parse(user) || {};
 
 export const queryClient = new QueryClient();
 

@@ -1,13 +1,13 @@
 'use client';
 
-import { APPCRUD } from '@/api';
+import { UIConstructor } from '@/UIModel';
 import { StatusChips } from '@/components/Chips';
 import { useResponsiveness } from '@/hooks';
 
 const MaintenanceRequest = () => {
     const { isMobile } = useResponsiveness();
 
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             fetchUrl: 'getVendorMaintenanceRequest',
             columns: [

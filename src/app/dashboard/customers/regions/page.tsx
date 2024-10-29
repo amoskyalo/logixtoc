@@ -1,16 +1,17 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorRegion } from '@/api';
+import {  VendorRegion } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Delete = { vendorRegionID: number | string };
 
 const Regions = () => {
     const router = useRouter();
 
-    const UI = new APPCRUD<VendorRegion, any, Delete, void>({
+    const UI = new UIConstructor<VendorRegion, any, Delete, void>({
         grid: {
             fetchUrl: 'getVendorRegions',
             deleteUrl: 'removeVendorRegion',

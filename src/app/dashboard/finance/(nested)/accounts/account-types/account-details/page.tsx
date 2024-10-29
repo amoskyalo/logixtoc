@@ -1,15 +1,16 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { VendorAccount, APPCRUD } from '@/api';
+import { VendorAccount } from '@/api';
 import { TablessContainer } from '@/components/Containers';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorAccountTypeID: number };
 
 const AccountTypeDetails = () => {
     const VendorAccountTypeID = useSearchParams().get('VendorAccountTypeID') as unknown as number;
 
-    const UI = new APPCRUD<VendorAccount, void, void, Params>({
+    const UI = new UIConstructor<VendorAccount, void, void, Params>({
         grid: {
             showDates: false,
             showActions: false,

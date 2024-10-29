@@ -1,9 +1,10 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorSupplier } from '@/api';
+import { VendorSupplier } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Values = {
     SupplierMail: string;
@@ -21,7 +22,7 @@ const Suppliers = () => {
         router.push(`/dashboard/suppliers/${route}?VendorSupplierID=${record.VendorSupplierID}`);
     };
 
-    const UI = new APPCRUD<VendorSupplier, Values, Delete, void>({
+    const UI = new UIConstructor<VendorSupplier, Values, Delete, void>({
         grid: {
             fetchUrl: 'getVendorSupplier',
             deleteUrl: 'removeVendorSupplier',

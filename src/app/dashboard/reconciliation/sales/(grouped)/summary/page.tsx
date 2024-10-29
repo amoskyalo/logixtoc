@@ -1,8 +1,9 @@
 'use client';
 
-import { APPCRUD, SummaryDeliveryPlan } from '@/api';
+import { SummaryDeliveryPlan } from '@/api';
 import { StatusChips } from '@/components/Chips';
 import { useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorLocationID: number };
 
@@ -13,7 +14,7 @@ const Summary = () => {
         router.push(`/dashboard/reconciliation/sales/summary/${route}?DeliveryPlanNO=${activeRecord.DeliveryPlanNO}&stockNO=${activeRecord.StockNO}`);
     };
 
-    const UI = new APPCRUD<SummaryDeliveryPlan, void, void, Params>({
+    const UI = new UIConstructor<SummaryDeliveryPlan, void, void, Params>({
         grid: {
             hasLocationsFilters: true,
             fetchUrl: 'getVendorLocationStockSaleSummary',

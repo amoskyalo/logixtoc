@@ -1,15 +1,16 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorUserStatement } from '@/api';
+import { VendorUserStatement } from '@/api';
 import { useSearchParams } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { UserID: number };
 
 const Statement = () => {
     const UserID = useSearchParams().get('UserID') as unknown as number;
 
-    const UI = new APPCRUD<VendorUserStatement, void, void, Params>({
+    const UI = new UIConstructor<VendorUserStatement, void, void, Params>({
         grid: {
             showActions: false,
             fetchUrl: 'getVendorUserWalletStatement',

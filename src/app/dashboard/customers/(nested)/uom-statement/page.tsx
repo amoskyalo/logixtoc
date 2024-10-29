@@ -1,8 +1,9 @@
 'use client';
 
-import { APPCRUD, VendorCustomerUOMStatement } from '@/api';
+import { VendorCustomerUOMStatement } from '@/api';
 import { TablessContainer } from '@/components/Containers';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorCustomerID: number };
 
@@ -10,7 +11,7 @@ const UOMStatement = () => {
     const VendorCustomerID = useSearchParams().get('VendorCustomerID') as unknown as number;
     const router = useRouter();
 
-    const UI = new APPCRUD<VendorCustomerUOMStatement, void, void, Params>({
+    const UI = new UIConstructor<VendorCustomerUOMStatement, void, void, Params>({
         grid: {
             fetchUrl: 'getVendorCustomerProductSummary',
             actions: ['options'],

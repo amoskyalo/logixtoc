@@ -1,12 +1,13 @@
 'use client';
-import { APPCRUD } from '@/api';
+
+import { UIConstructor } from '@/UIModel';
 import { TablessContainer } from '@/components/Containers';
 import { useSearchParams } from 'next/navigation';
 
 const Summary = () => {
     const StockNO = useSearchParams().get('StockNO');
 
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             showActions: false,
             showDates: false,

@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { APPCRUD, VendorCustomerNote } from '@/api';
+import { VendorCustomerNote } from '@/api';
 import { TablessContainer } from '@/components/Containers';
+import { UIConstructor } from '@/UIModel';
 
 type Params = { VendorCustomerID: number; NoteTypeID: number };
 type Values = { noteAmount: string; noteDescription: string };
@@ -13,7 +14,7 @@ const CustomerNote = ({ params }: { params: { note: string } }) => {
 
     const noteTypeID = params.note === 'debit-note' ? 2 : 1;
 
-    const UI = new APPCRUD<VendorCustomerNote, Values, Delete, Params>({
+    const UI = new UIConstructor<VendorCustomerNote, Values, Delete, Params>({
         grid: {
             fetchUrl: 'getVendorCustomerNote',
             deleteUrl: 'removeVendorCustomerNote',
@@ -30,7 +31,7 @@ const CustomerNote = ({ params }: { params: { note: string } }) => {
             ],
         },
         form: {
-            type: "normal",
+            type: 'normal',
             title: 'Add New Customer debit Note',
             submitKey: 'addVendorCustomerNote',
             initialValues: { noteAmount: '', noteDescription: '' },

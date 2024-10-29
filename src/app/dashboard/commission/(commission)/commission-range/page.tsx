@@ -1,10 +1,10 @@
 'use client';
 
-import { APPCRUD } from '@/api';
+import { UIConstructor } from '@/UIModel';
 import { StatusChips } from '@/components/Chips';
 
 const CommisionRange = () => {
-    const UI = new APPCRUD({
+    const UI = new UIConstructor({
         grid: {
             showDates: false,
             fetchUrl: 'GetVendorCommissionTypeRange',

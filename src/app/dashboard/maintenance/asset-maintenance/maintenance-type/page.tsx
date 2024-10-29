@@ -1,12 +1,13 @@
 'use client';
 
-import { APPCRUD, VendorMaintenanceRequestType } from '@/api';
+import { VendorMaintenanceRequestType } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 type Values = { vendorMaintenanceRequestTypeName: string };
 type Delete = { vendorMaintenanceRequestTypeID: number };
 
 const MaintenanceType = () => {
-    const UI = new APPCRUD<VendorMaintenanceRequestType, Values, Delete, void>({
+    const UI = new UIConstructor<VendorMaintenanceRequestType, Values, Delete, void>({
         grid: {
             showDates: false,
             actions: ['delete'],

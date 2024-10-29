@@ -1,6 +1,6 @@
 'use client';
 
-import { APPCRUD } from '@/api';
+import { UIConstructor } from "@/UIModel";
 
 type Values = {
     acceptedDeviation: string;
@@ -10,7 +10,7 @@ type Values = {
 };
 
 const RatioSetup = () => {
-    const UI = new APPCRUD<any, Values, void, void>({
+    const UI = new UIConstructor<any, Values, void, void>({
         grid: {
             fetchUrl: 'getVendorLocationFuelSetup',
             actions: ['delete'],

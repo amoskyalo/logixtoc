@@ -2,13 +2,14 @@
 
 import { useSearchParams } from 'next/navigation';
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorProductCategoryTypeDetail } from '@/api';
+import { VendorProductCategoryTypeDetail } from '@/api';
+import { UIConstructor } from '@/UIModel';
 
 const CategoryTypeDetail = () => {
     const VendorProductCategoryTypeID = useSearchParams().get('VendorProductCategoryTypeID') as unknown as number;
     const VendorProductCategoryID = useSearchParams().get('VendorProductCategoryID');
 
-    const UI = new APPCRUD<VendorProductCategoryTypeDetail, void, void, { VendorProductCategoryTypeID: number }>({
+    const UI = new UIConstructor<VendorProductCategoryTypeDetail, void, void, { VendorProductCategoryTypeID: number }>({
         grid: {
             showDates: false,
             fetchUrl: 'getVendorProductCategoryTypeDetail',

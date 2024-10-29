@@ -1,13 +1,14 @@
 'use client';
 
 import { TablessContainer } from '@/components/Containers';
-import { APPCRUD, VendorSupplierStatement } from '@/api';
+import { VendorSupplierStatement } from '@/api';
 import { useSearchParams } from 'next/navigation';
+import { UIConstructor } from '@/UIModel';
 
 const SupplierStatement = () => {
     const VendorSupplierID = useSearchParams().get('VendorSupplierID') as unknown as number;
 
-    const UI = new APPCRUD<VendorSupplierStatement, void, void, { VendorSupplierID: number }>({
+    const UI = new UIConstructor<VendorSupplierStatement, void, void, { VendorSupplierID: number }>({
         grid: {
             showActions: false,
             fetchUrl: 'getVendorSupplierStatement',
